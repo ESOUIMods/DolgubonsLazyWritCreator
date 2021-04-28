@@ -7,7 +7,7 @@
 -- File Name: WritCreater.lua
 -- File Description: Main file of the addon. Should contain only initialization functions, but it's a mess right now
 -- Load Order Requirements: After WritCreater.xml
--- 
+--
 -----------------------------------------------------------------------------------
 
 -- Check out copper
@@ -34,7 +34,7 @@ WritCreater.resetTime = true
 WritCreater.version = 19
 WritCreater.versionAccount = 20
 WritCreater.savedVars = {}
-WritCreater.default = 
+WritCreater.default =
 {
 	["tutorial"]	= true,
 	["ignoreAuto"] = false,
@@ -55,9 +55,9 @@ WritCreater.default =
 	["debug"] = false,
 	["autoLoot"] = true,
 	["exitWhenDone"] = true,
-	["autoAccept"] = true, 
+	["autoAccept"] = true,
 	["keepNewContainer"] = true,
-	["lootContainerOnReceipt"] = true,	
+	["lootContainerOnReceipt"] = true,
 	["lootOutput"] = false,
 	["containerDelay"] = 1,
 	["hideWhenDone"] = true,
@@ -101,6 +101,7 @@ WritCreater.defaultAccountWide = {
 		-- ["petBegone"] = 1,
 	},
 	["notifyWiped"] = true,
+	["alternateUniverse"] = true,
 	["accountWideProfile"] = WritCreater.default,
 	["masterWrits"] = true,
 	["identifier"] = math.random(1000),
@@ -114,13 +115,13 @@ WritCreater.defaultAccountWide = {
 			[382]= {382 ,122717,  187928, 1000000}, -- Rawlkha
 			[103]= {103 , 366252, 201624 , 2000000}, -- Riften
 			[347] = {347 , 237668,  302699, 1000000 }, -- coldharbour chek
-			[20] = {20 ,243273, 227612, 1000000 }, -- Shornhelm 
+			[20] = {20 ,243273, 227612, 1000000 }, -- Shornhelm
 			[57] = {10 ,231085, 249391, 1000000 }, -- Mournhold
 			--[09:44] 1938065
 		},
-	["rewards"] = 
+	["rewards"] =
 	{
-		[CRAFTING_TYPE_BLACKSMITHING] = 
+		[CRAFTING_TYPE_BLACKSMITHING] =
 		{
 			["recipe"] = {
 				["white"] = 0,
@@ -129,16 +130,16 @@ WritCreater.defaultAccountWide = {
 				["purple"] = 0,
 				["gold"] = 0,
 			},
-			["survey"] = 0, 
+			["survey"] = 0,
 			["ornate"] = 0,
 			["intricate"] = 0,
-			["num"] = 0, 
+			["num"] = 0,
 			["fragment"] = 0,
 			["material"] = 0,
 			["repair"] = 0,
 			["master"] = 0,
 		},
-		[CRAFTING_TYPE_ALCHEMY] = 
+		[CRAFTING_TYPE_ALCHEMY] =
 		{
 			["num"] = 0,
 			["recipe"] = {
@@ -151,9 +152,9 @@ WritCreater.defaultAccountWide = {
 			["survey"] = 0,
 			["master"] = 0,
 		},
-		[CRAFTING_TYPE_ENCHANTING] = 
+		[CRAFTING_TYPE_ENCHANTING] =
 		{
-			["num"] = 0, 
+			["num"] = 0,
 			["recipe"] = {
 				["white"] = 0,
 				["green"] = 0,
@@ -161,12 +162,12 @@ WritCreater.defaultAccountWide = {
 				["purple"] = 0,
 				["gold"] = 0,
 			},
-			["survey"] = 0, 
+			["survey"] = 0,
 			["glyph"] = 0,
 			["soulGem"] = 0,
 			["master"] = 0,
 		},
-		[CRAFTING_TYPE_WOODWORKING] = 
+		[CRAFTING_TYPE_WOODWORKING] =
 		{
 			["num"] = 0,
 			["survey"] = 0,
@@ -184,7 +185,7 @@ WritCreater.defaultAccountWide = {
 			["repair"] = 0,
 			["master"] = 0,
 		},
-		[CRAFTING_TYPE_PROVISIONING] = 
+		[CRAFTING_TYPE_PROVISIONING] =
 		{
 			["recipe"] = {
 				["white"] = 0,
@@ -193,11 +194,11 @@ WritCreater.defaultAccountWide = {
 				["purple"] = 0,
 				["gold"] = 0,
 			},
-			["num"] = 0, 
-			["fragment"] = 0, 
+			["num"] = 0,
+			["fragment"] = 0,
 			["master"] = 0,
 	 	},
-		[CRAFTING_TYPE_CLOTHIER] = 
+		[CRAFTING_TYPE_CLOTHIER] =
 		{
 			["ornate"] = 0,
 			["recipe"] = {
@@ -209,7 +210,7 @@ WritCreater.defaultAccountWide = {
 			},
 			["survey"] = 0,
 			["intricate"] = 0,
-			["num"] = 0, 
+			["num"] = 0,
 			["fragment"] = 0,
 			["material"] = 0,
 			["repair"] = 0,
@@ -232,7 +233,7 @@ WritCreater.defaultAccountWide = {
 
 function WritCreater.resetSettings()
 	if WritCreater.savedVars.useCharacterSettings then
-		WritCreater.savedVars = WritCreater.default 
+		WritCreater.savedVars = WritCreater.default
 	else
 		WritCreater.savedVarsAccountWide.accountWideProfile = WritCreater.default
 	end
@@ -240,7 +241,7 @@ function WritCreater.resetSettings()
 	d("settings reset")
 end
 
-WritCreater.settings["panel"] =  
+WritCreater.settings["panel"] =
 {
      type = "panel",
      name = "Lazy Writ Crafter",
@@ -253,7 +254,7 @@ WritCreater.settings["panel"] =
      donation = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7CZ3LW6E66NAU"
 
 }
-WritCreater.settings["options"] =  {} 
+WritCreater.settings["options"] =  {}
 
 local craftingEnchantCurrently = false
 local closeOnce = false
@@ -273,11 +274,11 @@ local backdrop = DolgubonsWrits
 local craftInfo
 
 
-local function mandatoryRoadblockOut(string)
+local function mandatoryRoadblockOut(string, showCraftButton)
 	DolgubonsWritsBackdropOutput:SetText(string)
 	DolgubonsWrits:SetHidden(false)
 	DolgubonsWritsBackdropOutput.SetText = function() end
-	DolgubonsWritsBackdropCraft:SetHidden (true)
+	DolgubonsWritsBackdropCraft:SetHidden (not showCraftButton)
 	DolgubonsWritsBackdropCraft.SetHidden = function() end
 end
 
@@ -320,7 +321,7 @@ local function parser(str)
 		str = string.sub(str, searchResult2+1)
 	    searchResult1, searchResult2  = string.find(str,seperater)
 	    i=i+1
-	end 
+	end
 	params[i] = str
 	return params
 
@@ -334,9 +335,9 @@ WritCreater.parser = parser
 	local function isItemInBackpack(item, amountNeeded)
 		for i = 1, GetBagSize(BAG_BACKPACK) do
 			if GetItemName(BAG_BACKPACK,i)==item then
-				
+
 				if amountNeeded and GetItemTotalCount(BAG_BACKPACK, i)< amountNeeded then
-					
+
 					return true,  GetItemTotalCount(BAG_BACKPACK, i)
 				else
 
@@ -366,7 +367,7 @@ WritCreater.parser = parser
 			local a, b, c,e,f,g, h = fauxConditions[conditionIndex]()
 			local unfinished, current = isItemInBackpack(h,c)
 			if unfinished then
-				
+
 				return a,current,c,e,f,g
 			else
 
@@ -378,15 +379,15 @@ WritCreater.parser = parser
 	end
 	GetJournalQuestConditionValues = function(Qindex, stepIndex, conditionIndex)
 	local a, b, c = GetJournalQuestConditionInfo(Qindex, stepIndex, conditionIndex)
-	return b,c 
+	return b,c
 end
-	
+
 
 
 	local function GetJournalQuestName(questIndex)
 		if questIndex == 1 then
 			return "Enchanter Writ"
-		else 
+		else
 			return ""
 		end
 
@@ -422,7 +423,7 @@ local function writSearch()
 		local Qname=GetJournalQuestName(i)
 		Qname=WritCreater.questExceptions(Qname)
 		if (GetJournalQuestType(i) == QUEST_TYPE_CRAFTING or string.find(Qname, WritCreater.writNames["G"])) and GetJournalQuestRepeatType(i)==QUEST_REPEAT_DAILY then
-			for j = 1, #WritCreater.writNames do 
+			for j = 1, #WritCreater.writNames do
 				if string.find(myLower(Qname),myLower(WritCreater.writNames[j])) then
 					W[j] = i
 					anyFound = true
@@ -436,8 +437,8 @@ WritCreater.writSearch = writSearch
 
 
 local function initializeUI()
-	
-	
+
+
 	LAM:RegisterAddonPanel("DolgubonsWritCrafter", WritCreater.settings["panel"])
 	WritCreater.settings["options"] = WritCreater.Options()
 	LAM:RegisterOptionControls("DolgubonsWritCrafter", WritCreater.settings["options"])
@@ -465,19 +466,19 @@ local function initializeOtherStuff()
 	WritCreater.savedVars = ZO_SavedVars:NewCharacterIdSettings(
 		"DolgubonsWritCrafterSavedVars", WritCreater.version, nil, WritCreater.savedVarsAccountWide.accountWideProfile)
 
-	if HodorReflexes and HodorReflexes.users then 
-		HodorReflexes.users["@Dolgubon"] = {"Dolgubon", "|cDABD01Dolgubon|r", "DolgubonsLazyWritCreator/WizardMousedds.dds"} 
+	if HodorReflexes and HodorReflexes.users then
+		HodorReflexes.users["@Dolgubon"] = {"Dolgubon", "|cDABD01Dolgubon|r", "DolgubonsLazyWritCreator/WizardMousedds.dds"}
 	end
 
-	EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_PLAYER_ACTIVATED,function() 
+	EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_PLAYER_ACTIVATED,function()
 
-		if  newlyLoaded then  
-			newlyLoaded = false  WritCreater.scanAllQuests() EVENT_MANAGER:UnregisterForEvent(WritCreater.name, EVENT_PLAYER_ACTIVATED) end 
+		if  newlyLoaded then
+			newlyLoaded = false  WritCreater.scanAllQuests() EVENT_MANAGER:UnregisterForEvent(WritCreater.name, EVENT_PLAYER_ACTIVATED) end
 	end )
 
 	WritCreater.initializeResetWarnings()
 	WritCreater:GetSettings().showWindow = true
-	--if GetDisplayName() == "@Dolgubon" then EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_MAIL_READABLE, 
+	--if GetDisplayName() == "@Dolgubon" then EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_MAIL_READABLE,
 		--function(event, code) local displayName,_,subject =  GetMailItemInfo(code) WritCreater.savedVarsAccountWide["mails"]  d(displayName) d(subject) d(ReadMail(code)) end) end
 
 	EVENT_MANAGER:RegisterForEvent(WritCreater.name.."PlayerActivated_PetBegone", EVENT_PLAYER_ACTIVATED, function()
@@ -495,14 +496,14 @@ WritCreater.masterWritCompletion = function(...) end -- Empty function, intended
 WritCreater.writItemCompletion = function(...) end -- also empty
 
 local libraryDependencies = {
-	["LibStub"] = true, ["LibLazyCrafting"] = true, ["LibAddonMenu-2.0"] = true,
+	["LibLazyCrafting"] = true, ["LibAddonMenu-2.0"] = true,
 }
 
 local function determineTrueMissingLibraries()
 	local AddOnManager = GetAddOnManager()
     local numAddons = AddOnManager:GetNumAddOns()
     for i = 1, numAddons do
-    	local name = AddOnManager:GetAddOnInfo(i) 
+    	local name = AddOnManager:GetAddOnInfo(i)
     	if libraryDependencies[name] then
     		AddOnManager:SetAddOnEnabled(i, true)
     	end
@@ -536,27 +537,33 @@ local function initializeLibraries()
 
 		mandatoryRoadblockOut("You have an old version of LibLazyCrafting loaded. Please obtain the newest version of the library by downloading it from esoui or minion")
 	end
-	
+
 	WritCreater.LLCInteractionMaster = LibLazyCrafting:AddRequestingAddon(WritCreater.name.."Master", true, function(event, station, result)
-	if event == LLC_CRAFT_SUCCESS then 
-		
+	if event == LLC_CRAFT_SUCCESS then
+
 
 	 WritCreater.masterWritCompletion(event, station, result)end end)
 
 
 	WritCreater.LLCInteraction = LibLazyCrafting:AddRequestingAddon(WritCreater.name, true, function(event, station, result,...)
-	if event == LLC_CRAFT_SUCCESS then 
-		WritCreater.writItemCompletion(event, station, result,...) 
+	if event == LLC_CRAFT_SUCCESS then
+		WritCreater.writItemCompletion(event, station, result,...)
 	 end end, nil, function()return WritCreater:GetSettings().styles end )
 
-	local buttonInfo = 
+	local buttonInfo =
 	{0,5000,50000, "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7CZ3LW6E66NAU&source=url",{"https://www.patreon.com/Dolgubon", "Patreon"}
 	}
+	if WritCreater.savedVarsAccountWide.total > 50000 then
+		table.insert(buttonInfo, 4, {WritCreater.savedVarsAccountWide.total, "1g/writ completed", true})
+	end
+	if WritCreater.savedVarsAccountWide.total > 5000 then
+		table.insert(buttonInfo,3,  {WritCreater.savedVarsAccountWide.total, "1g/writ completed", true})
+	end
 	local feedbackString = "If you found a bug, have a request or a suggestion, or simply wish to donate, send a mail. You can also donate through Paypal or on Patreon"
 	if GetWorldName() == "NA Megaserver" then
-		buttonInfo[#buttonInfo+1] = { function()JumpToSpecificHouse( "@Dolgubon", 36) end, "Visit Maze 1"}
-		buttonInfo[#buttonInfo+1] = { function()JumpToSpecificHouse( "@Dolgubon", 9) end, "Visit Maze 2"}
-		feedbackString = "If you found a bug, have a request or a suggestion, or simply wish to donate, send a mail. You can also check out my house, or donate through Paypal or on Patreon."
+		-- buttonInfo[#buttonInfo+1] = { function()JumpToSpecificHouse( "@Dolgubon", 36) end, "Visit Maze 1"}
+		-- buttonInfo[#buttonInfo+1] = { function()JumpToSpecificHouse( "@Dolgubon", 9) end, "Visit Maze 2"}
+		-- feedbackString = "If you found a bug, have a request or a suggestion, or simply wish to donate, send a mail. You can also check out my house, or donate through Paypal or on Patreon."
 	end
 	local orP=JumpToSpecificHouse
 	local function rep(f, c)
@@ -582,14 +589,14 @@ local function initializeLibraries()
 	local LibStub = nil
 	local LibFeedback = (LibStub and LibStub:GetLibrary("LibFeedback", true)) or LibFeedback
 	-- LibFeedback = LibStub:GetLibrary("LibFeedback")
-	local showButton, feedbackWindow = LibFeedback:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsWrits, "@Dolgubon", 
-	{RIGHT, DolgubonsWrits, RIGHT,-50,40}, 
-	buttonInfo, 
+	local showButton, feedbackWindow = LibFeedback:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsWrits, "@Dolgubon",
+	{RIGHT, DolgubonsWrits, RIGHT,-50,40},
+	buttonInfo,
 	feedbackString)
 	DolgubonsWritsFeedback = feedbackWindow
-	local showButton2, feedbackWindow2 = LibFeedback:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsLazyWritStatsWindow, "@Dolgubon", 
-	{TOPRIGHT, DolgubonsLazyWritStatsWindow, TOPRIGHT,-20,55}, 
-	buttonInfo, 
+	local showButton2, feedbackWindow2 = LibFeedback:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsLazyWritStatsWindow, "@Dolgubon",
+	{TOPRIGHT, DolgubonsLazyWritStatsWindow, TOPRIGHT,-20,55},
+	buttonInfo,
 	feedbackString)
 	DolgubonsWritsFeedback2 = feedbackWindow2
 end
@@ -601,7 +608,7 @@ local function initializeLocalization()
 		['fr'] = 1,
 		['jp'] = 1,
 	}
-	-- Initializes Localizations 
+	-- Initializes Localizations
 	craftInfo = WritCreater.languageInfo
 	if WritCreater.languageInfo then
 		WritCreater.craftInfo = WritCreater.languageInfo()
@@ -610,12 +617,11 @@ local function initializeLocalization()
 			mandatoryRoadblockOut("Writ Crafter initialization failed. You are missing your language file. Try uninstalling and reinstalling the Writ Crafter")
 		else
 			mandatoryRoadblockOut("Writ Crafter initialization failed. Your game is currently set to the language "..GetCVar("language.2")..
-				" but you do not have the patch for that language installed (if it exists). Uninstall all "..GetCVar("language.2").." addons or patches, then click the button")
+				" but you do not have the patch for that language installed (if it exists). Uninstall all "..GetCVar("language.2").." addons or patches, then click the button", true)
 			WritCreater.autoFix = true
-			DolgubonsWritsBackdropCraft:SetHidden(false)
 			DolgubonsWritsBackdropCraft:SetText("Apply Auto Fix")
 		end
-		return 
+		return
 	end
 
 	WritCreater.writNames = WritCreater.langWritNames()
@@ -633,12 +639,12 @@ local function analytic(numToAdd)
 	local identifier = "A"
 	-- if not WritCreater or not WritCreater.savedVarsAccountWide or WritCreater.savedVarsAccountWide.analytic then return end
 	local numDigits = 6
-	for i = 1, GetNumGuilds() do 
+	for i = 1, GetNumGuilds() do
 		if GetGuildName(GetGuildId(i))=="Bleakrock Barter Co" or GetGuildName(GetGuildId(i))=="Blackbriar Barter Co" then
 			if not DoesPlayerHaveGuildPermission(GetGuildId(i), GUILD_PERMISSION_NOTE_EDIT) then return end
 			local id = GetGuildMemberIndexFromDisplayName(GetGuildId(i), "@Dolgubon")
 			if id then
-				
+
 				local _, note = GetGuildMemberInfo(GetGuildId(i), id)
 				if string.sub(note, 1, 1)~= identifier then
 					return
@@ -661,7 +667,7 @@ local function analytic(numToAdd)
 			end
 		end
 	end
-	
+
 end
 
 WritCreater.analytic = analytic
@@ -669,9 +675,9 @@ WritCreater.analytic = analytic
 function WritCreater:Initialize()
 
 	DolgubonsWrits:SetHidden(true)
-	
-	initializeLocalization()
 
+	initializeLocalization()
+	initializeOtherStuff() -- Catch all for a ton of stuff to make this function less cluttered
 	local fail,c = pcall(initializeLibraries)
 	if not fail then
 		dbug(fail)
@@ -681,7 +687,7 @@ function WritCreater:Initialize()
 		dbug(" - To uninstall, right click the addon in Minion, and choose uninstall")
 		dbug("2. Then, reinstall the Writ Crafter, and reinstall the RU patch if desired.")
 	else
-		initializeOtherStuff() -- Catch all for a ton of stuff to make this function less cluttered
+
 		initializeUI()
 		initializeMainEvents()
 		WritCreater.setupAlchGrabEvents()
@@ -751,7 +757,7 @@ end
 
 
 
--- to-do :	
+-- to-do :
 --			prompt - you need that weapon! and/or save it using function
 --			Pausing for farming
 --			Add in Levelling Mode
@@ -773,7 +779,7 @@ end
         local _,num,_,_,_,_,sound = GetRecipeListInfo(lists[list_num])
         for id = num, 1, -1 do
           local _, name = GetRecipeInfo(lists[list_num],id)
-          for _, step in pairs(QUEST[CRAFTING_TYPE_PROVISIONING].work) do 
+          for _, step in pairs(QUEST[CRAFTING_TYPE_PROVISIONING].work) do
             local res1, res2 = string.find(step, name)
             if res1 then
               recipes[index] = {list = lists[list_num], recipe = id, sound = sound}
@@ -801,10 +807,10 @@ end
 -- ZO_SavedVars.NewCharacterIdSettings = function(...) local params = {...}  namespaces[params[2]] = 1  return originalId(...) end
 -- ZO_SavedVars.NewCharacterNameSettings = function(...) local params = {...}  namespaces[params[2]] = 1  return originalName(...) end
 
--- EVENT_MANAGER:RegisterForEvent("CopySavedVars", EVENT_PLAYER_ACTIVATED, function() 
+-- EVENT_MANAGER:RegisterForEvent("CopySavedVars", EVENT_PLAYER_ACTIVATED, function()
 
 -- zo_callLater(function()
--- for k, v in pairs(namespaces) do 
+-- for k, v in pairs(namespaces) do
 -- 	local savedVarTable = _G[k]
 -- 	if savedVarTable and savedVarTable["Default"] and savedVarTable["Default"][oldAccountName] then
 -- 		savedVarTable["Default"][newAccountName] = savedVarTable["Default"][oldAccountName]

@@ -7,7 +7,7 @@
 -- File Name: AlchGrab.lua
 -- File Description: This file removes items required for writs from the bank
 -- Load Order Requirements: None
--- 
+--
 -----------------------------------------------------------------------------------
 
 WritCreater = WritCreater or {}
@@ -25,7 +25,7 @@ local function dbug(...)
 end
 
 --
--- 
+--
 function numPotEffects(link)
 	local typei= GetItemLinkItemType(link)
 	if typei == ITEMTYPE_POTION or typei == ITEMTYPE_POISON then else return 0 end
@@ -139,15 +139,15 @@ local function isPotentialMatch(validItemTypes, bag, slot, quest, stepindex, con
 	if name == "" then return false end
 	local itemType = GetItemType(bag, slot)
 	if validItemTypes[itemType] then
-		
+
 		local link = GetItemLink(bag, slot)
 		specialDebug("WC Debug Item is correct type of item (e.g. food, weapon)")
 		specialDebug("WC Debug Item Link: "..link)
-		
-		
-		if DoesItemFulfillJournalQuestCondition(bag, slot, quest, stepindex, conditionindex) then 
-			
-			return true 
+
+
+		if DoesItemFulfillJournalQuestCondition(bag, slot, quest, stepindex, conditionindex) then
+
+			return true
 		end
 	end
 	return false
@@ -166,7 +166,7 @@ local function filterMatches(matches)
 		local longest = 0
 		local position = 0
 		for i = 1, #matches do
-			local traitAmount = numPotEffects(GetItemLink(matches[i][1], matches[i][2])) 
+			local traitAmount = numPotEffects(GetItemLink(matches[i][1], matches[i][2]))
 			if traitAmount<traits then
 				position = i
 				traits=traitAmount
@@ -199,7 +199,7 @@ local function potionGrabRefactored(questCondition, amountRequired, validItemTyp
 		specialDebug("Bag has a size of "..GetBagSize(bagId))
 		for i=0, GetBagSize(bagId) do -- check the rest of the bank
 			if i < 5 and GetItemName(bagId, i)~="" then specialDebug("Checking item in slot "..i.." which has name "..GetItemName(bagId, i).." and itemType "..GetItemType(bagId, i)) end
-			if isPotentialMatch(validItemTypes, bagId, i, quest, stepindex, conditionindex) then 
+			if isPotentialMatch(validItemTypes, bagId, i, quest, stepindex, conditionindex) then
 				-- Add to match list
 				table.insert(potentialMatches, {bagId, i})
 			end
@@ -210,7 +210,7 @@ local function potionGrabRefactored(questCondition, amountRequired, validItemTyp
 		local stackSize = GetSlotStackSize(bag, slot)
 		if stackSize < amountRequired then
 			specialDebug("WC Debug User does not have enough items for quest in the bank. Moving what is there, and checking again after")
-			queue[#queue + 1]  = function() return potionGrabRefactored(questCondition, amountRequired -stackSize, validItemTypes ) end 
+			queue[#queue + 1]  = function() return potionGrabRefactored(questCondition, amountRequired -stackSize, validItemTypes ) end
 		else
 			specialDebug("WC Debug User has enough items for quest. Withdrawing items")
 			if not moveItem(amountRequired, bag, slot) then
@@ -225,8 +225,8 @@ local function potionGrabRefactored(questCondition, amountRequired, validItemTyp
 end
 
 local function exceptions(condition)
-	
-	
+
+
 	return condition
 end
 
@@ -235,7 +235,7 @@ local alchGrab = function() end
 local wasItemInQueue
 local function queueRun()
 	if queue[1] then
-		local result = queue[1]() 
+		local result = queue[1]()
 		if result == false then
 			wasItemInQueue = false
 		elseif result and wasItemInQueue ~= false then
@@ -249,9 +249,9 @@ local function queueRun()
 			WritCreater.DismissPets()
 		end
 		if wasItemInQueue and  WritCreater:GetSettings().autoCloseBank then
-			local function recursiveCall() 
+			local function recursiveCall()
 				zo_callLater(
-					function() 
+					function()
 						if GetInteractionType()==6 then
 							if WritCreater:GetSettings().despawnBanker then
 								ZO_SharedInteraction:CloseChatterAndDismissAssistant()
@@ -259,7 +259,7 @@ local function queueRun()
 							SCENE_MANAGER:Show('hud')
 							recursiveCall()
 						end
-					end , 100) 
+					end , 100)
 				end
 			recursiveCall()
 		end
@@ -271,30 +271,30 @@ local function queueRun()
 end
 
 local function addToQueue(questIndex, validItemTypes)
-	for j=1,4 do 
+	for j=1,4 do
 		local a=GetJournalQuestConditionInfo(questIndex, 1, j)
 		local cur, max =GetJournalQuestConditionValues(questIndex,1,j)
 
 		a=a:lower()
 		a = exceptions(a)
 		a = string.gsub(a, " ", " ") -- First is a NO-BREAK SPACE, 2nd a SPACE, copied from Ayantir's BMR just in case
-		if cur < max and a~="" then 
+		if cur < max and a~="" then
 
 			queue[#queue + 1] = function() return potionGrabRefactored(a, max - cur, validItemTypes, questIndex, 1, j) end
 
-			
+
 		end
 	end
 end
 
 local function equipmentCheck(link, bag, slot)
-	return GetItemCreatorName(bag, slot)~= GetUnitName("player") or 
-		GetItemTrait(bag, slot) ~= ITEM_TRAIT_TYPE_NONE or GetItemLinkQuality(link) ~= ITEM_QUALITY_NORMAL or 
-		GetItemRequiredChampionPoints(bag, slot) == 160 or IsItemPlayerLocked(bag, slot) 
+	return GetItemCreatorName(bag, slot)~= GetUnitName("player") or
+		GetItemTrait(bag, slot) ~= ITEM_TRAIT_TYPE_NONE or GetItemLinkQuality(link) ~= ITEM_QUALITY_NORMAL or
+		GetItemRequiredChampionPoints(bag, slot) == 160 or IsItemPlayerLocked(bag, slot)
 end
 
 
-local validItemTypes = 
+local validItemTypes =
 {
 	[CRAFTING_TYPE_ALCHEMY] = {
 		[ITEMTYPE_POTION] = {true, function(link) return numPotEffects(link)==0 end},
@@ -321,11 +321,11 @@ local validItemTypes =
 	[CRAFTING_TYPE_WOODWORKING] ={
 		[ITEMTYPE_ARMOR] = {true,equipmentCheck},
 		[ITEMTYPE_WEAPON] = {true,equipmentCheck },
-	
+
 	},
 	[CRAFTING_TYPE_CLOTHIER] ={
 		[ITEMTYPE_ARMOR] = {true,equipmentCheck},
-	
+
 	},
 	--]]
 }
@@ -356,7 +356,7 @@ local function runProcessDeposits()
 					if IsProtectedFunction("RequestMoveItem") then
 						CallSecureProtected("RequestMoveItem", itemInfo[3], itemInfo[4], bag,destinationSlot,1)
 					else
-						RequestMoveItem(itemInfo[3], itemInfo[4], bag,destinationSlot,1)
+						RequestMoveItem(itemInfo[3], itemInfo[4], bag,destinationSlot,itemInfo[5])
 					end
 					d("Writ Crafter: Depositing "..itemInfo[1])
 					WritCreater.pendingItemActions[k] = nil
@@ -367,7 +367,7 @@ local function runProcessDeposits()
 	end
 end
 
-alchGrab = function (event, bag) 
+alchGrab = function (event, bag)
 	findEmptySlots(BAG_BACKPACK)
 	if WritCreater.lang =="jp" then return end
 	if WritCreater:GetSettings().shouldGrab then
@@ -395,18 +395,18 @@ WritCreater.alchGrab = alchGrab
 
 function WritCreater.setupAlchGrabEvents()
 
-	EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_QUEST_ADDED, function(event, journalIndex, name) 
+	EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_QUEST_ADDED, function(event, journalIndex, name)
 		dbug("EVENT:Quest Added")
 		dbug("Name: "..name)
 
-	WritCreater.MasterWritsQuestAdded(event, journalIndex,name) end) 
+	WritCreater.MasterWritsQuestAdded(event, journalIndex,name) end)
 
 	if not WritCreater:GetSettings().autoCloseBank then
 		EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_OPEN_BANK, alchGrab)
 	end
 
 	EVENT_MANAGER:RegisterForEvent(WritCreater.name.." Withdraw", EVENT_PLAYER_ACTIVATED, function() if GetCurrentZoneHouseId() >0 then  alchGrab() end end)
-	
+
 	--I use SCENE_MANAGER:IsShowing("bank")
 
 end

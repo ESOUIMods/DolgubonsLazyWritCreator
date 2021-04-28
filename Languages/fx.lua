@@ -70,13 +70,13 @@ function WritCreater.langWritNames() -- Vital
 	-- Exact!!!  I know for german alchemy writ is Alchemistenschrieb - so ["G"] = schrieb, and ["A"]=Alchemisten
 	local names = {
 	["G"] = "Writ",
-	[CRAFTING_TYPE_ENCHANTING] = "Enchanter",
-	[CRAFTING_TYPE_BLACKSMITHING] = "Blacksmith",
-	[CRAFTING_TYPE_CLOTHIER] = "Clothier",
-	[CRAFTING_TYPE_PROVISIONING] = "Provisioner",
-	[CRAFTING_TYPE_WOODWORKING] = "Woodworker",
-	[CRAFTING_TYPE_ALCHEMY] = "Alchemist",
-	[CRAFTING_TYPE_JEWELRYCRAFTING] = "Jewelry",
+[CRAFTING_TYPE_ENCHANTING] = "Zlecenie dla zaklinacza",
+	[CRAFTING_TYPE_BLACKSMITHING] = "Zlecenie dla kowala",
+	[CRAFTING_TYPE_CLOTHIER] = "Zlecenie dla krawca",
+	[CRAFTING_TYPE_PROVISIONING] = "Zlecenie na przyrządzanie",
+	[CRAFTING_TYPE_WOODWORKING] = "Zlecenie dla stolarza",
+	[CRAFTING_TYPE_ALCHEMY] = "Zlecenie dla alchemika",
+	[CRAFTING_TYPE_JEWELRYCRAFTING] = "Zlecenie dla jubilera",
 	}
 	return names
 end
@@ -113,7 +113,7 @@ end
 
 function WritCreater.writCompleteStrings() -- Vital for translation
 	local strings = {
-	["place"] = "Place the goods",
+	["umieść"] = "Place the goods",
 	["sign"] = "Sign the Manifest",
 	["masterPlace"] = "I've finished the ",
 	["masterSign"] = "<Finish the job.>",
@@ -419,8 +419,8 @@ end
 
 function WritCreater.langStationNames()
 	return
-	{["Blacksmithing Station"] = 1, ["Clothing Station"] = 2, 
-	 ["Enchanting Table"] = 3,["Alchemy Station"] = 4, ["Cooking Fire"] = 5, ["Woodworking Station"] = 6, ["Jewelry Crafting Station"] = 7, }
+	{["Kuźnia"] = 1, ["Stanowisko krawieckie"] = 2, 
+	 ["Stół do zaklinania"] = 3,["Stanowisko alchemiczne"] = 4, ["Palenisko do gotowania"] = 5, ["Stanowisko stolarskie"] = 6, ["Stanowisko jubilerskie"] = 7, }
 end
 
 -- What is this??! This is just a fun 'easter egg' that is never activated on easter.

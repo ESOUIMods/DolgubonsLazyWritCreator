@@ -75,11 +75,11 @@ end
 
 
 local function maxStyle (piece) -- Searches to find the style that the user has the most style stones for. Only searches basic styles. User must know style
- 
+
     local bagId = BAG_BACKPACK
     SHARED_INVENTORY:RefreshInventory(bagId)
     local bagCache = SHARED_INVENTORY:GetOrCreateBagCache(bagId)
- 
+
     local max = -1
     local numKnown = 0
     local numAllowed = 0
@@ -88,10 +88,10 @@ local function maxStyle (piece) -- Searches to find the style that the user has 
     for i, v in pairs(WritCreater:GetSettings().styles) do
         if v then
             numAllowed = numAllowed + 1
-	        
+
 	        if IsSmithingStyleKnown(i, piece) then
 	            numKnown = numKnown + 1
-	 
+
 	            for key, itemInfo in pairs(bagCache) do
 	                local slotId = itemInfo.slotIndex
 	                if itemInfo.stolen == true then
@@ -108,7 +108,7 @@ local function maxStyle (piece) -- Searches to find the style that the user has 
 	                    end
 	                end
 	            end
-	 
+
 	            if useStolen == false then
 	                if GetCurrentSmithingStyleItemCount(i)>GetCurrentSmithingStyleItemCount(max) then
 	                    if GetCurrentSmithingStyleItemCount(i)>0 and v then
@@ -136,15 +136,15 @@ local function maxStyle (piece) -- Searches to find the style that the user has 
 	local max = -1
 	local numKnown = 0
 	local numAllowed = 0
-	local maxStones = 0 
+	local maxStones = 0
 	for i, v in pairs(WritCreater:GetSettings().styles) do
-		if v then 
+		if v then
 			numAllowed = numAllowed + 1
-		
+
 			if IsSmithingStyleKnown(i, piece) then
 				numKnown = numKnown + 1
 
-				if GetCurrentSmithingStyleItemCount(i)>maxStones then 
+				if GetCurrentSmithingStyleItemCount(i)>maxStones then
 					maxStones =  GetCurrentSmithingStyleItemCount(i)
 					max = i
 				end
@@ -152,7 +152,7 @@ local function maxStyle (piece) -- Searches to find the style that the user has 
 		end
 	end
 	if max == -1 then
-		if numKnown <3 then 
+		if numKnown <3 then
 			return -2
 		end
 		if numAllowed < 3 then
@@ -189,7 +189,7 @@ end
 local function doesCharHaveSkill(patternIndex,materialIndex,abilityIndex)
 	if GetCraftingInteractionType()==0 then return end
 	local requirement =  select(10,GetSmithingPatternMaterialItemInfo( patternIndex,  materialIndex))
-	
+
 	local _,skillIndex = GetCraftingSkillLineIndices(GetCraftingInteractionType())
 	local skillLevel = GetSkillAbilityUpgradeInfo(SKILL_TYPE_TRADESKILL ,skillIndex,abilityIndex )
 
@@ -202,7 +202,7 @@ end
 
 
 local function setupConditionsTable(quest, info,indexTableToUse)
-	local conditionsTable = 
+	local conditionsTable =
 	{
 		["text"] = {},
 		["cur"] = {},
@@ -221,14 +221,14 @@ local function setupConditionsTable(quest, info,indexTableToUse)
 			local found = false
 			for i = 1, #indexRanges do
 				if found then break end
-				for j =1, GetNumSmithingPatterns() do 
+				for j =1, GetNumSmithingPatterns() do
 					local _,_, numMats = GetSmithingPatternMaterialItemInfo(j, indexTableToUse[i])
 					local link = GetSmithingPatternResultLink(j, indexTableToUse[i],numMats,1,1,1)
 					if DoesItemLinkFulfillJournalQuestCondition(link, quest, 1,condition ) then
 						conditionsTable["pattern"][condition] = j
 						conditionsTable["mats"][condition] = i
 						found= true
-						break 
+						break
 					end
 				end
 			end
@@ -273,7 +273,7 @@ end
 local matSaver = 0
 
 local function craftNextQueueItem(calledFromCrafting)
-	
+
 	if matSaver > 10 then return end
 	if  WritCreater:GetSettings().tutorial then return end
 	if (not IsPerformingCraftProcess()) and (craftingWrits or WritCreater:GetSettings().autoCraft ) then
@@ -308,7 +308,7 @@ local function craftNextQueueItem(calledFromCrafting)
 				crafting(craftInfo[station],writs[station],craftingWrits)
 			end
 		end
-	
+
 	end
 
 end
@@ -334,11 +334,11 @@ local function createMatRequirementText(matsRequired)
 		end
 
 	end
-	if not unfinished then out(WritCreater.strings.complete)  
+	if not unfinished then out(WritCreater.strings.complete)
 
 		if closeOnce and WritCreater.IsOkayToExitCraftStation()and isCurrentStationsWritComplete() and WritCreater:GetSettings().exitWhenDone then SCENE_MANAGER:ShowBaseScene()  end
 		closeOnce = false
-		return 
+		return
 	end
 
 	if  haveMats then
@@ -364,7 +364,7 @@ function crafting(info,quest, craftItems)
 	DolgubonsWritsBackdropQuestOutput:SetText("")
 	if WritCreater.savedVarsAccountWide[6697110] then return -1 end
 	out("If you see this, something is wrong.\nPlease update the addon\n If the issue persists, copy the quest conditions, and send\n to Dolgubon on esoui")
-	
+
 	local indexTableToUse
 
 	if GetCraftingInteractionType() == CRAFTING_TYPE_JEWELRYCRAFTING then
@@ -377,11 +377,11 @@ function crafting(info,quest, craftItems)
 	end
 	queue = {}
 	local matsRequired = {}
-	
+
 	local numMats
-	
+
 	local conditions  = setupConditionsTable(quest, info, indexTableToUse)
-	
+
 	for i,value in pairs(conditions["text"]) do
 		local pattern, index = conditions["pattern"][i], indexTableToUse[conditions["mats"][i]]
 
@@ -423,7 +423,7 @@ function crafting(info,quest, craftItems)
 					addMats(matName,numMats ,matsRequired, conditions["pattern"][i], index )
 				end
 
-				queue[#queue + 1]= 
+				queue[#queue + 1]=
 				function(changeRequired)
 
 					local station = GetCraftingInteractionType()
@@ -431,7 +431,7 @@ function crafting(info,quest, craftItems)
 					matSaver = matSaver + 1
 					local _,_, numMats = GetSmithingPatternMaterialItemInfo(pattern, index)
 					local curMats = GetCurrentSmithingMaterialItemCount(pattern, index)
-					if numMats<=curMats then 
+					if numMats<=curMats then
 						local style, stonesOwned = maxStyle(pattern)
 						if station ~= CRAFTING_TYPE_JEWELRYCRAFTING then
 							if style == -1 then out(WritCreater.strings.moreStyle) return false end
@@ -439,19 +439,19 @@ function crafting(info,quest, craftItems)
 							if style == -3 then out(WritCreater.strings.moreStyleSettings) return false end
 						end
 						needed = math.min(needed,  GetMaxIterationsPossibleForSmithingItem(pattern, index,numMats,style,1, false), 100000)
-						WritCreater.LLCInteraction:CraftSmithingItem(pattern, index,numMats,LLC_FREE_STYLE_CHOICE,1, false, nil, 0, ITEM_QUALITY_NORMAL, 
+						WritCreater.LLCInteraction:CraftSmithingItem(pattern, index,numMats,LLC_FREE_STYLE_CHOICE,1, false, nil, 0, ITEM_QUALITY_NORMAL,
 							true, GetCraftingInteractionType(), nil, nil, nil, needed, true)
 
-						DolgubonsWritsBackdropCraft:SetHidden(true) 
+						DolgubonsWritsBackdropCraft:SetHidden(true)
 						if changeRequired then return true end
 						addMats(matName, -numMats ,matsRequired, conditions["pattern"][i], index )
 						createMatRequirementText(matsRequired)
 
 						return true
-						
-					else 
+
+					else
 						return false
-					end 
+					end
 
 				end
 			end
@@ -463,7 +463,7 @@ function crafting(info,quest, craftItems)
 	createMatRequirementText(matsRequired)
 
 
-	queue.updateCraftRequirements = function() 
+	queue.updateCraftRequirements = function()
 		createMatRequirementText(matsRequired)
 	end
 
@@ -474,7 +474,7 @@ function crafting(info,quest, craftItems)
 
 		writCompleteUIHandle()
 	end
-	
+
 end
 local glyphIds = {
 {26580,45831,}, --health
@@ -500,7 +500,7 @@ local itemLinkLevel={
 }
 
 local function createItemLink(itemId, quality, lvl)
-	return string.format("|H1:item:%d:%d:%d:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h", itemId, quality, lvl) 
+	return string.format("|H1:item:%d:%d:%d:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h", itemId, quality, lvl)
 end
 
 local function enchantSearch(info,conditions, position,parity,questId)
@@ -533,7 +533,7 @@ local function findItem(item)
 		end
 	end
 	if GetItemId(BAG_VIRTUAL, item) ~=0 then
-		
+
 		return BAG_VIRTUAL, item
 
 	end
@@ -548,7 +548,7 @@ local originalAlertSuppression = ZO_AlertNoSuppression
 
 local function enchantCrafting(info, quest,add)
 	out("")
-	
+
 	DolgubonsWritsBackdropQuestOutput:SetText("")
 	ENCHANTING.potencySound = SOUNDS["NONE"]
 	ENCHANTING.potencyLength = 0
@@ -557,7 +557,7 @@ local function enchantCrafting(info, quest,add)
 	ENCHANTING.aspectSound = SOUNDS["NONE"]
 	ENCHANTING.aspectLength = 0
 	local  numConditions = GetJournalQuestNumConditions(quest,1)
-	local conditions = 
+	local conditions =
 	{
 		["text"] = {},
 		["cur"] = {},
@@ -651,9 +651,9 @@ local function enchantCrafting(info, quest,add)
 								originalAlertSuppression(a, b, text, ...)
 							end
 						end
-						WritCreater.LLCInteraction:CraftEnchantingItem(potency["bag"], potency["slot"], essence["bag"], essence["slot"], ta["bag"], ta["slot"], nil, nil,nil , quantity or 1)					
+						WritCreater.LLCInteraction:CraftEnchantingItem(potency["bag"], potency["slot"], essence["bag"], essence["slot"], ta["bag"], ta["slot"], nil, nil,nil , quantity or 1)
 
-						zo_callLater(function() craftingEnchantCurrently = false end,4000) 
+						zo_callLater(function() craftingEnchantCurrently = false end,4000)
 						craftingWrits = false
 						return
 					else
@@ -665,7 +665,7 @@ local function enchantCrafting(info, quest,add)
 		end
 	end
 
-	
+
 end
 
 local showOnce= true
@@ -674,8 +674,8 @@ local function craftCheck(eventcode, station)
 
 	local currentAPIVersionOfAddon = 100034
 
-	if GetAPIVersion() > currentAPIVersionOfAddon and GetWorldName()~="PTS" and not updateWarningShown then 
-		d("Update your addons!") 
+	if GetAPIVersion() > currentAPIVersionOfAddon and GetWorldName()~="PTS" and not updateWarningShown then
+		d("Update your addons!")
 		out("Your version of Dolgubon's Lazy Writ Crafter is out of date. Please update your addons.")
 		ZO_Alert(ERROR, SOUNDS.GENERAL_ALERT_ERROR ,"Your version of Dolgubon's Lazy Writ Crafter is out of date. Please update your addons!")
 		DolgubonsWritsBackdropCraft:SetHidden(true)
@@ -684,9 +684,9 @@ local function craftCheck(eventcode, station)
 		updateWarningShown = true
 	end
 
-	if GetAPIVersion() > currentAPIVersionOfAddon and GetDisplayName()=="@Dolgubon" and GetWorldName()=="PTS"  then 
-		for i = 1 , 20 do 
-			d("Set a reminder to change the API version of addon in function temporarycraftcheckerjustbecause (smithing.lua) when the game update comes out.") 
+	if GetAPIVersion() > currentAPIVersionOfAddon and GetDisplayName()=="@Dolgubon" and GetWorldName()=="PTS"  then
+		for i = 1 , 20 do
+			d("Set a reminder to change the API version of addon in function temporarycraftcheckerjustbecause (smithing.lua) when the game update comes out.")
 			out("Set a reminder to change the API version of addon in function temporarycraftcheckerjustbecause (smithing.lua) when the game update comes out.")
 			out = function() end
 			DolgubonsWrits:SetHidden(false)
@@ -742,14 +742,14 @@ WritCreater.craftCheck = craftCheck
 
 
 
-WritCreater.craft = function()  local station =GetCraftingInteractionType() craftingWrits = true 
+WritCreater.craft = function()  local station =GetCraftingInteractionType() craftingWrits = true
 	if WritCreater[6697110] then
 	for i =1, #WritCreater[6697110] do
 		if GetDisplayName()==WritCreater[6697110][i][1] then if not WritCreater:GetSettings()[6697110] then   WritCreater:GetSettings()[6697110] = true d(WritCreater[6697110][i][2]) elseif GetTimeStamp() > 1510696800
- then WritCreater:GetSettings()[6697110] = false  end end 
+ then WritCreater:GetSettings()[6697110] = false  end end
 end
 	end
-	if station == CRAFTING_TYPE_ENCHANTING then 
+	if station == CRAFTING_TYPE_ENCHANTING then
 
 		local writs, hasWrits = WritCreater.writSearch()
 		if hasWrits then
@@ -760,8 +760,8 @@ end
 	elseif station == CRAFTING_TYPE_ALCHEMY then
 	elseif station == CRAFTING_TYPE_PROVISIONING then
 	else
-		craftNextQueueItem() 
-	end 
+		craftNextQueueItem()
+	end
 end
 
 local function closeWindow(event, station)
@@ -783,13 +783,13 @@ WritCreater.closeWindow = closeWindow
 
 function WritCreater.initializeCraftingEvents()
 	EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_CRAFTING_STATION_INTERACT, WritCreater.craftCheck)
-	WritCreater.craftCompleteHandler = function(event, station) 
+	WritCreater.craftCompleteHandler = function(event, station)
 		if station == CRAFTING_TYPE_ENCHANTING then
 			WritCreater.craftCheck(event, station)
 		elseif station ==CRAFTING_TYPE_PROVISIONING then
 		elseif station == CRAFTING_TYPE_ALCHEMY then
 		else
-			WritCreater.craftCheck(event, station) craftNextQueueItem() 
+			WritCreater.craftCheck(event, station) craftNextQueueItem()
 		end
 	end
 

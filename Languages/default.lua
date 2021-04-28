@@ -7,13 +7,30 @@
 -- File Name: Languages/default.lua
 -- File Description: Default language file
 -- Load Order Requirements: Before the language file
--- 
+--
 -----------------------------------------------------------------------------------
 
 function WritCreater.language()
 
 	return false
 
+end
+
+local function myLower(str)
+	return zo_strformat("<<z:1>>",str)
+end
+
+function WritCreater.getWritAndSurveyType()
+	if not WritCreater.langCraftKernels then return end
+
+	local kernels = WritCreater.langCraftKernels()
+	local craftType
+	for craft, kernel in pairs(kernels) do
+		if string.find(myLower(itemName), myLower(kernel)) then
+			craftType = craft
+		end
+	end
+	return craftType
 end
 
 local function proper(str)
@@ -26,7 +43,7 @@ end
 
 WritCreater.lang = "none"
 
--- This is in the default, so that if a new setting is added an error is not thrown, 
+-- This is in the default, so that if a new setting is added an error is not thrown,
 -- and the addon instead uses the English option strings for any that are missing.
 
 local function runeMissingFunction (ta,essence,potency)
@@ -78,7 +95,7 @@ local function dailyResetFunction(till, stamp) -- You can translate the followin
 		else
 			return till["hour"].." hours and "..till["minute"].." minutes until daily reset"
 		end
-	end 
+	end
 end
 
 local function masterWritEnchantToCraft (pat,set,trait,style,qual,mat,writName,Mname,generalName)
@@ -88,7 +105,7 @@ end
 
 WritCreater.missingTranslations = {}
 local stringIndexTable = {}
-local findMissingTranslationsMetatable = 
+local findMissingTranslationsMetatable =
 {
 ["__newindex"] = function(t,k,v) if not stringIndexTable[tostring(t)] then stringIndexTable[tostring(t)] = {} end stringIndexTable[tostring(t)][k] = v WritCreater.missingTranslations[k] = {k, v} end,
 ["__index"] = function(t, k) return stringIndexTable[tostring(t)][k] end,
@@ -98,7 +115,7 @@ WritCreater.strings = {}
 setmetatable(WritCreater.strings, findMissingTranslationsMetatable)
 
 WritCreater.strings["runeReq"] 					= function (essence, potency) return zo_strformat("|c2dff00Crafting will require 1 |rTa|c2dff00, 1 |cffcc66<<1>>|c2dff00 and 1 |c0066ff<<2>>|r", essence, potency) end
-WritCreater.strings["runeMissing"] 				= runeMissingFunction 
+WritCreater.strings["runeMissing"] 				= runeMissingFunction
 WritCreater.strings["notEnoughSkill"]				= "You do not have a high enough crafting skill to make the required equipment"
 WritCreater.strings["smithingMissing"] 			= "\n|cf60000You do not have enough mats|r"
 WritCreater.strings["craftAnyway"] 				= "Craft anyway"
@@ -121,7 +138,7 @@ WritCreater.strings["countVouchers"]				= "You have <<1>> unearned Writ Vouchers
 WritCreater.strings["includesStorage"]				= function(type) local a= {"Surveys", "Master Writs"} a = a[type] return zo_strformat("Count includes <<1>> in house storage", a) end
 WritCreater.strings["surveys"]						= "Crafting Surveys"
 WritCreater.strings["sealedWrits"]					= "Sealed Writs"
-WritCreater.strings["masterWritEnchantToCraft"]	= function(lvl, type, quality, writCraft, writName, generalName) 
+WritCreater.strings["masterWritEnchantToCraft"]	= function(lvl, type, quality, writCraft, writName, generalName)
 										return zo_strformat("<<t:4>> <<t:5>> <<t:6>>: Crafting a <<t:1>> Glyph of <<t:2>> at <<t:3>> quality",lvl, type, quality,
 											writCraft,writName, generalName) end
 WritCreater.strings["masterWritSmithToCraft"]		= masterWritEnchantToCraft
@@ -144,7 +161,7 @@ WritCreater.optionStrings.accountWide                  = "Account Wide"
 WritCreater.optionStrings.characterSpecific            = "Character Specific"
 WritCreater.optionStrings.useCharacterSettings         = "Use character settings" -- de
 WritCreater.optionStrings.useCharacterSettingsTooltip  = "Use character specific settings on this character only" --de
-WritCreater.optionStrings["style tooltip"]								= function (styleName, styleStone) return zo_strformat("Allow the <<1>> style, which uses the <<2>> style stone, to be used for crafting",styleName, styleStone) end 
+WritCreater.optionStrings["style tooltip"]								= function (styleName, styleStone) return zo_strformat("Allow the <<1>> style, which uses the <<2>> style stone, to be used for crafting",styleName, styleStone) end
 WritCreater.optionStrings["show craft window"]							= "Show Craft Window"
 WritCreater.optionStrings["show craft window tooltip"]					= "Shows the crafting window when a crafting station is open"
 WritCreater.optionStrings["autocraft"]									= "AutoCraft"
@@ -258,7 +275,8 @@ WritCreater.optionStrings["fragmentRewardTooltip"]						= "What to do with psiji
 WritCreater.optionStrings["writRewards submenu"]						= "Writ Reward Handling"
 WritCreater.optionStrings["writRewards submenu tooltip"]				= "What to do with all the rewards from writs"
 
-
+WritCreater.optionStrings["jubilee"]									= "Loot Anniversary Boxes"
+WritCreater.optionStrings["jubilee tooltip"]							= "Auto Loot Anniversary Boxes"
 
 
 WritCreater.optionStrings["rewardChoices"]								= {"Nothing","Deposit","Junk", "Destroy"}

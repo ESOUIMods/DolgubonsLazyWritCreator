@@ -7,17 +7,16 @@
 -- File Name: SettingsMenu.lua
 -- File Description: Contains the information for the settings menu
 -- Load Order Requirements: None (April, after language files)
--- 
+--
 -----------------------------------------------------------------------------------
 
 local checks = {}
-local validLanguages = 
+local validLanguages =
 {
-	["en"]=true,["de"] = true,["fr"] = true,["jp"] = true, ["ru"] = false, ["zh"] = false, ["pl"] = false,
-}
+	["en"]=true,["de"] = true,["fr"] = true,["jp"] = true, ["ru"] = false, ["zh"] = false, ["pl"] = true, ["fx"] = true, }
 if true then
 	EVENT_MANAGER:RegisterForEvent("WritCrafterLocalizationError", EVENT_PLAYER_ACTIVATED, function()
-		if not WritCreater.languageInfo then 
+		if not WritCreater.languageInfo then
 			local language = GetCVar("language.2")
 			if validLanguages[language] == nil then
 				d("Dolgubon's Lazy Writ Crafter: Your language is not supported for this addon. If you are looking to translate the addon, check the lang/en.lua file for more instructions.")
@@ -69,10 +68,10 @@ end
 			choices = {"Copy the", "Autoloot", "Never Autoloot"},
 			choicesValues = {1,2,3},
 			getFunc = function() if WritCreater:GetSettings().ignoreAuto then return 1 elseif WritCreater:GetSettings().autoLoot then return 2 else return 3 end end,
-			setFunc = function(value) 
-				if value == 1 then 
+			setFunc = function(value)
+				if value == 1 then
 					WritCreater:GetSettings().ignoreAuto = false
-				elseif value == 2 then  
+				elseif value == 2 then
 					WritCreater:GetSettings().autoLoot = true
 					WritCreater:GetSettings().ignoreAuto = true
 				elseif value == 3 then
@@ -145,7 +144,7 @@ function WritCreater.Options() --Sentimental
 				if types then
 					stationsToCheck = usingOld
 				else
-					for i = 1, #types do 
+					for i = 1, #types do
 						stationsToCheck[types] = usingOld[types]
 					end
 				end
@@ -159,7 +158,7 @@ function WritCreater.Options() --Sentimental
 					local text = parameters[positionOfText]
 					if positionOfText == 0 then text = self end
 					if type(text )~="string" then original(self, ...) return end
-					for i, stationOriginalName in pairs(stationsToCheck) do 
+					for i, stationOriginalName in pairs(stationsToCheck) do
 						-- if case =="u" then d(text, string.upper(usingOld[i]) ) d(string.find(text, usingOld[i]) or (case == "u" and string.find(text, string.upper(usingOld[i]) ))) end
 						if string.find(text, usingOld[i]) or (case == "u" and string.find(text, string.upper(usingOld[i]) )) then
 							local newText = string.gsub(text, usingOld[i], usingNames[i] or text or "")
@@ -195,7 +194,7 @@ function WritCreater.Options() --Sentimental
 				if types then
 					stationsToCheck = usingOld
 				else
-					for i = 1, #types do 
+					for i = 1, #types do
 						stationsToCheck[types] = usingOld[types]
 					end
 				end
@@ -207,7 +206,7 @@ function WritCreater.Options() --Sentimental
 					local results = {original(self, ...)}
 					local text = results[positionOfText]
 					if type(text )~="string" then return unpack(results) end
-					for i, stationOriginalName in pairs(stationsToCheck) do 
+					for i, stationOriginalName in pairs(stationsToCheck) do
 						if string.find(text, usingOld[i]) then
 							local newText = string.gsub(text, usingOld[i], usingNames[i] or text or "")
 							results[positionOfText] = newText
@@ -219,7 +218,7 @@ function WritCreater.Options() --Sentimental
 			end
 
 			interceptReplacement(_G, "GetJournalQuestInfo",2,true, 3)
-			local originalInventorySlot = ZO_Inventory_SetupSlot 
+			local originalInventorySlot = ZO_Inventory_SetupSlot
 
 			ZO_Inventory_SetupSlot = function(slotControl, ...)
 				local controlToAct = slotControl:GetParent():GetNamedChild("Name")
@@ -231,21 +230,21 @@ function WritCreater.Options() --Sentimental
 					controlToAct.isAlternatedUniverse = true
 					controlToAct:SetText(controlToAct:GetText())
 				end
-				return originalInventorySlot(slotControl, ...) 
+				return originalInventorySlot(slotControl, ...)
 			end
 			-- interceptReplacement(_G, "GetItemLinkName",1,true, 4)
-			
+
 			-- interceptReplacement(LOOT_HISTORY_KEYBOARD, "InsertOrQueue", 1, true, 4)
 
 			local original = LOOT_HISTORY_KEYBOARD.InsertOrQueue
-			LOOT_HISTORY_KEYBOARD.InsertOrQueue = function(self, newEntry) 
+			LOOT_HISTORY_KEYBOARD.InsertOrQueue = function(self, newEntry)
 				if not WritCreater.savedVarsAccountWide.alternateUniverse then
 					return original(self, newEntry)
 				end
 				for k, v in pairs(newEntry.lines) do
 					local text = v.text
 					if type(text )~="string" then return original(self, newEntry)  end
-					for i, stationOriginalName in pairs(oneOff) do 
+					for i, stationOriginalName in pairs(oneOff) do
 						if string.find(text, oneOff[i]) then
 							local newText = string.gsub(text, oneOff[i], oneOffNames[i] or text or "")
 							v.text = newText
@@ -256,7 +255,7 @@ function WritCreater.Options() --Sentimental
 				end
 			end
 			local original
-			local function inventorySetup (pool) 
+			local function inventorySetup (pool)
 				local activeObjects = pool:GetActiveObjects()
 				for k, c in pairs(activeObjects) do
 					local label  = c:GetNamedChild("Name")
@@ -303,10 +302,10 @@ function WritCreater.Options() --Sentimental
 			setupReplacement(ZO_QuestJournalTitleText, "SetText",1,true,2)
 
 			setupReplacement(ZO_CraftBagTabsActive, "SetText",1,true,1)
-			for j = 3, 9 do 
+			for j = 3, 9 do
 				local text = ZO_CraftBagTabs:GetNamedChild("Button"..j).m_object.m_buttonData.tooltipText
-				if type(text )=="string" then 
-					for i, stationOriginalName in pairs(crafts) do 
+				if type(text )=="string" then
+					for i, stationOriginalName in pairs(crafts) do
 						if string.find(text, crafts[i]) then
 							local newText = string.gsub(text, crafts[i], craftNames[i] or text or "")
 							ZO_CraftBagTabs:GetNamedChild("Button"..j).m_object.m_buttonData.tooltipText = newText
@@ -323,7 +322,7 @@ function WritCreater.Options() --Sentimental
 			setupReplacement(ZO_LootTitle, "SetText",1,true,4)
 			setupReplacement(ZO_TargetUnitFramereticleoverCaption , "SetText",1,true,2)
 
-			
+
 			setupReplacement(ZO_AchievementsCategoryTitle,"SetText", 1, true, 1)
 
 			setupReplacement(ZO_AlchemyTopLevelSkillInfoName,"SetText", 2, true, 1,"u")
@@ -334,7 +333,7 @@ function WritCreater.Options() --Sentimental
 			local function skillActvices()
 				ZO_Skills_TieSkillInfoHeaderToCraftingSkill(ENCHANTING.control:GetNamedChild("SkillInfo"),CRAFTING_TYPE_ENCHANTING)
 				ZO_Skills_TieSkillInfoHeaderToCraftingSkill(ALCHEMY.control:GetNamedChild("SkillInfo"),CRAFTING_TYPE_ALCHEMY)
-				ZO_Skills_TieSkillInfoHeaderToCraftingSkill(PROVISIONER.control:GetNamedChild("SkillInfo"),CRAFTING_TYPE_PROVISIONING) 
+				ZO_Skills_TieSkillInfoHeaderToCraftingSkill(PROVISIONER.control:GetNamedChild("SkillInfo"),CRAFTING_TYPE_PROVISIONING)
 				setupReplacement(ZO_FocusedQuestTrackerPanelContainerQuestContainerTrackedHeader1,"SetText", 1, true, 2)
 				if ZO_FocusedQuestTrackerPanelContainerQuestContainerTrackedHeader1 then
 					ZO_FocusedQuestTrackerPanelContainerQuestContainerTrackedHeader1:SetText(ZO_FocusedQuestTrackerPanelContainerQuestContainerTrackedHeader1:GetText())
@@ -352,10 +351,10 @@ function WritCreater.Options() --Sentimental
 			interceptReplacement(_G, "GetSkillLineInfo", 1, true, 1)
 			interceptReplacement(ZO_SkillLineData,"GetFormattedNameWithNumPointsAllocated", 1, true, 1)
 			interceptReplacement(ZO_SkillLineData,"GetFormattedName", 1, true, 1)
-			for i = 1, 10 do 
+			for i = 1, 10 do
 				setupReplacement(GetControl("ZO_ChatterOption",i), "SetText",1, true, 2)
 			end
-			
+
 
 			-- unstuck yourself prompts do use the string overwrite functions
 			SafeAddString(SI_CUSTOMER_SERVICE_UNSTUCK_COST_PROMPT,string.gsub(GetString(SI_CUSTOMER_SERVICE_UNSTUCK_COST_PROMPT_TELVAR), stations[9], stationNames[9]), 2)
@@ -368,14 +367,14 @@ function WritCreater.Options() --Sentimental
 			setupReplacement(ZO_InteractWindowTargetAreaBodyText, "SetText", 1, true,1) -- turnin text of body
 
 			local original = INTERACTION.givenRewardPool.AcquireObject
-			INTERACTION.givenRewardPool.AcquireObject = function(...) 
+			INTERACTION.givenRewardPool.AcquireObject = function(...)
 				local c,b = original(...)
 				if not c.isAlternatedUniverse then
 					c.isAlternatedUniverse = true
 					setupReplacement(c:GetNamedChild("Name"), "SetText",1,true,4)
 				end
 				return c,b
-			end			
+			end
 
 			setupReplacement(InformationTooltip, "AddLine", 1, true) -- tooltips
 			setupReplacement(ZO_CompassCenterOverPinLabel, "SetText", 1, {9}) -- compass words
@@ -385,10 +384,10 @@ function WritCreater.Options() --Sentimental
 			setupReplacement(ZO_DeathTwoOptionButton2NameLabel, "SetText", 1, {9}) -- when you can revive here or go to wayshrine
 
 			local originalMapAcquire = ZO_MapLocationTooltip.labelPool.AcquireObject
-			ZO_MapLocationTooltip.labelPool.AcquireObject = function(...) 
+			ZO_MapLocationTooltip.labelPool.AcquireObject = function(...)
 				local control,b = originalMapAcquire(...)
-				if not control.hasAprilStarted then 
-					control.hasAprilStarted = true 
+				if not control.hasAprilStarted then
+					control.hasAprilStarted = true
 					setupReplacement(control, "SetText", 1, true)
 					setupReplacement(control, "SetText", 1, true,2)
 				end
@@ -399,32 +398,33 @@ function WritCreater.Options() --Sentimental
 
 			-- checkboxes to show wayshrines on map. This one needs to be delayed because the map is not initialized at first
 			local runOnce = {}
-			SCENE_MANAGER.scenes['worldMap']:RegisterCallback("StateChange", function(old, new) 
+			SCENE_MANAGER.scenes['worldMap']:RegisterCallback("StateChange", function(old, new)
 				if new ~= "shown" then return end
-				if not runOnce['worldMap'] then 
+				if not runOnce['worldMap'] then
 					runOnce['worldMap'] = true
 					setupReplacement(ZO_WorldMapFiltersPvECheckBox2Label, "SetText", 1, {9})
-					ZO_WorldMapFiltersPvECheckBox2Label:SetText(ZO_WorldMapFiltersPvECheckBox2Label:GetText()) 
-				end  
+					ZO_WorldMapFiltersPvECheckBox2Label:SetText(ZO_WorldMapFiltersPvECheckBox2Label:GetText())
+				end
 			end)
 		end
 	end
 	-- WipeThatFrownOffYourFace(GetDisplayName()=="@Dolgubon")
+	-- WipeThatFrownOffYourFace(GetDisplayName()=="@Dolgubonn")
 	WipeThatFrownOffYourFace()
 	local g = getmetatable(WritCreater) or {}
 	g.__index = g.__index or {}
 	g.__index.WipeThatFrownOffYourFace = WipeThatFrownOffYourFace
 	g.__metatable = "Only Sheogorath Certified Cheese Enthusiasts are allowed to see this table!"
-	
+
 	local options =  {
 		{
 			type = "header",
-			name = function() 
+			name = function()
 				local profile = WritCreater.optionStrings.accountWide
 				if WritCreater.savedVars.useCharacterSettings then
 					profile = WritCreater.optionStrings.characterSpecific
 				end
-				return  string.format(WritCreater.optionStrings.nowEditing, profile)  
+				return  string.format(WritCreater.optionStrings.nowEditing, profile)
 			end, -- or string id or function returning a string
 		},
 
@@ -433,7 +433,7 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings.useCharacterSettings,
 			tooltip = WritCreater.optionStrings.useCharacterSettingsTooltip,
 			getFunc = function() return WritCreater.savedVars.useCharacterSettings end,
-			setFunc = function(value) 
+			setFunc = function(value)
 				WritCreater.savedVars.useCharacterSettings = value
 			end,
 		},
@@ -443,34 +443,34 @@ function WritCreater.Options() --Sentimental
 			alpha = 0.5,
 			width = "full",
 		},
-		
+
 		{
 			type = "checkbox",
 			name = WritCreater.optionStrings["autocraft"]  ,
 			tooltip = WritCreater.optionStrings["autocraft tooltip"] ,
 			getFunc = function() return WritCreater:GetSettings().autoCraft end,
 			disabled = function() return not WritCreater:GetSettings().showWindow end,
-			setFunc = function(value) 
-				WritCreater:GetSettings().autoCraft = value 
+			setFunc = function(value)
+				WritCreater:GetSettings().autoCraft = value
 			end,
 		},
-		
-		
+
+
 		{
 			type = "checkbox",
 			name = WritCreater.optionStrings["master"],--"Master Writs",
 			tooltip = WritCreater.optionStrings["master tooltip"],--"Craft Master Writ Items",
 			getFunc = function() return WritCreater.savedVarsAccountWide.masterWrits end,
-			setFunc = function(value) 
+			setFunc = function(value)
 			WritCreater.savedVarsAccountWide.masterWrits = value
 			WritCreater.savedVarsAccountWide.rightClick = not value
 			WritCreater.LLCInteraction:cancelItem()
 				if value  then
-					
+
 					for i = 1, 25 do WritCreater.MasterWritsQuestAdded(1, i,GetJournalQuestName(i)) end
 				end
-				
-				
+
+
 			end,
 		},
 		{
@@ -478,12 +478,12 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings["right click to craft"],--"Master Writs",
 			tooltip = WritCreater.optionStrings["right click to craft tooltip"],--"Craft Master Writ Items",
 			getFunc = function() return WritCreater.savedVarsAccountWide.rightClick end,
-			setFunc = function(value) 
+			setFunc = function(value)
 			WritCreater.savedVarsAccountWide.masterWrits = not value
 			WritCreater.savedVarsAccountWide.rightClick = value
 			WritCreater.LLCInteraction:cancelItem()
 				if not value  then
-					
+
 					for i = 1, 25 do WritCreater.MasterWritsQuestAdded(1, i,GetJournalQuestName(i)) end
 				end
 			end,
@@ -495,8 +495,8 @@ function WritCreater.Options() --Sentimental
 			choices = WritCreater.optionStrings["dailyResetWarnTypeChoices"],
 			choicesValues = {"none","announcement","alert","chat","window","all"},
 			getFunc = function() return WritCreater:GetSettings().dailyResetWarnType end,
-			setFunc = function(value) 
-				WritCreater:GetSettings().dailyResetWarnType = value 
+			setFunc = function(value)
+				WritCreater:GetSettings().dailyResetWarnType = value
 				WritCreater.showDailyResetWarnings("Example") -- Show the example warnings
 			end
 		},
@@ -527,7 +527,7 @@ function WritCreater.Options() --Sentimental
 			tooltip = WritCreater.optionStrings['suppressQuestAnnouncementsTooltip'], -- or string id or function returning a string (optional)
 		} ,
 
-			
+
 	}
 ----------------------------------------------------
 ----- TIMESAVERS SUBMENU
@@ -546,7 +546,7 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings['autoCloseBank'],
 			tooltip = WritCreater.optionStrings['autoCloseBankTooltip'],
 			getFunc = function() return  WritCreater:GetSettings().autoCloseBank end,
-			setFunc = function(value) 
+			setFunc = function(value)
 				WritCreater:GetSettings().autoCloseBank = value
 				if not value then
 					EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_OPEN_BANK, WritCreater.alchGrab)
@@ -561,7 +561,7 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings['despawnBanker'],
 			tooltip = WritCreater.optionStrings['despawnBankerTooltip'],
 			getFunc = function() return  WritCreater:GetSettings().despawnBanker end,
-			setFunc = function(value) 
+			setFunc = function(value)
 				WritCreater:GetSettings().despawnBanker = value
 			end,
 			disabled = function() return not WritCreater:GetSettings().autoCloseBank end,
@@ -580,10 +580,10 @@ function WritCreater.Options() --Sentimental
 			choices = WritCreater.optionStrings["autoloot behaviour choices"],
 			choicesValues = {1,2,3},
 			getFunc = function() if not WritCreater:GetSettings().ignoreAuto then return 1 elseif WritCreater:GetSettings().autoLoot then return 2 else return 3 end end,
-			setFunc = function(value) 
-				if value == 1 then 
+			setFunc = function(value)
+				if value == 1 then
 					WritCreater:GetSettings().ignoreAuto = false
-				elseif value == 2 then  
+				elseif value == 2 then
 					WritCreater:GetSettings().autoLoot = true
 					WritCreater:GetSettings().ignoreAuto = true
 				elseif value == 3 then
@@ -597,8 +597,8 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings["new container"],
 			tooltip = WritCreater.optionStrings["new container tooltip"],
 			getFunc = function() return WritCreater:GetSettings().keepNewContainer end,
-			setFunc = function(value) 
-			WritCreater:GetSettings().keepNewContainer = value			
+			setFunc = function(value)
+			WritCreater:GetSettings().keepNewContainer = value
 			end,
 		},
 		{
@@ -606,8 +606,8 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings["loot container"],
 			tooltip = WritCreater.optionStrings["loot container tooltip"],
 			getFunc = function() return WritCreater:GetSettings().lootContainerOnReceipt end,
-			setFunc = function(value) 
-			WritCreater:GetSettings().lootContainerOnReceipt = value					
+			setFunc = function(value)
+			WritCreater:GetSettings().lootContainerOnReceipt = value
 			end,
 		},
 		--[[{
@@ -627,8 +627,8 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings["master writ saver"],
 			tooltip = WritCreater.optionStrings["master writ saver tooltip"],
 			getFunc = function() return WritCreater:GetSettings().preventMasterWritAccept end,
-			setFunc = function(value) 
-			WritCreater:GetSettings().preventMasterWritAccept = value					
+			setFunc = function(value)
+			WritCreater:GetSettings().preventMasterWritAccept = value
 			end,
 		},
 		{
@@ -636,8 +636,8 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings["loot output"],--"Master Writs",
 			tooltip = WritCreater.optionStrings["loot output tooltip"],--"Craft Master Writ Items",
 			getFunc = function() return WritCreater:GetSettings().lootOutput end,
-			setFunc = function(value) 
-			WritCreater:GetSettings().lootOutput = value					
+			setFunc = function(value)
+			WritCreater:GetSettings().lootOutput = value
 			end,
 		},
 		{
@@ -645,7 +645,7 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings['reticleColour'],--"Master Writs",
 			tooltip = WritCreater.optionStrings['reticleColourTooltip'],--"Craft Master Writ Items",
 			getFunc = function() return  WritCreater:GetSettings().changeReticle end,
-			setFunc = function(value) 
+			setFunc = function(value)
 				WritCreater:GetSettings().changeReticle = value
 			end,
 		},
@@ -654,7 +654,7 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings['noDELETEConfirmJewelry'],--"Master Writs",
 			tooltip = WritCreater.optionStrings['noDELETEConfirmJewelryTooltip'],--"Craft Master Writ Items",
 			getFunc = function() return  WritCreater:GetSettings().EZJewelryDestroy end,
-			setFunc = function(value) 
+			setFunc = function(value)
 				WritCreater:GetSettings().EZJewelryDestroy = value
 			end,
 		},
@@ -666,11 +666,11 @@ function WritCreater.Options() --Sentimental
 			warning = WritCreater.optionStrings["pet begone warning"],
 			choicesValues = {1,2,3},
 			getFunc = function() return WritCreater:GetSettings().petBegone end ,
-			setFunc = function(value) 
+			setFunc = function(value)
 				WritCreater.savedVarsAccountWide.updateDefaultCopyValue.petBegone = value
 				WritCreater:GetSettings().petBegone = value
 				WritCreater.hidePets()
-				
+
 			end,
 		},
 		{
@@ -678,7 +678,7 @@ function WritCreater.Options() --Sentimental
 			name = WritCreater.optionStrings['questBuffer'],--"Master Writs",
 			tooltip = WritCreater.optionStrings['questBufferTooltip'],--"Craft Master Writ Items",
 			getFunc = function() return  WritCreater:GetSettings().keepQuestBuffer end,
-			setFunc = function(value) 
+			setFunc = function(value)
 				WritCreater:GetSettings().keepQuestBuffer = value
 			end,
 		},
@@ -690,7 +690,7 @@ function WritCreater.Options() --Sentimental
 			max = 8,
 			step = 1,
 			getFunc = function() return  WritCreater:GetSettings().craftMultiplier end,
-			setFunc = function(value) 
+			setFunc = function(value)
 				WritCreater:GetSettings().craftMultiplier = value
 			end,
 		},
@@ -730,19 +730,20 @@ function WritCreater.Options() --Sentimental
 						WritCreater:GetSettings().rewardHandling[rewardName][craftingIndex] = 1
 					end
 					return WritCreater:GetSettings().rewardHandling[rewardName][craftingIndex] end ,
-				setFunc = function(value) 
+				setFunc = function(value)
 					WritCreater:GetSettings().rewardHandling[rewardName][craftingIndex] = value
 				end,
 			}
 	end
-	local validForReward = 
+	local validForReward =
 	{
 		-- {"mats" ,    {1,2,3,4,5,6,7}, },
-		{"master" ,  {1,2,3,4,5,6,7}, },
-		{"survey" ,  {1,2,3,4,6,7}, },
+		{"repair" ,  {}, false},
+		{"master" ,  {1,2,3,4,5,6,7}, true },
+		{"survey" ,  {1,2,3,4,6,7}, true},
 		-- {"ornate" ,  {1,2,6,7}, },
 		-- {"intricate" ,  {1,2,6,7}, },
-		-- {"repair" ,  {1,2,6,7}, },
+
 		-- {"soulGem" ,    {3}, },
 		-- {"glyph" ,    {3}, },
 		-- {"fragment" ,    {5}, },
@@ -768,65 +769,85 @@ function WritCreater.Options() --Sentimental
 	------------------ divider
 	-- per craft
 	-- just the dropdown
-	if GetDisplayName()=="@Dolgubon" then
-		for i = 1, #validForReward do
-			local rewardName, validCraftTypes = validForReward[i][1], validForReward[i][2]
-			local submenuOptions
-			if true or #validCraftTypes > 1 then
-				submenuOptions = {
-					{
-						type = "checkbox",
-						name = WritCreater.optionStrings['sameForALlCrafts'],--"Master Writs",
-						tooltip = WritCreater.optionStrings['sameForALlCraftsTooltip'],--"Craft Master Writ Items",
-						getFunc = function() return  WritCreater:GetSettings().rewardHandling[rewardName].sameForAllCrafts end,
-						setFunc = function(value) 
-							WritCreater:GetSettings().rewardHandling[rewardName].sameForAllCrafts = value
-						end,
-					},
-					{
-						type = "dropdown",
-						name =  WritCreater.optionStrings["allReward"]	,
-						tooltip = WritCreater.optionStrings["allRewardTooltip"],
-						choices = WritCreater.optionStrings["rewardChoices"],
-						choicesValues = {1,2,3,4},
-						disabled = function() return not WritCreater:GetSettings().rewardHandling[rewardName].sameForAllCrafts end,
-						getFunc = function()
-							-- So I don't need to ennummerate it all in the default writ creator settings
-							if not  WritCreater:GetSettings().rewardHandling[rewardName]["all"] then
-								WritCreater:GetSettings().rewardHandling[rewardName]["all"] = 1
+	for i = 1, #validForReward do
+		local rewardName, validCraftTypes = validForReward[i][1], validForReward[i][2]
+		local submenuOptions
+		if  #validCraftTypes > 1 then
+			submenuOptions = {
+				{
+					type = "checkbox",
+					name = WritCreater.optionStrings['sameForALlCrafts'],--"Master Writs",
+					tooltip = WritCreater.optionStrings['sameForALlCraftsTooltip'],--"Craft Master Writ Items",
+					getFunc = function() return  WritCreater:GetSettings().rewardHandling[rewardName].sameForAllCrafts end,
+					setFunc = function(value)
+						WritCreater:GetSettings().rewardHandling[rewardName].sameForAllCrafts = value
+					end,
+				},
+				{
+					type = "dropdown",
+					name =  WritCreater.optionStrings["allReward"]	,
+					tooltip = WritCreater.optionStrings["allRewardTooltip"],
+					choices = WritCreater.optionStrings["rewardChoices"],
+					choicesValues = {1,2,3,4},
+					disabled = function() return not WritCreater:GetSettings().rewardHandling[rewardName].sameForAllCrafts end,
+					getFunc = function()
+						-- So I don't need to ennummerate it all in the default writ creator settings
+						if not  WritCreater:GetSettings().rewardHandling[rewardName]["all"] then
+							WritCreater:GetSettings().rewardHandling[rewardName]["all"] = 1
+						end
+						return WritCreater:GetSettings().rewardHandling[rewardName]["all"] end ,
+					setFunc = function(value)
+						local oldValue = WritCreater:GetSettings().rewardHandling[rewardName]["all"]
+						for k, v in pairs(WritCreater:GetSettings().rewardHandling[rewardName]) do
+							if WritCreater:GetSettings().rewardHandling[rewardName][k] == oldValue then
+								WritCreater:GetSettings().rewardHandling[rewardName][k] = value
 							end
-							return WritCreater:GetSettings().rewardHandling[rewardName]["all"] end ,
-						setFunc = function(value)
-							local oldValue = WritCreater:GetSettings().rewardHandling[rewardName]["all"]
-							-- for k, v in pairs(WritCreater:GetSettings().rewardHandling[rewardName]) do
-							-- 	if WritCreater:GetSettings().rewardHandling[rewardName][k] == oldValue then
-							-- 		WritCreater:GetSettings().rewardHandling[rewardName][k] = value
-							-- 	end
-							-- end
-						end,
-					},
-					{
-						type = "divider",
-						height = 15,
-						alpha = 0.5,
-						width = "full",
-					},
-				}testingoffd = submenuOptions
-				for j = 1, #validCraftTypes do
-					submenuOptions[#submenuOptions + 1] = geRewardTypeOption(validCraftTypes[j], rewardName)
-				end
-			else
-				submenuOptions = {geRewardTypeOption(validCraftTypes[1], rewardName)}
+						end
+					end,
+				},
+				{
+					type = "divider",
+					height = 15,
+					alpha = 0.5,
+					width = "full",
+				},
+			}
+			for j = 1, #validCraftTypes do
+				submenuOptions[#submenuOptions + 1] = geRewardTypeOption(validCraftTypes[j], rewardName)
 			end
 			rewardsSubmenu[#rewardsSubmenu + 1] = {
-				type = "submenu",
-				name = WritCreater.optionStrings[rewardName.."Reward"],
-				tooltip = WritCreater.optionStrings[rewardName.."RewardTooltip"],
-				controls = submenuOptions,
-				reference = "WritCreaterRewardsSubmenu"..rewardName,
+			type = "submenu",
+			name = WritCreater.optionStrings[rewardName.."Reward"],
+			tooltip = WritCreater.optionStrings[rewardName.."RewardTooltip"],
+			controls = submenuOptions,
+			reference = "WritCreaterRewardsSubmenu"..rewardName,
+		}
+		else
+			rewardsSubmenu[#rewardsSubmenu + 1] = {
+				type = "dropdown",
+				name =  WritCreater.optionStrings[rewardName.."Reward"]	,
+				tooltip = WritCreater.optionStrings["allRewardTooltip"],
+				choices = WritCreater.optionStrings["rewardChoices"],
+				choicesValues = {1,2,3,4},
+				disabled = function() return not WritCreater:GetSettings().rewardHandling[rewardName].sameForAllCrafts end,
+				getFunc = function()
+					-- So I don't need to ennummerate it all in the default writ creator settings
+					if not  WritCreater:GetSettings().rewardHandling[rewardName]["all"] then
+						WritCreater:GetSettings().rewardHandling[rewardName]["all"] = 1
+					end
+					return WritCreater:GetSettings().rewardHandling[rewardName]["all"] end ,
+				setFunc = function(value)
+					local oldValue = WritCreater:GetSettings().rewardHandling[rewardName]["all"]
+					for k, v in pairs(WritCreater:GetSettings().rewardHandling[rewardName]) do
+						if WritCreater:GetSettings().rewardHandling[rewardName][k] == oldValue then
+							WritCreater:GetSettings().rewardHandling[rewardName][k] = value
+						end
+					end
+				end,
 			}
-			
 		end
+
+
 	end
 	-- local gearWrits = {1, 2, 6, 7}
 	-- for _, craftingIndex in pairs(gearWrits) do
@@ -864,7 +885,7 @@ function WritCreater.Options() --Sentimental
 	-- 	geRewardTypeOption(CRAFTING_TYPE_PROVISIONING, "recipe"),
 	-- }
 	-- rewardsSubmenu[4] = rewardSubmenu(provisioningSubmenu, CRAFTING_TYPE_PROVISIONING)
-	
+
 ----------------------------------------------------
 ----- CRAFTING SUBMENU
 
@@ -873,8 +894,8 @@ function WritCreater.Options() --Sentimental
 		name = WritCreater.optionStrings["blackmithing"]   ,
 		tooltip = WritCreater.optionStrings["blacksmithing tooltip"] ,
 		getFunc = function() return WritCreater:GetSettings()[CRAFTING_TYPE_BLACKSMITHING] end,
-		setFunc = function(value) 
-			WritCreater:GetSettings()[CRAFTING_TYPE_BLACKSMITHING] = value 
+		setFunc = function(value)
+			WritCreater:GetSettings()[CRAFTING_TYPE_BLACKSMITHING] = value
 		end,
 	},
 	{
@@ -882,8 +903,8 @@ function WritCreater.Options() --Sentimental
 		name = WritCreater.optionStrings["clothing"]  ,
 		tooltip = WritCreater.optionStrings["clothing tooltip"] ,
 		getFunc = function() return WritCreater:GetSettings()[CRAFTING_TYPE_CLOTHIER] end,
-		setFunc = function(value) 
-			WritCreater:GetSettings()[CRAFTING_TYPE_CLOTHIER] = value 
+		setFunc = function(value)
+			WritCreater:GetSettings()[CRAFTING_TYPE_CLOTHIER] = value
 		end,
 	},
 	{
@@ -891,8 +912,8 @@ function WritCreater.Options() --Sentimental
 	  name = WritCreater.optionStrings["woodworking"]    ,
 	  tooltip = WritCreater.optionStrings["woodworking tooltip"],
 	  getFunc = function() return WritCreater:GetSettings()[CRAFTING_TYPE_WOODWORKING] end,
-	  setFunc = function(value) 
-		WritCreater:GetSettings()[CRAFTING_TYPE_WOODWORKING] = value 
+	  setFunc = function(value)
+		WritCreater:GetSettings()[CRAFTING_TYPE_WOODWORKING] = value
 	  end,
 	},
 	{
@@ -900,8 +921,8 @@ function WritCreater.Options() --Sentimental
 	  name = WritCreater.optionStrings["jewelry crafting"]    ,
 	  tooltip = WritCreater.optionStrings["jewelry crafting tooltip"],
 	  getFunc = function() return WritCreater:GetSettings()[CRAFTING_TYPE_JEWELRYCRAFTING] end,
-	  setFunc = function(value) 
-		WritCreater:GetSettings()[CRAFTING_TYPE_JEWELRYCRAFTING] = value 
+	  setFunc = function(value)
+		WritCreater:GetSettings()[CRAFTING_TYPE_JEWELRYCRAFTING] = value
 	  end,
 	},
 
@@ -910,8 +931,8 @@ function WritCreater.Options() --Sentimental
 		name = WritCreater.optionStrings["enchanting"],
 		tooltip = WritCreater.optionStrings["enchanting tooltip"]  ,
 		getFunc = function() return WritCreater:GetSettings()[CRAFTING_TYPE_ENCHANTING] end,
-		setFunc = function(value) 
-			WritCreater:GetSettings()[CRAFTING_TYPE_ENCHANTING] = value 
+		setFunc = function(value)
+			WritCreater:GetSettings()[CRAFTING_TYPE_ENCHANTING] = value
 		end,
 	},
 	{
@@ -919,8 +940,8 @@ function WritCreater.Options() --Sentimental
 		name = WritCreater.optionStrings["provisioning"],
 		tooltip = WritCreater.optionStrings["provisioning tooltip"]  ,
 		getFunc = function() return WritCreater:GetSettings()[CRAFTING_TYPE_PROVISIONING] end,
-		setFunc = function(value) 
-			WritCreater:GetSettings()[CRAFTING_TYPE_PROVISIONING] = value 
+		setFunc = function(value)
+			WritCreater:GetSettings()[CRAFTING_TYPE_PROVISIONING] = value
 		end,
 	},
 	{
@@ -928,8 +949,8 @@ function WritCreater.Options() --Sentimental
 		name = WritCreater.optionStrings["alchemy"],
 		tooltip = WritCreater.optionStrings["alchemy tooltip"]  ,
 		getFunc = function() return WritCreater:GetSettings()[CRAFTING_TYPE_ALCHEMY] end,
-		setFunc = function(value) 
-			WritCreater:GetSettings()[CRAFTING_TYPE_ALCHEMY] = value 
+		setFunc = function(value)
+			WritCreater:GetSettings()[CRAFTING_TYPE_ALCHEMY] = value
 		end,
 	},}
 
@@ -962,7 +983,7 @@ function WritCreater.Options() --Sentimental
 	  tooltip =WritCreater.optionStrings["send data tooltip"] ,
 	  getFunc = function() return WritCreater.savedVarsAccountWide.sendData end,
 	  setFunc = function(value) WritCreater.savedVarsAccountWide.sendData = value  end,
-	}) 
+	})
 	end
 	table.insert(options,{
 	  type = "submenu",
@@ -993,33 +1014,33 @@ function WritCreater.Options() --Sentimental
 	  reference = "WritCreaterStyleSubmenu",
 	})
 
-	
+
 	if WritCreater.alternateUniverse then
 		table.insert(options,1, {
 				type = "checkbox",
 				name = WritCreater.optionStrings["alternate universe"],
 				tooltip =WritCreater.optionStrings["alternate universe tooltip"] ,
 				getFunc = function() return WritCreater.savedVarsAccountWide.alternateUniverse end,
-				setFunc = function(value) 
-					WritCreater.savedVarsAccountWide.alternateUniverse = value 
-					WritCreater.savedVarsAccountWide.completeImmunity = not value 
+				setFunc = function(value)
+					WritCreater.savedVarsAccountWide.alternateUniverse = value
+					WritCreater.savedVarsAccountWide.completeImmunity = not value
 				end,
 				requiresReload = true,
-				
+
 			})
 	end
-	if GetTimeStamp() < 1586872800 then
+	if GetTimeStamp() < 1618322400 then
 		local jubileeOption = {
 			type = "checkbox",
 			name = WritCreater.optionStrings["jubilee"]  ,
 			tooltip = WritCreater.optionStrings["jubilee tooltip"] ,
 			getFunc = function() return WritCreater:GetSettings().lootJubileeBoxes end,
-			setFunc = function(value) 
-				WritCreater:GetSettings().lootJubileeBoxes = value 
+			setFunc = function(value)
+				WritCreater:GetSettings().lootJubileeBoxes = value
 			end,
 		}
 		table.insert(options, 4, jubileeOption)
-		table.insert(timesaverOptions, 8, jubileeOption)
+		-- table.insert(timesaverOptions, 8, jubileeOption)
 	end
 
 	return options
