@@ -249,9 +249,8 @@ local function OnLootUpdated(event)
 			EVENT_MANAGER:UnregisterForUpdate(WritCreater.name.."LootSavingFatigue")
 			EVENT_MANAGER:RegisterForUpdate(WritCreater.name.."LootSavingFatigue", 10000, clearLootFatigue)
 
-			if shouldSaveStats(i,boxRank) and not fatiguedLoot[i] then
+			if shouldSaveStats(i,boxRank) and not fatiguedLoot[i] and i~= 9 then
 				LootAllHook(i,boxRank)
-				fatiguedLoot[i] = true
 			else
 				local loot = {}
 				for j = 1, GetNumLootItems() do
@@ -272,8 +271,8 @@ local function OnLootUpdated(event)
 						lootOutput(itemLink, nil, quantity, true)
 					end
 				end
-				fatiguedLoot[i] = true
 			end
+			fatiguedLoot[i] = true
 			if autoLoot then
 				if numLootTransmute==0 or numTransmute + numLootTransmute <=GetMaxPossibleCurrency( 5 , CURRENCY_LOCATION_ACCOUNT) then
 					if numLootTransmute > 0 then

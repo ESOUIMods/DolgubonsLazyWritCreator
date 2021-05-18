@@ -13,7 +13,8 @@
 local checks = {}
 local validLanguages =
 {
-	["en"]=true,["de"] = true,["fr"] = true,["jp"] = true, ["ru"] = false, ["zh"] = false, ["pl"] = true, ["fx"] = true, }
+	["en"]=true, ["de"] = true, ["fr"] = true, ["jp"] = true, ["ru"] = false, ["zh"] = false, ["pl"] = true, ["fx"] = true,
+}
 if true then
 	EVENT_MANAGER:RegisterForEvent("WritCrafterLocalizationError", EVENT_PLAYER_ACTIVATED, function()
 		if not WritCreater.languageInfo then
