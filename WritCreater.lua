@@ -23,11 +23,14 @@ CRAFTING_TYPE_JEWELRYCRAFTING = CRAFTING_TYPE_JEWELRYCRAFTING or 7
 DolgubonsWritsBackdropQuestOutput.SetText = function()end
 -- if GetDisplayName()~="@Dolgubon" then DolgubonsWritsBackdropQuestOutput.SetText = function() end end
 
+local LAM = LibAddonMenu2
+local LFB = LibFeedback
+
+
 WritCreater = WritCreater or {}
 WritCreater.name = "DolgubonsLazyWritCreator"
 
 WritCreater.settings = {}
-local LAM = LibAddonMenu2
 WritCreater.languageStrings = {}
 WritCreater.resetTime = true
 WritCreater.version = 19
@@ -611,14 +614,12 @@ local function initializeLibraries()
 		rep("FastTravelToNode", 1)
 	end
 	local LibStub = nil
-	local LibFeedback = (LibStub and LibStub:GetLibrary("LibFeedback", true)) or LibFeedback
-	-- LibFeedback = LibStub:GetLibrary("LibFeedback")
-	local showButton, feedbackWindow = LibFeedback:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsWrits, "@Dolgubon",
+	local showButton, feedbackWindow = LFB:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsWrits, "@Dolgubon",
 	{RIGHT, DolgubonsWrits, RIGHT,-50,40},
 	buttonInfo,
 	feedbackString)
 	DolgubonsWritsFeedback = feedbackWindow
-	local showButton2, feedbackWindow2 = LibFeedback:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsLazyWritStatsWindow, "@Dolgubon",
+	local showButton2, feedbackWindow2 = LFB:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsLazyWritStatsWindow, "@Dolgubon",
 	{TOPRIGHT, DolgubonsLazyWritStatsWindow, TOPRIGHT,-20,55},
 	buttonInfo,
 	feedbackString)
