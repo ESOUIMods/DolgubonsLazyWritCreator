@@ -5,9 +5,9 @@
 -- Addon Creation Date: March 14, 2016
 --
 -- File Name: MasterWrits.lua
--- File Description: Crafts Master 
+-- File Description: Crafts Master
 -- Load Order Requirements: None
--- 
+--
 -----------------------------------------------------------------------------------
 
 local DolgubonDebugRunningDebugString = ""
@@ -102,7 +102,7 @@ local function standardizeString(str)
 end
 
 local function strFind(str, str2find, a, b, c)
-	
+
 	str = standardizeString(str)
 	str2find = standardizeString(str2find)
 	return string.find(str, str2find, a, b, c)
@@ -155,7 +155,7 @@ end
 local function enchantSearch(info,condition)
 	for i = 1, #info do
 		if strFind(condition, info[i][1]) then
-			
+
 			return info[i]
 		end
 
@@ -192,7 +192,7 @@ local function EnchantingMasterWrit(journalIndex, sealedText, reference)
 	--d(journalIndex, sealedText, reference)
 	dbug("FUNCTION:EnchantingMasterHandler")
 	if not reference then reference = journalIndex end
-	
+
 	local condition, complete
 	if sealedText then
 		condition, complete = sealedText, false
@@ -215,19 +215,19 @@ local function EnchantingMasterWrit(journalIndex, sealedText, reference)
 		-- Output what we're making.
 		if potency[1]=="truly" then lvl = "truly superb" end
 		-- Actually add the glyph to the queue
-		
+
 		d(WritCreater.strings.masterWritEnchantToCraft( lvl, essence[1], aspect[1],
 			WritCreater.langWritNames()[CRAFTING_TYPE_ENCHANTING],
 			WritCreater.langMasterWritNames()["M1"],
 			WritCreater.langWritNames()["G"]))
-		if not WritWorthy then 
+		if not WritWorthy then
 			d("The Master Writ crafting feature of Dolgubon's Lazy Writ Crafter will no longer be supported. Please download and use Writ Worthy by Ziggr from Minion or Esoui if you wish to do Master Writs.")
 		end
 
 		WritCreater.LLCInteractionMaster:CraftEnchantingItemId(potency[2][essence[3]], essence[2], aspect[2], true, reference)
 
 		dbug("CALL:LLCENchantCraft")
-		
+
 	else
 	end
 end
@@ -276,11 +276,11 @@ end
 
 local function foundAllRequirements(pattern, style, setIndex, trait, quality)
 	local foundAllRequirements = true
-	if setIndex==-1 then 
+	if setIndex==-1 then
 		foundAllRequirements = false
-		d("Set not found") 
+		d("Set not found")
 	end
-	if pattern[1] =="" then 
+	if pattern[1] =="" then
 		foundAllRequirements = false
 		d("Pattern not found")
 	end
@@ -317,7 +317,7 @@ local function splitCondition(condition, isQuest)
 	while strFind(condition , seperator) and a<50 do
 		a = a+1
 		t[#t+1] = string.gsub(string.sub(condition, 1, strFind(condition, seperator)),"\n","")
-		condition = string.sub(condition, strFind(condition,seperator) + 1, string.len(condition) ) 
+		condition = string.sub(condition, strFind(condition,seperator) + 1, string.len(condition) )
 		if string.len(t[#t])<5 then t[#t] = nil end
 	end
 	t[#t+1] = condition
@@ -326,7 +326,7 @@ local function splitCondition(condition, isQuest)
 end
 
 -- Adds a master writ crafting request to the LLC queue
--- Either journalIndex, or sealedText and reference must be passed. The reference should be 
+-- Either journalIndex, or sealedText and reference must be passed. The reference should be
 -- either the journalquestindex or the unique itemid of the sealed writ.
 -- table info is {{itemName, itemValue}...}
 -- station is the station that the writ is associated with (or a best guess for woodworking/blacksmithing weapons)
@@ -337,7 +337,7 @@ end
 local function SmithingMasterWrit(journalIndex, info, station, isArmour, material, reference, sealedText)
 	dbug("FUNCTION:SmithingMasterHandler")
 	-- If this is nil, then the language the game is currently in is not supported.
-	if not WritCreater.masterWritQuality then d("Language not supported for Master Writs") return end 
+	if not WritCreater.masterWritQuality then d("Language not supported for Master Writs") return end
 	if WritCreater.lang == "de" then for i = 1, #info do  info[i][1] = germanRemoveEN(info[i][1])   end end
 	local condition, complete =GetJournalQuestConditionInfo(journalIndex, 1)
 	condition = standardizeString(condition)
@@ -381,23 +381,23 @@ local function SmithingMasterWrit(journalIndex, info, station, isArmour, materia
 	end
 	local style = smithingSearch(conditionStrings["style"], styles)
 	local _,setIndex = smithingSearch(conditionStrings["set"], GetSetIndexes())
-	
+
 	local quality = smithingSearch(conditionStrings["quality"],WritCreater.masterWritQuality()) --search quality
 
 	if foundAllRequirements(pattern, style, setIndex, trait, quality) then
 		-- too many variable stuff so need to do multiple calls to zo_strformat
 		d(WritCreater.strings.masterWritSmithToCraft(
-			pattern[1], 
+			pattern[1],
 			GetSetIndexes()[setIndex][1],
 			trait[1],
-			style[1], 
+			style[1],
 			quality[1],
 			material,
 			WritCreater.langWritNames()[station],
 			WritCreater.langMasterWritNames()["M1"],
 			WritCreater.langWritNames()["G"]
 			))
-		if not WritWorthy then 
+		if not WritWorthy then
 			d("The Master Writ crafting feature of Dolgubon's Lazy Writ Crafter will no longer be supported. Please download and use Writ Worthy by Ziggr from Minion or Esoui if you wish to do Master Writs.")
 		end
 		dbug("CALL:LLCCraftSmithing")
@@ -433,7 +433,7 @@ end
 local function partialTable(t, start, ending)
 
 	local temp = {}
-	for i = start or 1, ending or #t do 
+	for i = start or 1, ending or #t do
 		temp[i] = t[i]
 	end
 	return temp
@@ -466,10 +466,10 @@ function WritCreater.MasterWritsQuestAdded(event, journalIndex,name)
 	dbug("FUNCTION:MasterWritStart")
 	local langInfo = WritCreater.languageInfo()
 	--local info = {}
-	if writType =="" then 
+	if writType =="" then
 		return
 	else
-		
+
 		if writType=="weapon" then
 
 			local info = partialTable(langInfo[CRAFTING_TYPE_BLACKSMITHING]["pieces"] , 1, 7)
@@ -522,7 +522,7 @@ local function QuestCounterChanged(event, journalIndex, questName, _, _, currCon
 	if #WritCreater.LLCInteractionMaster:findItemByReference(journalIndex) == 0 then
 		WritCreater.LLCInteractionMaster:cancelItemByReference(journalIndex)
 		if newConditionVal<conditionMax then
-			
+
 			WritCreater.MasterWritsQuestAdded(event, journalIndex, questName)
 		end
 	end
@@ -540,9 +540,9 @@ function WritCreater.scanAllQuests()
 end
 
 function WritCreater.InventorySlot_ShowContextMenu(rowControl,debugslot)
-	
+
 	local bag, slot, link, flavour, reference
-	if type(rowControl)=="userdata" or type(rowControl)=="number" then 
+	if type(rowControl)=="userdata" or type(rowControl)=="number" then
 		if type(rowControl)=="userdata" then
 	    	bag, slot = ZO_Inventory_GetBagAndIndex(rowControl)
 	    else
@@ -557,7 +557,7 @@ function WritCreater.InventorySlot_ShowContextMenu(rowControl,debugslot)
 	    flavour = GetItemLinkFlavorText(rowControl)
 	    reference = "Test"
 	end
-	
+
     local exampleSealedWrits = {
     [CRAFTING_TYPE_CLOTHIER] = "|H1:item:121532:6:1:0:0:0:26:194:5:178:15:34:0:0:0:0:0:0:0:0:883200|h|h",
     [CRAFTING_TYPE_BLACKSMITHING] = "|H1:item:119680:6:1:0:0:0:47:188:4:240:12:29:0:0:0:0:0:0:0:0:56375|h|h",
@@ -575,7 +575,7 @@ function WritCreater.InventorySlot_ShowContextMenu(rowControl,debugslot)
 	if not station then return end
     -- Check if you can find "Blacksmithing, Clothing Woodworking or Enchanting"
     -- Search for if it is armour or not
-    if not WritCreater.savedVarsAccountWide.rightClick then return end
+    if not WritCreater.savedVarsAccountWide.rightClick or not LibCustomMenu then return end
     zo_callLater(function ()
         AddCustomMenuItem("Craft Sealed Writ", function ()
             if station == CRAFTING_TYPE_ENCHANTING then
@@ -596,8 +596,8 @@ function WritCreater.InventorySlot_ShowContextMenu(rowControl,debugslot)
 					if flavour == GetItemLinkFlavorText(exampleSealedWrits[CRAFTING_TYPE_WOODWORKING]) then
 						isArmour = true
 					end
-					table.insert(info,{"healing",6}) 
-					table.insert(info,{"frost",4}) 
+					table.insert(info,{"healing",6})
+					table.insert(info,{"frost",4})
 
 					material = "Ruby Ash"
 				elseif station == CRAFTING_TYPE_CLOTHIER then
@@ -634,7 +634,7 @@ EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_ADD_ON_LOADED, WritCreate
 
 
 
--- |H1:item:119681:6:1:0:0:0:72:192:4:207:2:29:0:0:0:0:0:0:0:0:57750|h|h 
+-- |H1:item:119681:6:1:0:0:0:72:192:4:207:2:29:0:0:0:0:0:0:0:0:57750|h|h
 -- |H1:item:121528:6:1:0:0:0:26581:225:5:0:0:0:0:0:0:0:0:0:0:0:66000|h|h
 -- Ruby Ash Shield Epic Divines Night's Silence, Dwemer
 -- |H1:item:119682:6:1:0:0:0:65:192:4:40:18:14:0:0:0:0:0:0:0:0:52250|h|h

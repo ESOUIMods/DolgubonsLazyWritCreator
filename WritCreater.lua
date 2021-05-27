@@ -27,8 +27,7 @@ WritCreater = WritCreater or {}
 WritCreater.name = "DolgubonsLazyWritCreator"
 
 WritCreater.settings = {}
-local LAM
-local LAM2
+local LAM = LibAddonMenu2
 WritCreater.languageStrings = {}
 WritCreater.resetTime = true
 WritCreater.version = 19
@@ -282,6 +281,13 @@ local function mandatoryRoadblockOut(string, showCraftButton)
 	DolgubonsWritsBackdropCraft.SetHidden = function() end
 end
 
+local function dismissableRoadblock(string, showCraftButton)
+	DolgubonsWritsBackdropOutput:SetText(string)
+	DolgubonsWrits:SetHidden(false)
+	DolgubonsWritsBackdropCraft:SetHidden (not showCraftButton)
+	WritCreater.dismissable = true
+end
+
 -- Method for @silvereyes to overwrite and cancel exiting the station
 function WritCreater.IsOkayToExitCraftStation()
 	return true
@@ -521,7 +527,6 @@ local function initializeLibraries()
 		missing = true
 		missingString = missingString.."LibLazyCrafting, "
 	end
-	LAM = LibAddonMenu2
 	if not LAM then
 		missing = true
 		missingString = missingString.."LibAddonMenu-2.0"
@@ -536,6 +541,25 @@ local function initializeLibraries()
 	if LLCVersion <2.33 then
 
 		mandatoryRoadblockOut("You have an old version of LibLazyCrafting loaded. Please obtain the newest version of the library by downloading it from esoui or minion")
+	end
+
+	if WritCreater.savedVarsAccountWide.rightClick and not LibCustomMenu then
+		-- WritCreater.savedVarsAccountWide.rightClick = false
+		-- WritCreater.savedVarsAccountWide.masterWrits = true
+		dismissableRoadblock("To use the master writ right click to craft option, you must have LIbCustomMenu turned on. The option has been turned off, and to re-enable it, you'll need to install and turn on LibCustomMenu", true)
+		-- dismissableRoadblock("It looks like you had the right click to craft option turned ON. Unfortunately, this feature has been discontinued. ")
+		-- WritCreater.autoFix = function()
+		-- 	local manager = GetAddOnManager()
+		-- 	for i =1 , manager:GetNumAddOns() do
+		-- 		if manager:GetAddOnInfo(i) =="LibCustomMenu" then
+		-- 			manager:SetAddOnEnabled(i, true)
+		-- 			ReloadUI()
+		-- 			return
+		-- 		end
+		-- 	end
+		-- 	d("Could not find LibCustomMenu")
+		-- end
+		DolgubonsWritsBackdropCraft:SetText("Close")
 	end
 
 	WritCreater.LLCInteractionMaster = LibLazyCrafting:AddRequestingAddon(WritCreater.name.."Master", true, function(event, station, result)
@@ -618,7 +642,8 @@ local function initializeLocalization()
 		else
 			mandatoryRoadblockOut("Writ Crafter initialization failed. Your game is currently set to the language "..GetCVar("language.2")..
 				" but you do not have the patch for that language installed (if it exists). Uninstall all "..GetCVar("language.2").." addons or patches, then click the button", true)
-			WritCreater.autoFix = true
+            --TODO check language functionality
+			WritCreater.autoFix = function() SetCVar('language.2', 'en') end
 			DolgubonsWritsBackdropCraft:SetText("Apply Auto Fix")
 		end
 		return
