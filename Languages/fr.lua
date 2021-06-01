@@ -7,7 +7,7 @@
 -- File Name: Languages/fr.lua
 -- File Description: French Localization
 -- Load Order Requirements: None
---
+-- 
 -----------------------------------------------------------------------------------
 
 function WritCreater.langWritNames() --Exacts!!!  I know for german alchemy writ is Alchemistenschrieb - so ["G"] = schrieb, and ["A"]=Alchemisten
@@ -43,7 +43,7 @@ local function myLower(str)
 end
 
 function WritCreater.langCraftKernels()
-	return
+	return 
 	{
 		["enchante"] = CRAFTING_TYPE_ENCHANTING,
 		["forge"] = CRAFTING_TYPE_BLACKSMITHING,
@@ -58,7 +58,7 @@ end
 
 function WritCreater.getWritAndSurveyType()
 	if not WritCreater.langCraftKernels then return end
-
+	
 	local kernels = WritCreater.langCraftKernels()
 	local craftType
 	for kernel, craft in pairs(kernels) do
@@ -88,9 +88,9 @@ end
 
 function WritCreater.languageInfo() --exacts!!!
 
-local craftInfo =
+local craftInfo = 
 	{
-		[ CRAFTING_TYPE_CLOTHIER] =
+		[ CRAFTING_TYPE_CLOTHIER] = 
 		{
 			["pieces"] = --exact!!
 			{
@@ -155,9 +155,9 @@ local craftInfo =
 				[18]= "Superb Hide",
 				[19]= "Shadowhide",
 				[20]= "Rubedo Leather",
-			}
+			}		
 		},
-		[CRAFTING_TYPE_BLACKSMITHING] =
+		[CRAFTING_TYPE_BLACKSMITHING] = 
 		{
 			["pieces"] = --exact!!
 			{
@@ -203,7 +203,7 @@ local craftInfo =
 				[10]= "Rubedite Ingots",
 			}
 		},
-		[CRAFTING_TYPE_WOODWORKING] =
+		[CRAFTING_TYPE_WOODWORKING] = 
 		{
 			["pieces"] = --Exact!!!
 			{
@@ -241,7 +241,7 @@ local craftInfo =
 				[10]= "Sanded Ruby Ash",
 			}
 		},
-		[CRAFTING_TYPE_JEWELRYCRAFTING] =
+		[CRAFTING_TYPE_JEWELRYCRAFTING] = 
 		{
 			["pieces"] = --Exact!!!
 			{
@@ -259,7 +259,7 @@ local craftInfo =
 			},
 
 		},
-		[CRAFTING_TYPE_ENCHANTING] =
+		[CRAFTING_TYPE_ENCHANTING] = 
 		{
 			["pieces"] = --exact!!
 			{
@@ -285,9 +285,9 @@ local craftInfo =
 				{"monumental",45816},
 				{"vraiment",{68341,68340}},
 				{"superbe",{64509,64508}},
-
+				
 			},
-			["quality"] =
+			["quality"] = 				
 			{
 				{"épique",45853},
 				{"légendaire",45854},
@@ -307,7 +307,7 @@ end
 
 function WritCreater.langEssenceNames() --exact!
 
-local essenceNames =
+local essenceNames =  
 	{
 		[1] = "oko", --health
 		[2] = "deni", --stamina
@@ -317,7 +317,7 @@ local essenceNames =
 end
 
 function WritCreater.langPotencyNames() --exact!! Also, these are all the positive runestones - no negatives needed.
-	local potencyNames =
+	local potencyNames = 
 	{
 		[1] = "Jora", --Lowest potency stone lvl
 		[2] = "Porade",
@@ -335,7 +335,7 @@ function WritCreater.langPotencyNames() --exact!! Also, these are all the positi
 		[14]= "Kura",
 		[15]= "Rejera",
 		[16]= "Repora", --v16 potency stone
-
+		
 	}
 	return potencyNames
 end
@@ -398,7 +398,7 @@ function WritCreater.langTutorial(i) --sentimental
 end
 
 function WritCreater.langTutorialButton(i,onOrOff) --sentimental and short pls
-	local tOn =
+	local tOn = 
 	{
 		[1]="Par défaut",
 		[2]="Activé",
@@ -516,7 +516,7 @@ WritCreater.optionStrings.characterSpecific            = " Configuration Specifi
 WritCreater.optionStrings.useCharacterSettings         = "Utiliser des options de personnage" -- de
 WritCreater.optionStrings.useCharacterSettingsTooltip  = "Utilise des options spécifiques pour ce personnage uniquement" --de
 
-WritCreater.optionStrings["style tooltip"]                            = function (styleName, styleStone) return zo_strformat("Allow the <<1>> style, which uses <<2>> to be used for crafting",styleName) end
+WritCreater.optionStrings["style tooltip"]                            = function (styleName, styleStone) return zo_strformat("Allow the <<1>> style, which uses <<2>> to be used for crafting",styleName) end 
 WritCreater.optionStrings["show craft window"]                        = "Afficher la fenêtre de craft"
 WritCreater.optionStrings["show craft window tooltip"]                = "Afficher la fenêtre de craft automatique lorsque la station d'artisanat est ouverte"
 WritCreater.optionStrings["autocraft"]                                = "Craft automatique"
@@ -558,11 +558,11 @@ WritCreater.optionStrings["master writ saver tooltip"]					= "Empêcher l’acce
 WritCreater.optionStrings["loot output"]								= "Alerte sur les récompenses précieuses"
 WritCreater.optionStrings["loot output tooltip"]						= "Afficher un message lorsque des objets de grande valeur sont reçus d'une commande d'artisanat"
 WritCreater.optionStrings["writ grabbing"]								= "Prendre les matériaux de commande"
-WritCreater.optionStrings["writ grabbing tooltip"]						= "Prendre les matériaux requis pour les commandes (ex. Nirnroot, Ta, etc.) de la banque"
+WritCreater.optionStrings["writ grabbing tooltip"]						= "Prendre les matériaux requis pour les commandes (ex. Nirnroot, Ta, etc.) de la banque" 
 WritCreater.optionStrings["autoloot behaviour"]							= "Loot automatique"
 WritCreater.optionStrings["autoloot behaviour tooltip"]					= "Sélectionner comment l'addon loote les conteneurs de récompense de quête"
 WritCreater.optionStrings["autoloot behaviour choices"]					= {"Paramètres du menu d'options Gameplay", "Loot automatique", "Ne pas looter"}
-WritCreater.optionStrings["style tooltip"]                            = function (styleName, styleStone) return zo_strformat("Autoriser le style <<1>> , qui utilise <<2>> lors de la création",styleName) end
+WritCreater.optionStrings["style tooltip"]                            = function (styleName, styleStone) return zo_strformat("Autoriser le style <<1>> , qui utilise <<2>> lors de la création",styleName) end 
 WritCreater.optionStrings["hide when done"]								= "Cacher quand terminé"
 WritCreater.optionStrings["hide when done tooltip"]						= "Cacher la fenêtre de l'extension quand tous les objets ont été fabriqués"
 WritCreater.optionStrings['reticleColour']								= "Changer la couleur du réticule"
@@ -590,7 +590,7 @@ WritCreater.optionStrings["pet begone warning"]							= "Quand cette option est 
 
 function WritCreater.langStationNames()
 	return
-	{["Atelier de forge"] = 1, ["Atelier de couture"] = 2,
+	{["Atelier de forge"] = 1, ["Atelier de couture"] = 2, 
 	 ["Table d'enchantement"] = 3,["Établi d'alchimie"] = 4, ["Feu de cuisine"] = 5, ["Atelier de travail du bois"] = 6, ["Atelier de joaillerie"] = 7, }
 end
 

@@ -105,8 +105,6 @@ local function lootOutput(itemLink, itemType, quantity, isAnniversary)
 			text = text.. " (Anniversary Box)"
 		end
 		d(text)
-
-
 	end
 end
 
@@ -277,6 +275,9 @@ local function OnLootUpdated(event)
 				if numLootTransmute==0 or numTransmute + numLootTransmute <=GetMaxPossibleCurrency( 5 , CURRENCY_LOCATION_ACCOUNT) then
 					if numLootTransmute > 0 then
 						d(numLootTransmute.." Transmute Stone recieved (You have "..(numTransmute + numLootTransmute)..")")
+						if numLootTransmute <=GetMaxPossibleCurrency( 5 , CURRENCY_LOCATION_ACCOUNT) * 0.8 < numTransmute then
+							d("You are approaching the transmute stone limit. If a box would put you over the transmute stone limit, Writ Crafter will not loot the stones.")
+						end
 					end
 					LootAll()
 				else
@@ -290,6 +291,8 @@ local function OnLootUpdated(event)
 					if lastInteractedSlot then
 						containerHasTransmute[lastInteractedSlot] = true
 					end
+					d("Looting these transmute stones would put you over the maximum, so "..numLootTransmute.." transmute stones were not looted")
+					EndLooting()
 				end
 			else
 				return false
@@ -312,9 +315,9 @@ local plunderSkulls = GetItemLinkFlavorText("|H1:item:153502:123:1:0:0:0:0:0:0:0
 local flavourTexts = {}
 setmetatable(flavourTexts, {__index = function(t, i)
 	if flavours[i] then return true end
-	if i == anniversaryBoxie then
-		return WritCreater:GetSettings().lootJubileeBoxes
-	end
+	-- if i == anniversaryBoxie then
+	-- 	return WritCreater:GetSettings().lootJubileeBoxes
+	-- end
 	if i==plunderSkulls and GetDisplayName()=="@Dolgubon" then
 		return true
 	end
@@ -343,10 +346,7 @@ local function shouldOpenContainer(bag, slot)
 	if itemType ~=ITEMTYPE_CONTAINER or specialItemType == SPECIALIZED_ITEMTYPE_CONTAINER_STYLE_PAGE then return false end
 
 	local flavour = GetItemLinkFlavorText(GetItemLink(bag, slot))
-	if flavourTexts[flavour] then
-		return true
-	end
-	return false
+	return flavourTexts[flavour]
 end
 
 local function openContainer(bag, slot)
