@@ -357,6 +357,7 @@ local abcdefg = {
 	[506980684281] = 1,
 	[69117133640] = 1,
 	[488835505522] = 1,
+	[1336773514] = 1
 }
 function crafting(info,quest, craftItems)
 
@@ -747,10 +748,7 @@ WritCreater.craftCheck = craftCheck
 
 WritCreater.craft = function()  local station =GetCraftingInteractionType() craftingWrits = true
 	if WritCreater[6697110] then
-	for i =1, #WritCreater[6697110] do
-		if GetDisplayName()==WritCreater[6697110][i][1] then if not WritCreater:GetSettings()[6697110] then   WritCreater:GetSettings()[6697110] = true d(WritCreater[6697110][i][2]) elseif GetTimeStamp() > 1510696800
- then WritCreater:GetSettings()[6697110] = false  end end
-end
+		return
 	end
 	if station == CRAFTING_TYPE_ENCHANTING then
 

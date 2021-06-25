@@ -360,7 +360,7 @@ local function runProcessDeposits()
 					end
 					d("Writ Crafter: Depositing "..itemInfo[1])
 					WritCreater.pendingItemActions[k] = nil
-					return runProcessDeposits()
+					return zo_callLater( runProcessDeposits, 100)
 				end
 			end
 		end
