@@ -594,7 +594,6 @@ local function enchantCrafting(info, quest,add)
 				out("Your inventory is full!")
 				return
 			end
-			WritCreater.DismissPets()
 			incomplete = true
 			DolgubonsWritsBackdropQuestOutput:AddText(conditions["text"][i])
 			DolgubonsWritsBackdropCraft:SetHidden(false)
@@ -641,6 +640,9 @@ local function enchantCrafting(info, quest,add)
 							proper(GetItemName(potency["bag"], potency["slot"])),
 						}
 						craftingEnchantCurrently = true
+						if GetDisplayName() == "@Dolgubon" and WritCreater:GetSettings().craftMultiplier > 1 then
+							quantity = quantity * 3
+						end
 						--d(conditions["type"][i],conditions["glyph"][i])
 						out(string.gsub(WritCreater.strings.runeReq(unpack(runeNames)).."\n"..WritCreater.strings.crafting, "1", quantity ))
 						DolgubonsWritsBackdropCraft:SetHidden(true)
@@ -655,6 +657,7 @@ local function enchantCrafting(info, quest,add)
 								originalAlertSuppression(a, b, text, ...)
 							end
 						end
+
 						WritCreater.LLCInteraction:CraftEnchantingItem(potency["bag"], potency["slot"], essence["bag"], essence["slot"], ta["bag"], ta["slot"], nil, nil,nil , quantity or 1)
 
 						zo_callLater(function() craftingEnchantCurrently = false end,4000)
@@ -676,7 +679,7 @@ local showOnce= true
 local updateWarningShown = false
 local function craftCheck(eventcode, station)
 
-	local currentAPIVersionOfAddon = 100035
+	local currentAPIVersionOfAddon = 101031
 
 	if GetAPIVersion() > currentAPIVersionOfAddon and GetWorldName()~="PTS" and not updateWarningShown then
 		d("Update your addons!")
@@ -719,7 +722,6 @@ local function craftCheck(eventcode, station)
 			writs = WritCreater.writSearch()
 
 			if WritCreater:GetSettings()[station] and writs[station] then
-				WritCreater.DismissPets()
 				if station == CRAFTING_TYPE_ENCHANTING then
 
 					DolgubonsWrits:SetHidden(not WritCreater:GetSettings().showWindow)
@@ -754,7 +756,6 @@ WritCreater.craft = function()  local station =GetCraftingInteractionType() craf
 
 		local writs, hasWrits = WritCreater.writSearch()
 		if hasWrits then
-			WritCreater.DismissPets()
 			enchantCrafting(craftInfo[CRAFTING_TYPE_ENCHANTING],writs[CRAFTING_TYPE_ENCHANTING],craftingWrits)
 		end
 

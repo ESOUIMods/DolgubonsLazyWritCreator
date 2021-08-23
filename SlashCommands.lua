@@ -7,7 +7,7 @@
 -- File Name: SlashCommands.lua
 -- File Description: This file contains all the slash commands in the addon
 -- Load Order Requirements: None
--- 
+--
 -----------------------------------------------------------------------------------
 
 
@@ -25,7 +25,7 @@ local function dailyReset()
 	stamp = stamp%hour
 	date["minute"] = math.floor(stamp/60)
 	stamp = stamp%60
-	if date["hour"]>5 then 
+	if date["hour"]>5 then
 		till["hour"] = 24-date["hour"]+5
 	else
 		till["hour"] = 6- date["hour"] -1
@@ -64,7 +64,7 @@ local function countSurveys()
 		names[CRAFTING_TYPE_ALCHEMY] = "enchanteur"
 		names[CRAFTING_TYPE_ENCHANTING] = "alchimiste"
 	end
-    local total = 
+    local total =
     {
     	overall = 0,
     	bank = 0,
@@ -72,7 +72,7 @@ local function countSurveys()
     	storage = 0,
     }
     local i, j, bankNum
-    local detailedCount = 
+    local detailedCount =
     {
     	[CRAFTING_TYPE_ENCHANTING] = 0,
 		[CRAFTING_TYPE_BLACKSMITHING] = 0,
@@ -81,11 +81,11 @@ local function countSurveys()
 		[CRAFTING_TYPE_WOODWORKING] = 0,
 		[CRAFTING_TYPE_ALCHEMY] = 0,
 		[CRAFTING_TYPE_JEWELRYCRAFTING] = 0,
-		[8] = 0, -- This is for internal purposes, mainly to bypass if statements checking if a survey type was found. 
+		[8] = 0, -- This is for internal purposes, mainly to bypass if statements checking if a survey type was found.
 	}
 	local storageIncluded = false
 
-	local bagCounts = 
+	local bagCounts =
 	{
 		["bank"] = ZO_DeepTableCopy(detailedCount),
 		["inventory"] = ZO_DeepTableCopy(detailedCount),
@@ -127,7 +127,7 @@ local function countSurveys()
 	else
 		d(zo_strformat(WritCreater.strings.countSurveys,total.overall).." (Inventory : "..total["inventory"].." , Bank : "..total["bank"]..")")
     end
-    
+
     for i = 1, 7 do
     	if detailedCount[i] >0 then
     		if storageIncluded then
@@ -141,7 +141,7 @@ end
 
 -- countVouchers counts how many unearned vouchers the user has in sealed writs
 local masterWritTextures  = {
-	["/esoui/art/icons/master_writ_blacksmithing.dds"] = CRAFTING_TYPE_BLACKSMITHING,   
+	["/esoui/art/icons/master_writ_blacksmithing.dds"] = CRAFTING_TYPE_BLACKSMITHING,
 	["/esoui/art/icons/master_writ_clothier.dds"     ] = CRAFTING_TYPE_CLOTHIER,
 	["/esoui/art/icons/master_writ_woodworking.dds"  ] = CRAFTING_TYPE_WOODWORKING,
 	["/esoui/art/icons/master_writ_jewelry.dds"      ] = CRAFTING_TYPE_JEWELRYCRAFTING,
@@ -186,11 +186,11 @@ local function countVouchers()
 		names[CRAFTING_TYPE_ALCHEMY] = "enchanteur"
 		names[CRAFTING_TYPE_ENCHANTING] = "alchimiste"
 	end
-    for k, v in pairs(craftTotals) do 
+    for k, v in pairs(craftTotals) do
     	d(names[k].." : "..v.." ("..sealedTotals[k].." sealed writs)")
     end
     d(zo_strformat(WritCreater.strings.countVouchers,total).." ("..totalSealed.." sealed writs)")
-    
+
 end
 
 -- outputStats outputs the user's writ rewards in a (mildly) readable fashion
@@ -206,12 +206,12 @@ local function outputStats(showChances)
 		DolgubonsLazyWritStatsWindow:SetHidden(not DolgubonsLazyWritStatsWindow:IsHidden())
 		return
 	end
-	for k, v in pairs(WritCreater.savedVarsAccountWide["rewards"]) do 
+	for k, v in pairs(WritCreater.savedVarsAccountWide["rewards"]) do
 		if type(v) == "table" and WritCreater.writNames[k] then
 			d("--------------------------------")
 			d(WritCreater.writNames[k].." Stats")
 			local numberOfWritType = v.num
-			for statType, stats in pairs(v) do 
+			for statType, stats in pairs(v) do
 				if stats==0 then
 				elseif type(stats)=="table" then
 					for quality, amount in pairs(stats) do
@@ -250,7 +250,7 @@ end
 
 -- Resets the user's writ reward statistics
 
-local function resetStats() 
+local function resetStats()
 	for k, v in pairs(WritCreater.defaultAccountWide) do
 		if k == "masterWrits" then
 		else
@@ -266,7 +266,7 @@ end
 
 local function resetSettings()
 	if WritCreater.savedVars.useCharacterSettings then
-		WritCreater.savedVars = WritCreater.default 
+		WritCreater.savedVars = WritCreater.default
 	else
 		WritCreater.savedVarsAccountWide.accountWideProfile = WritCreater.default
 	end
@@ -278,14 +278,14 @@ end
 
 local function activateDebug(str)
 	if string.lower(str) == "bank" then
-		WritCreater.savedVarsAccountWide.bankDebug = not WritCreater.savedVarsAccountWide.bankDebug 
+		WritCreater.savedVarsAccountWide.bankDebug = not WritCreater.savedVarsAccountWide.bankDebug
 		d("Bank debug is "..tostring( WritCreater.savedVarsAccountWide.bankDebug) )
 	elseif string.lower(str) == "delay" then
 		WritCreater.savedVarsAccountWide.masterDebugDelay = not WritCreater.savedVarsAccountWide.masterDebugDelay
 		d("Delay debug is "..tostring( WritCreater.savedVarsAccountWide.bankDebug) )
 	else
-		
-		WritCreater:GetSettings().debug = not WritCreater:GetSettings().debug 
+
+		WritCreater:GetSettings().debug = not WritCreater:GetSettings().debug
 		d("Craft Debug is ".. tostring(WritCreater:GetSettings().debug))
 	end
 end
@@ -296,7 +296,7 @@ local function abandonWrits()
 	local a = WritCreater.writSearch() d("Abandon Ship!!!") for i = 1, 7 do AbandonQuest(a[i]) end
 end
 
--- Outputs the indexes of all the writs the user has. This is another debug function. It has not been used in a while, but 
+-- Outputs the indexes of all the writs the user has. This is another debug function. It has not been used in a while, but
 -- I'm keeping it here just in case. Usecase is to have someone I'm working with to debug stuff use this function
 -- NOTE: Does not output locations of master writs.
 
@@ -353,6 +353,10 @@ SLASH_COMMANDS['/dlwcfindwrit'] = findWrits
 if WritCreater.needTranslations and GetTimeStamp()<1590361774 then
 	SLASH_COMMANDS['/writcraftertranslations'] = goToTranslationSite
 end
+if GetDisplayName() == "@Dolgubon" then
+	SLASH_COMMANDS['/loothirelings'] = function() SLASH_COMMANDS['/dcsbar']("lootmail") end
+end
+
 -- local bags2 = {BAG_BANK, BAG_SUBSCRIBER_BANK,BAG_BACKPACK, BAG_HOUSE_BANK_EIGHT ,BAG_HOUSE_BANK_FIVE ,BAG_HOUSE_BANK_FOUR,
 -- 	BAG_HOUSE_BANK_ONE ,BAG_HOUSE_BANK_SEVEN ,BAG_HOUSE_BANK_SIX  ,BAG_HOUSE_BANK_THREE ,BAG_HOUSE_BANK_TWO ,}
 -- local function newBagTable()

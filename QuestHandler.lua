@@ -7,7 +7,7 @@
 -- File Name: QuestHandler.lua
 -- File Description: Handles automatic acceptance and completion of quests
 -- Load Order Requirements: None
--- 
+--
 -----------------------------------------------------------------------------------
 
 
@@ -16,11 +16,10 @@ local completionStrings
 local function onWritComplete()
 	local zoneIndex = GetUnitZoneIndex("player")
 	local zoneId = GetZoneId(zoneIndex)
-	WritCreater.hidePets()
 	if WritCreater.savedVarsAccountWide.writLocations[zoneId] then
 		return
 	end
-	
+
 	local _,x,_, y = GetUnitWorldPosition("player")
 	WritCreater.savedVarsAccountWide.writLocations[zoneId] = {zoneIndex, x, y, 640000}
 
@@ -28,13 +27,12 @@ end
 
 -- Handles the dialogue where we actually complete the quest
 local function HandleQuestCompleteDialog(eventCode, journalIndex)
-	WritCreater.hidePets()
 	local writs = WritCreater.writSearch()
 	if not GetJournalQuestIsComplete(journalIndex) then return end
-	local currentWritDialogue 
+	local currentWritDialogue
 	for i = 1, 7 do
 		if writs[i] == journalIndex then -- determine which type of writ it is
-			
+
 			currentWritDialogue= i
 		end
 	end
@@ -45,11 +43,11 @@ local function HandleQuestCompleteDialog(eventCode, journalIndex)
 		CompleteQuest()
 		EVENT_MANAGER:UnregisterForEvent(WritCreater.name, EVENT_QUEST_COMPLETE_DIALOG)
 		WritCreater.analytic()
-		return 
+		return
 	end
 	EVENT_MANAGER:UnregisterForEvent(WritCreater.name, EVENT_QUEST_COMPLETE_DIALOG)
 	if not currentWritDialogue then return end
-	
+
 	-- Increment the number of writs complete number
 	WritCreater.savedVarsAccountWide["rewards"][currentWritDialogue]["num"] = WritCreater.savedVarsAccountWide["rewards"][currentWritDialogue]["num"] + 1
 	WritCreater.savedVarsAccountWide["total"] = WritCreater.savedVarsAccountWide["total"] + 1
@@ -78,9 +76,9 @@ local function isQuestTypeActive(optionString)
 	optionString = string.gsub(optionString, "couture","tailleur")
 
 	for i = 1, 7 do
-		if string.find(string.lower(optionString), string.lower(WritCreater.writNames[i])) and (WritCreater:GetSettings()[i] or WritCreater:GetSettings()[i]==nil) then 
+		if string.find(string.lower(optionString), string.lower(WritCreater.writNames[i])) and (WritCreater:GetSettings()[i] or WritCreater:GetSettings()[i]==nil) then
 			return true
-		
+
 		end
 	end
 
@@ -103,7 +101,7 @@ end
 -- Handles dialogue start. It will fire on any NPC dialogue, so we need to filter out a bit
 local function HandleChatterBegin(eventCode, optionCount)
 
-	
+
     -- Ignore interactions with no options
     if optionCount == 0 then return end
 
@@ -113,8 +111,8 @@ local function HandleChatterBegin(eventCode, optionCount)
 	    local optionString, optionType = GetChatterOption(i)
 
 	    -- If it is a writ quest option...
-	    if optionType == CHATTER_START_NEW_QUEST_BESTOWAL 
-	       and string.find(string.lower(optionString), string.lower(WritCreater.writNames["G"])) ~= nil 
+	    if optionType == CHATTER_START_NEW_QUEST_BESTOWAL
+	       and string.find(string.lower(optionString), string.lower(WritCreater.writNames["G"])) ~= nil
 	    then
 	    	if not WritCreater:GetSettings().autoAccept then return end
 	    	if isQuestTypeActive(optionString) then
@@ -129,10 +127,10 @@ local function HandleChatterBegin(eventCode, optionCount)
 					wasQuestAccepted = nil
 				end
 			end
-			
+
 	    -- If it is a writ quest completion option
 	    elseif optionType == CHATTER_START_ADVANCE_COMPLETABLE_QUEST_CONDITIONS
-	       and string.find(string.lower(optionString), string.lower(completionStrings.place)) ~= nil  
+	       and string.find(string.lower(optionString), string.lower(completionStrings.place)) ~= nil
 	    then
 	    	if not WritCreater:GetSettings().autoAccept then return end
 	        -- Listen for the quest complete dialog
@@ -140,10 +138,10 @@ local function HandleChatterBegin(eventCode, optionCount)
 	        -- Select the first option to complete the quest
 	        SelectChatterOption(1)
 	        return
-	    
+
 	    -- If the goods were already placed, then complete the quest
 	    elseif optionType == CHATTER_START_COMPLETE_QUEST
-	       and (string.find(string.lower(optionString), string.lower(completionStrings.place)) ~= nil 
+	       and (string.find(string.lower(optionString), string.lower(completionStrings.place)) ~= nil
 	            or string.find(string.lower(optionString), string.lower(completionStrings.sign)) ~= nil)
 	    then
 	    	if not WritCreater:GetSettings().autoAccept then return end
@@ -153,12 +151,12 @@ local function HandleChatterBegin(eventCode, optionCount)
 	        SelectChatterOption(1)
 	        return
 	        -- Talking to the master writ person?
-	    elseif zo_plainstrfind( ZO_InteractWindowTargetAreaTitle:GetText() ,completionStrings["Rolis Hlaalu"]) then 
+	    elseif zo_plainstrfind( ZO_InteractWindowTargetAreaTitle:GetText() ,completionStrings["Rolis Hlaalu"]) then
 	    	if not WritCreater:GetSettings().autoAccept then return end
 	    	--d(optionType)
 	    	--d(optionString)
 		    if optionType == CHATTER_START_ADVANCE_COMPLETABLE_QUEST_CONDITIONS
-		       and string.find(string.lower(optionString), string.lower(completionStrings.masterPlace)) ~= nil  
+		       and string.find(string.lower(optionString), string.lower(completionStrings.masterPlace)) ~= nil
 		    then
 		        -- Listen for the quest complete dialog
 		        EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_QUEST_COMPLETE_DIALOG, HandleQuestCompleteDialog)
@@ -168,7 +166,7 @@ local function HandleChatterBegin(eventCode, optionCount)
 		        return
 		        -- If the goods were already placed, then complete the quest
 		    elseif optionType == CHATTER_START_COMPLETE_QUEST
-		       and (string.find(string.lower(optionString), string.lower(completionStrings.masterPlace)) ~= nil 
+		       and (string.find(string.lower(optionString), string.lower(completionStrings.masterPlace)) ~= nil
 		            or string.find(string.lower(optionString), string.lower(completionStrings.masterSign)) ~= nil)
 		    then
 		        -- Listen for the quest complete dialog
@@ -186,52 +184,7 @@ local function HandleChatterBegin(eventCode, optionCount)
 	end
 end
 
--- All the abilityIDs for pets that should not be near writ containers. Grrr
-local petIds = { 
-[23304]=true, [30631]=true, [30636]=true, [30641]=true, [23319]=true, [30647]=true, 
-[30652]=true, [30657]=true, [23316]=true, [30664]=true, [30669]=true, [30674]=true , 
-[24613]=true, [30581]=true, [30584]=true, [30587]=true, [24636]=true, [30592]=true, 
-[30595]=true, [30598]=true, [24639]=true, [30618]=true, [30622]=true, [30626]=true, 
-[85982]=true, [85983]=true, [85984]=true, [85985]=true, [85986]=true, [85987]=true, 
-[85988]=true, [85989]=true, [85990]=true, [85991]=true, [85992]=true, [85993]=true, }
 
-local function DismissPets()
-
-	-- Walk through the player's active buffs
-	for i = 1, GetNumBuffs("player") do
-		local _, _, _, buffSlot, _, _, _, _, _, _, abilityId, _ = GetUnitBuffInfo("player", i)
-		-- Compare each buff's abilityID to the list of IDs we were given
-		if petIds[abilityId] then
-			-- Cancel the buff if we got a match
-			CancelBuff(buffSlot)
-		end
-	end
-end
-
-WritCreater.DismissPets = DismissPets
-
-local function calculateDistance()
-	local watchedZones=	WritCreater.savedVarsAccountWide.writLocations
-	local zoneIndex = GetUnitZoneIndex("player")
-	local zoneId = GetZoneId(zoneIndex)
-	if not watchedZones[zoneId] then
-		return
-	end
-	if not watchedZones[zoneId][2] then return end
-	-- Pretty sure that means we're in a tracked zone so let's calculate!
-	local _,x,_, y = GetUnitWorldPosition("player")
-	x = watchedZones[zoneId][2] - x
-	y = watchedZones[zoneId][3] - y
-	local dist = x*x + y*y
-	local _, hasWrit = WritCreater.writSearch()
-	if not hasWrit then
-		dist = dist *2
-	end
-	if dist<(watchedZones[zoneId][4] or 0) then
-		DismissPets()
-	end
-	return dist
-end
 --[[
 WritCreater.savedVarsAccountWide.writLocations={
 WritCreater.savedVarsAccountWide.writLocations[645] =  {1011 , 146161, 341851, 1000000}, -- summerset
@@ -239,7 +192,7 @@ WritCreater.savedVarsAccountWide.writLocations[496]= {849 , 215118,  512682, 900
 WritCreater.savedVarsAccountWide.writLocations[179]= {382 ,122717,  187928, 1000000},-- Rawlkha
 WritCreater.savedVarsAccountWide.writLocations[16]= {103 , 366252, 201624 , 2000000}, -- Riften
 WritCreater.savedVarsAccountWide.writLocations[154] = {347 , 237668,  302699, 1000000 },-- coldharbour chek
-WritCreater.savedVarsAccountWide.writLocations[5] = {20 ,243273, 227612, 1000000 },  -- Shornhelm 
+WritCreater.savedVarsAccountWide.writLocations[5] = {20 ,243273, 227612, 1000000 },  -- Shornhelm
 WritCreater.savedVarsAccountWide.writLocations[10] = {57 ,231085, 249391, 1000000 }, -- Mournhold
 }
 ]]
@@ -258,19 +211,19 @@ local function hookIndexEvent(event)
 	local originalAdded = ZO_CenterScreenAnnounce_GetEventHandlers()[ event]
 	ZO_CenterScreenAnnounce_GetEventHandlers()[ event] = function(...)
 	originalAdded(...)
-		local params={...} 
+		local params={...}
 		local questIndex = params[1]
-		if isQuestWritQuest(questIndex) then 
-			return 
-		end 
+		if isQuestWritQuest(questIndex) then
+			return
+		end
 		return originalAdded(...)
 	end
 end
 
 local function OnQuestAdvanced(eventId, questIndex, questName, isPushed, isComplete, mainStepChanged)
-	
+
 	if WritCreater:GetSettings().suppressQuestAnnouncements and isQuestWritQuest(questIndex) then
-		return 
+		return
 	end
 
     if(not mainStepChanged) then
@@ -307,10 +260,9 @@ WritCreater.OnQuestAdvanced = OnQuestAdvanced
 
 local function OnQuestAdded(eventId, questIndex)
 
-	WritCreater.hidePets()
-	if WritCreater:GetSettings().suppressQuestAnnouncements and isQuestWritQuest(questIndex) then 
-		return 
-	end 
+	if WritCreater:GetSettings().suppressQuestAnnouncements and isQuestWritQuest(questIndex) then
+		return
+	end
     OnQuestAdvanced(EVENT_QUEST_ADVANCED, questIndex, nil, nil, nil, true)
 end
 
@@ -361,16 +313,15 @@ ZO_PreHook("AcceptSharedQuest", checkIfCanAcceptQuest)
 ZO_PreHook("AcceptOfferedQuest", checkIfCanAcceptQuest)
 
 function WritCreater.InitializeQuestHandling()
-	EVENT_MANAGER:RegisterForUpdate(WritCreater.name.."Pe(s)tControl", 1000, calculateDistance)
 	EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_CHATTER_BEGIN, HandleChatterBegin)
 	completionStrings = WritCreater.writCompleteStrings()
 	local original = AcceptOfferedQuest
 	AcceptOfferedQuest = function()
-		if string.find(GetOfferedQuestInfo(), completionStrings["Rolis Hlaalu"]) and WritCreater:GetSettings().preventMasterWritAccept then 
-			d(WritCreater.strings.masterWritSave)  
-		else 
-			original() 
-		end 
+		if string.find(GetOfferedQuestInfo(), completionStrings["Rolis Hlaalu"]) and WritCreater:GetSettings().preventMasterWritAccept then
+			d(WritCreater.strings.masterWritSave)
+		else
+			original()
+		end
 	end
 	for k, v in pairs(WritCreater.defaultAccountWide.writLocations) do
 		WritCreater.savedVarsAccountWide.writLocations[k] = v
