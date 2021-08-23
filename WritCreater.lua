@@ -26,7 +26,6 @@ DolgubonsWritsBackdropQuestOutput.SetText = function()end
 local LAM = LibAddonMenu2
 local LFB = LibFeedback
 
-
 WritCreater = WritCreater or {}
 WritCreater.name = "DolgubonsLazyWritCreator"
 
