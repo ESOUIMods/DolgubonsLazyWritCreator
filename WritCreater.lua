@@ -90,6 +90,10 @@ WritCreater.default =
 		fragment = 	 	{sameForAllCrafts = true, [0] = 1, },
 		recipe =   		{sameForAllCrafts = true, [0] = 1, },
 	},
+	["mail"] = {
+		delete = false,
+		loot = true,
+	}
 }
 
 WritCreater.defaultAccountWide = {
