@@ -5,25 +5,25 @@ WritCreater.rewardsScroll = RewardsScroll
 function RewardsScroll:New(control)
 
 	ZO_SortFilterList.InitializeSortFilterList(self, control)
-	
+
 	local SorterKeys =
 	{
 		name = {},
 	}
 	self.viewType = 0
  	self.masterList = {}
-	
+
  	ZO_ScrollList_AddDataType(self.list, 1, "WritCrafterRewardTemplate", 30, function(control, data) self:SetupEntry(control, data) end)
  	ZO_ScrollList_EnableHighlight(self.list, "ZO_ThinListHighlight")
 	self.currentSortKey = "Reference"
 	self.currentSortOrder = ZO_SORT_ORDER_UP
- 	self.sortFunction = function(listEntry1, listEntry2) 
+ 	self.sortFunction = function(listEntry1, listEntry2)
  		if listEntry1.data.craft==listEntry2.data.craft then
  			d(listEntry1.data.amount)
  			d(listEntry2.data.amount)
  			return (listEntry1.data.amount or -1)> (listEntry2.data.amount or -1)
- 		end 
- 		return listEntry1.data.craft> listEntry2.data.craft 
+ 		end
+ 		return listEntry1.data.craft> listEntry2.data.craft
  	end
  	--[[
 	self.currentSortKey = "name"
@@ -31,7 +31,7 @@ function RewardsScroll:New(control)
  	]]
 	self.data = WritCreater.savedVarsAccountWide.rewards
 	return self
-	
+
 end
 
 local function round(num, numDecimalPlaces)
@@ -74,7 +74,7 @@ local priceEstimates={
 		[54173] = 5000,
 		[54177] = 8000,
 		[54181] = 2000,
-		[45854] = 2000,	
+		[45854] = 2000,
 		[135154] = 8000,
 		[135150] = 80000,
 		[135152] = 800,
@@ -118,7 +118,7 @@ local priceEstimates={
 	}
 }
 
-local rewardNameMaps = 
+local rewardNameMaps =
 {
 	["master"] = {"Sealed Writs",5000},
 	["intricate"] = {"Intricate Gear",200},
@@ -130,7 +130,7 @@ local rewardNameMaps =
 	["ornate"] = {"Ornate Gear",200},
 	["voucher"] = {"Vouchers",500},
 }
-local craftWritValueModifiers = 
+local craftWritValueModifiers =
 {
 	10000,
 	10000,
@@ -145,20 +145,18 @@ local function getPrice(itemInfo,estimateKey, craft)
 	local itemLink
 	if type(itemInfo ) == "number" then
 		itemLink = getItemLinkFromItemId(itemInfo)
-		if LibPrice then 
+		if LibPrice then
 			local price  = LibPrice.ItemLinkToPriceGold(itemLink)
 			if price then
 				return price
 			end
 		end
 		if MasterMerchant then
-			local itemID = tonumber(string.match(itemLink, '|H.-:item:(.-):'))
-			local itemIndex = MasterMerchant.makeIndexFromLink(itemLink)
-			local price = MasterMerchant:toolTipStats(itemID, itemIndex, true, nil, false)['avgPrice']
-			if price then
-				return price
-			end 
-		end
+        local itemStats = MasterMerchant:itemStats(itemLink, false)
+        if itemStats and itemStats.avgPrice then
+            return itemStats.avgPrice
+        end
+    end
 		if TamrielTradeCentrePrice then
 			local t = TamrielTradeCentrePrice:GetPriceInfo(itemLink)
 			if t and t.SuggestedPrice then
@@ -238,21 +236,21 @@ function RewardsScroll:SetupEntry(control, data)
 			end
 			if BG then
 				BG:SetAnchorFill(control)
-			end	
+			end
 		end
 	end
 	ZO_SortFilterList.SetupRow(self, control, data)
 	-- local BG = GetControl(control, "BG")
 	-- local name = GetControl(control, "Name")
 	-- local amount = GetControl(control, "Amount")
-	
+
 
 	-- if BG then
 	-- 	BG:SetAnchorFill(control)
 	-- 	BG:SetCenterColor(1, 0.5, 0.5, 0.2)
 	-- 	BG:SetEdgeColor(0,0,0,0)
 	-- end
-	
+
 	-- BG:SetCenterColor(1,0,0)
 	-- if  data.header then
 	-- 	name:SetText(GetCraftingSkillName(data.craft).. " Rewards")
@@ -265,9 +263,9 @@ WritCreater.quality = {}
 
 for i = 1, 5 do
 	local qualityColor = ZO_ColorDef:New(GetInterfaceColor(INTERFACE_COLOR_TYPE_ITEM_QUALITY_COLORS, i))
-    
-    WritCreater.quality[i] = {[1] = i, [2] = qualityColor:Colorize(GetString(SI_ITEMQUALITY0 + i))  } 
-	
+
+    WritCreater.quality[i] = {[1] = i, [2] = qualityColor:Colorize(GetString(SI_ITEMQUALITY0 + i))  }
+
 end
 
 function RewardsScroll:BuildMasterList()
@@ -279,7 +277,7 @@ function RewardsScroll:BuildMasterList()
 		local craftMasterList = {}
 		local traitMatTable =  {["craft"] = craft ,["item"]="Trait Stones", ["amount"]=0, estimateKey="traitMat"}
 		local pulverizedTraitMatTable =  {["craft"] = craft ,["item"]="Trait Fragments", ["amount"]=0, estimateKey="pulverizedMat"}
-		-- table.insert(self.masterList, 
+		-- table.insert(self.masterList,
 		-- 		craftHeader
 		-- 	)
 		local i = 1
@@ -293,7 +291,7 @@ function RewardsScroll:BuildMasterList()
 			if craft == CRAFTING_TYPE_JEWELRYCRAFTING then
 				self.masterList[i] = self.masterList[i] or {}
 				self.masterList[i][craft]= pulverizedTraitMatTable
-				
+
 				i = i+1
 			end
 		end
@@ -315,7 +313,7 @@ function RewardsScroll:BuildMasterList()
 					i = i+1
 				end
 			else
-				
+
 				if type(amount)=="table" then
 					for qualifier, qualifierAmount in pairs(amount) do
 						if qualifierAmount>0 then
@@ -342,11 +340,11 @@ function RewardsScroll:BuildMasterList()
 						pulverizedTraitMatTable.amount = pulverizedTraitMatTable.amount + amount
 					else
 						self.masterList[i] = self.masterList[i] or {}
-						self.masterList[i][craft]= {["craft"] = craft ,["item"]=rewardNameMaps[reward] and rewardNameMaps[reward][1] or reward, 
+						self.masterList[i][craft]= {["craft"] = craft ,["item"]=rewardNameMaps[reward] and rewardNameMaps[reward][1] or reward,
 							["estimate"]=rewardNameMaps[reward] and rewardNameMaps[reward][2] or nil,["amount"]=amount}
 						i = i+1
 					end
-					
+
 				else
 
 					self.masterList[i] = self.masterList[i] or {}
@@ -403,7 +401,7 @@ end
 
 function WritCreater.setupScrollLists()
 	WritCreater.rewardsScrollManager = RewardsScroll:New(DolgubonsLazyWritStatsWindowRewardScroll) -- check
-	
+
 	if WritCreater:GetSettings().debugMode then
 		DolgubonsLazyWritStatsWindow:SetHidden(false)
 		WritCreater.rewardsScrollManager.viewType =	WritCreater:GetSettings().defaultViewType or 1
@@ -414,13 +412,13 @@ end
 local function updateNonScrollElements()
 	local daysSinceReset = math.floor((GetTimeStamp() - WritCreater.savedVarsAccountWide.timeSinceReset)/86400*100)/100
 	DolgubonsLazyWritStatsWindowBackdropWritCounter:SetText("Writs Done: ".. WritCreater.savedVarsAccountWide.total.." in the past "..daysSinceReset.." days")
-	
+
 	local itemGold= GetControl(DolgubonsLazyWritStatsWindowBackdrop, "ItemGold")
 	local totalGold= GetControl(DolgubonsLazyWritStatsWindowBackdrop, "TotalGold")
 	local estimateWarning = GetControl(DolgubonsLazyWritStatsWindowBackdrop, "EstimateWarning")
 end
 
-updateList = function () 
+updateList = function ()
 	WritCreater.rewardsScrollManager:RefreshData()
 	updateNonScrollElements()
 end
