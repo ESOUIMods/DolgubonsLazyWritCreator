@@ -73,7 +73,7 @@ local function deleteLootedMail(mailId)
 	end
 	if hirelingMails[1] == mailId then
 		table.remove(hirelingMails, 1)
-		zo_callLater(lootMails, 40)
+		zo_callLater(lootMails, 250)
 	end
 	-- table.remove(hirelingMails, mailId)
 	shouldBeRemoved = mailId
@@ -89,10 +89,10 @@ function lootReadMail(event, mailId)
 	end
 	local  _,_,subject, _,_,system,customer, _, numAtt, money = GetMailItemInfo(mailId)
 	if not customer and money == 0 and system and hirelingMailSubjects[subject] then
-		if numAtt > 0 then
+		if numAtt > 0 and FindFirstEmptySlotInBag() then
 			-- d("Writ Crafter: Looting "..subject)
 			ZO_MailInboxShared_TakeAll(mailId)
-			zo_callLater(function() deleteLootedMail(mailId) end, 40)
+			zo_callLater(function() deleteLootedMail(mailId) end, 250)
 			return
 		else
 			-- d("Mail empty. Delete it")
@@ -118,7 +118,8 @@ function WritCreater.lootHireling(event)
 		local toremove
 		for k, v in pairs(hirelingMails) do
 			if v == mailId then
-				local _,_,sub = GetMailItemInfo(mailId) d("Writ Crafter: "..sub.." looted")
+				local _,_,sub = GetMailItemInfo(mailId)
+				-- d("Writ Crafter: "..sub.." looted")
 				if not WritCreater:GetSettings().mail.delete then
 					toremove = k
 				end
@@ -150,76 +151,3 @@ end
 SLASH_COMMANDS['/testmail'] = WritCreater.triggerMailLooting
 --EVENT_MAIL_INBOX_UPDATE
 
-
--- EVENT_MANAGER:RegisterForEvent(_addon.name, EVENT_MAIL_OPEN_MAILBOX, function ()
--- 			EVENT_MANAGER:UnregisterForEvent(_addon.name, EVENT_MAIL_OPEN_MAILBOX)
--- 			zo_callLater(function ()
--- 					if mailAction~=MAIL_ACTION_LOOT then return end
--- 					--todo: get out of the action if we get stuck
-
--- 					local mailId = GetNextMailId(nil)
-
--- 					if not mailId then
--- 						DCS_closeMailbox()
--- 						_out("Extract from Mail: |cFF8080mailbox empty or not ready yet|r")
--- 						return
--- 					end
-
--- 					while mailId do
--- 						local _,_,subject,_,_,fromSystem,fromCustSrv,returned,numAtt,attMoney,codAmount = GetMailItemInfo(mailId)
--- 						local lootf = false
--- 						if not fromCustSrv and not returned and attMoney==0 and codAmount==0 then
--- 							if subjtext and subjtext~="" then
--- 								lootf = string.find(subject,subjtext)
--- 							else
--- 								lootf = FindFromList(string.lower(subject),langStrings["material"])
--- 							end
--- 						end
--- 						if lootf then
--- 							if numAtt==0 then
--- 								lootedMail[#lootedMail+1] = mailId
--- 							else
--- 								mailToLoot[#mailToLoot+1] = mailId
--- 							end
--- 						end
--- 						mailId = GetNextMailId(mailId)
--- 					end
-
--- 					EVENT_MANAGER:RegisterForEvent(_addon.name, EVENT_MAIL_READABLE, DCS_lootSingleMail)
--- 					EVENT_MANAGER:RegisterForEvent(_addon.name, EVENT_MAIL_TAKE_ATTACHED_ITEM_SUCCESS, DCS_takeMailAttSuccess)
--- 					EVENT_MANAGER:RegisterForEvent(_addon.name, EVENT_INVENTORY_IS_FULL, DCS_takeMailAttFail)
--- 					DCS_regUnexpectedCloseEvent()
--- 					DCS_tryLootNextMail()
--- 				end, MAIL_NEXTOP_DELAY)
--- 		end)
-
--- 	_out("Extract from Mail: please wait...")
--- 	DCS_tryOpenMailbox()
-
--- 	local function DCS_tryOpenMailbox()
--- 	if mailAction==MAIL_ACTION_NONE then return end
--- 	if SCENE_MANAGER:GetCurrentScene().name == "mailInbox" then
--- 		SCENE_MANAGER:HideCurrentScene()
--- 	end
-
--- 	CloseMailbox()
-
--- 	local cMailAction = mailAction
--- 	local cMailActionId = mailActionId
-
--- 	--if inbox is not open within 5s, abort all
--- 	zo_callLater(function ()
--- 			if mailAction==cMailAction then
--- 				if mailActionId==cMailActionId then
--- 					if curMailIndex==0 then
--- 						EVENT_MANAGER:UnregisterForEvent(_addon.name, EVENT_MAIL_OPEN_MAILBOX)
--- 						mailAction = MAIL_ACTION_NONE
--- 						mailActionId = 0
--- 						_out("Failed to open mailbox, |cFF8080operation aborted")
--- 					end
--- 				end
--- 			end
--- 		end, 5000)
-
--- 	RequestOpenMailbox()
--- end

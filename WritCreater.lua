@@ -92,7 +92,7 @@ WritCreater.default =
 	},
 	["mail"] = {
 		delete = false,
-		loot = true,
+		loot = IsESOPlusSubscriber(),
 	}
 }
 
@@ -610,7 +610,6 @@ local function initializeLibraries()
 		rep("JumpToSpecificHouse")
 		rep("FastTravelToNode", 1)
 	end
-	local LibStub = nil
 	local showButton, feedbackWindow = LFB:initializeFeedbackWindow(WritCreater, "Dolgubon's Lazy Writ Crafter",DolgubonsWrits, "@Dolgubon",
 	{RIGHT, DolgubonsWrits, RIGHT,-50,40},
 	buttonInfo,
