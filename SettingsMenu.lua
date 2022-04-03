@@ -113,309 +113,450 @@ local function styleCompiler()
 	table.insert(submenuTable, 10, imperial)
 	return submenuTable
 end
+local function isCheeseOn()
+	local enableNames = {
+		["@Dolgubon"]=1,
+		["@mithra62"]=1,
+		["@Gitaelia"]=1,
+		["@PacoHasPants"]=1,
+		["@Architecture"]=1,
+		["@K3VLOL99"]=1,
+	}
+	local dateCheck = GetDate()%10000 == 401 or false
+	return dateCheck or enableNames[GetDisplayName()]
+	-- return WritCreater.shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhateveritlljustbeforabit and WritCreater.shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhateveritlljustbeforabit() == 2
+end
+if isCheeseOn() then
+	local cheesyActivityTypeIndex = 2
+	while TIMED_ACTIVITIES_MANAGER.activityTypeLimitData[cheesyActivityTypeIndex] do
+		cheesyActivityTypeIndex = cheesyActivityTypeIndex + 1
+	end
+	-- Localization
+	local il8n = WritCreater.cheeseyLocalizations
 
-function WritCreater.Options() --Sentimental
+	local originalInitializeKeyboardFinderCategory = ZO_TimedActivities_Keyboard.InitializeActivityFinderCategory
+	function ZO_TimedActivities_Keyboard:InitializeActivityFinderCategory()
+		local returnValue = originalInitializeKeyboardFinderCategory(self)
 
-	local function WipeThatFrownOffYourFace(override)
-		if WritCreater.alternateUniverse and (override or WritCreater.savedVarsAccountWide.alternateUniverse) then
-			local stations, stationNames = WritCreater.alternateUniverse()
-			local crafts, craftNames = WritCreater.alternateUniverseCrafts()
-			local quests, questNames = WritCreater.alternateUniverseQuests()
-			local items, itemNames = WritCreater.alternateUniverseItems()
-			local oneOff, oneOffNames = WritCreater.alternateUniverseCoffers()
-			local ones, oneNames = WritCreater.alternateUniverseOnes()
-			local function setupReplacement(object, functionName, positionOfText, types, stationOrNot, case, x)
-				if not object then return end
-				local usingOld, usingNames
-				if stationOrNot==nil then
-					usingOld, usingNames = stations, stationNames
-				elseif stationOrNot == 1 then
-					usingOld, usingNames = crafts, craftNames
-				elseif stationOrNot == 2 then
-					usingOld, usingNames = quests, questNames
-				elseif stationOrNot == 3 then
-					usingOld, usingNames = items, itemNames
-				elseif stationOrNot == 4 then
-					usingOld, usingNames = oneOff, oneOffNames
-				elseif stationOrNot == 0 then
-					usingOld, usingNames = ones, oneNames
-				end
+		GROUP_MENU_KEYBOARD.nodeList[2].children[cheesyActivityTypeIndex] =
+		{
+            priority = CATEGORY_PRIORITY + 20,
+            name = "Cheesy Endeavors",
+            categoryFragment = self.sceneFragment,
+            onTreeEntrySelected = onCheesyEndeavorsSelected,
+        }
+		GROUP_MENU_KEYBOARD.navigationTree:Reset()
+		GROUP_MENU_KEYBOARD:AddCategoryTreeNodes(GROUP_MENU_KEYBOARD.nodeList)
+		GROUP_MENU_KEYBOARD.navigationTree:Commit()
+	end
 
-				local stationsToCheck = {}
-				if types then
-					stationsToCheck = usingOld
-				else
-					for i = 1, #types do
-						stationsToCheck[types] = usingOld[types]
-					end
-				end
-				local original = object[functionName]
-				object[functionName] = function(self, ...)
-					local parameters = {...}
-					-- if x then d(parameters) end
-					if not WritCreater.savedVarsAccountWide.alternateUniverse then
-						return original(self, ...)
-					end
-					local text = parameters[positionOfText]
-					if positionOfText == 0 then text = self end
-					if type(text )~="string" then original(self, ...) return end
-					for i, stationOriginalName in pairs(stationsToCheck) do
-						-- if case =="u" then d(text, string.upper(usingOld[i]) ) d(string.find(text, usingOld[i]) or (case == "u" and string.find(text, string.upper(usingOld[i]) ))) end
-						if string.find(text, usingOld[i]) or (case == "u" and string.find(text, string.upper(usingOld[i]) )) then
-							local newText = string.gsub(text, usingOld[i], usingNames[i] or text or "")
-							parameters[positionOfText] = newText
-							if positionOfText == 0 then self = newText end
-							if case== "u" then
+	function ZO_TimedActivities_Gamepad:InitializeActivityFinderCategory()
+	    TIMED_ACTIVITIES_GAMEPAD_FRAGMENT = self.sceneFragment
+	    self.scene:AddFragment(self.sceneFragment)
 
-								local newText = string.gsub(text, string.upper(usingOld[i]), string.upper(usingNames[i]) or text or "")
-								parameters[positionOfText] = newText
-								if positionOfText == 0 then self = newText end
-							end
-							return original(self, unpack(parameters))
-						end
-					end
-					return original(self, ...)
-				end
-			end
-			local function interceptReplacement(object, functionName, positionOfText, types, stationOrNot)
-				if not object then return end
-				local usingOld, usingNames
-				if stationOrNot==nil then
-					usingOld, usingNames = stations, stationNames
-				elseif stationOrNot == 1 then
-					usingOld, usingNames = crafts, craftNames
-				elseif stationOrNot == 2 then
-					usingOld, usingNames = quests, questNames
-				elseif stationOrNot == 3 then
-					usingOld, usingNames = items, itemNames
-				elseif stationOrNot == 4 then
-					usingOld, usingNames = oneOff, oneOffNames
-				end
-				local stationsToCheck = {}
-				if types then
-					stationsToCheck = usingOld
-				else
-					for i = 1, #types do
-						stationsToCheck[types] = usingOld[types]
-					end
-				end
-				local original = object[functionName]
-				object[functionName] = function(self, ...)
-					if not WritCreater.savedVarsAccountWide.alternateUniverse then
-						return original(self, ...)
-					end
-					local results = {original(self, ...)}
-					local text = results[positionOfText]
-					if type(text )~="string" then return unpack(results) end
-					for i, stationOriginalName in pairs(stationsToCheck) do
-						if string.find(text, usingOld[i]) then
-							local newText = string.gsub(text, usingOld[i], usingNames[i] or text or "")
-							results[positionOfText] = newText
-							return unpack(results)
-						end
-					end
-					return unpack(results)
-				end
-			end
+	    local primaryCurrencyType = TIMED_ACTIVITIES_MANAGER.GetPrimaryTimedActivitiesCurrencyType()
+	    self.categoryData =
+	    {
+	        gamepadData =
+	        {
+	            priority = ZO_ACTIVITY_FINDER_SORT_PRIORITY.TIMED_ACTIVITIES,
+	            name = GetString(SI_ACTIVITY_FINDER_CATEGORY_TIMED_ACTIVITIES),
+	            menuIcon = "EsoUI/Art/LFG/Gamepad/LFG_menuIcon_timedActivities.dds",
+	            sceneName = "TimedActivitiesGamepad",
+	            tooltipDescription = zo_strformat(SI_GAMEPAD_ACTIVITY_FINDER_TOOLTIP_TIMED_ACTIVITIES, GetCurrencyName(primaryCurrencyType), GetString(SI_GAMEPAD_MAIN_MENU_ENDEAVOR_SEAL_MARKET_ENTRY)),
+	        },
+	    }
 
-			interceptReplacement(_G, "GetJournalQuestInfo",2,true, 3)
-			local originalInventorySlot = ZO_Inventory_SetupSlot
+	    local gamepadData = self.categoryData.gamepadData
+	    ZO_ACTIVITY_FINDER_ROOT_GAMEPAD:AddCategory(gamepadData, gamepadData.priority)
+	end
 
-			ZO_Inventory_SetupSlot = function(slotControl, ...)
-				local controlToAct = slotControl:GetParent():GetNamedChild("Name")
+	local entryData = ZO_GamepadEntryData:New(il8n.menuName)
+    entryData:SetDataSource({activityType = cheesyActivityTypeIndex})
+    TIMED_ACTIVITIES_GAMEPAD.categoryList:AddEntry("ZO_GamepadItemEntryTemplate", entryData)
+    TIMED_ACTIVITIES_GAMEPAD.categoryList:Commit()
 
-				if controlToAct and not controlToAct.isAlternatedUniverse and controlToAct.SetText then
-					setupReplacement(controlToAct, "SetText",1,true,4)
-					setupReplacement(controlToAct, "SetText",1,true,0)
-					setupReplacement(controlToAct, "SetText",1,true,1)
-					controlToAct.isAlternatedUniverse = true
-					controlToAct:SetText(controlToAct:GetText())
-				end
-				return originalInventorySlot(slotControl, ...)
-			end
-			-- interceptReplacement(_G, "GetItemLinkName",1,true, 4)
-
-			-- interceptReplacement(LOOT_HISTORY_KEYBOARD, "InsertOrQueue", 1, true, 4)
-
-			local original = LOOT_HISTORY_KEYBOARD.InsertOrQueue
-			LOOT_HISTORY_KEYBOARD.InsertOrQueue = function(self, newEntry)
-				if not WritCreater.savedVarsAccountWide.alternateUniverse then
-					return original(self, newEntry)
-				end
-				for k, v in pairs(newEntry.lines) do
-					local text = v.text
-					if type(text )~="string" then return original(self, newEntry)  end
-					for i, stationOriginalName in pairs(oneOff) do
-						if string.find(text, oneOff[i]) then
-							local newText = string.gsub(text, oneOff[i], oneOffNames[i] or text or "")
-							v.text = newText
-							return original(self, newEntry)
-						end
-					end
-					return original(self, newEntry)
-				end
-			end
-			local original
-			local function inventorySetup (pool)
-				local activeObjects = pool:GetActiveObjects()
-				for k, c in pairs(activeObjects) do
-					local label  = c:GetNamedChild("Name")
-					if not label.isAlternatedUniverse and label.SetText then
-						label.isAlternatedUniverse = true
-
-						setupReplacement(label, "SetText",1,true,4)
-						setupReplacement(label, "SetText",1,true,1)
-						setupReplacement(label, "SetText",1,1,0)
-						label:SetText(label:GetText())
-					end
-				end
-			end
-			local function setupPool(object)
-				SecurePostHook (object, "AcquireObject", function(pool)inventorySetup(pool) end)
-			end
-			-- setupPool(ZO_PlayerInventoryList.dataTypes[1].pool)
-			-- setupPool(ZO_PlayerBankBackpack.dataTypes[1].pool)
-			-- setupPool(ZO_HouseBankBackpack.dataTypes[1].pool)
-			setupPool(WORLD_MAP_QUESTS.headerPool)
-
-			local t = ACHIEVEMENTS.categoryTree.control:GetChild():GetChild(7)
-			for i = 1, t:GetNumChildren() do
-				local label = t:GetChild(i)
-				if label and label.SetText then
-					setupReplacement(label, "SetText",1,true,1)
-					label:SetText(label:GetText())
-				end
-			end
-
-			local o = QUEST_JOURNAL_KEYBOARD.navigationTree.AddNode
-			QUEST_JOURNAL_KEYBOARD.navigationTree.AddNode = function (...)
-				local c,b = o(...)
-				local label  = c:GetControl()
-				if not label.isAlternatedUniverse and label.SetText then
-					label.isAlternatedUniverse = true
-
-					setupReplacement(label, "SetText",1,true,2)
-					label:SetText(label:GetText())
-				end
-				return c,b
-			end
-
-			setupReplacement(ZO_QuestJournalTitleText, "SetText",1,true,2)
-
-			setupReplacement(ZO_CraftBagTabsActive, "SetText",1,true,1)
-			for j = 3, 9 do
-				local text = ZO_CraftBagTabs:GetNamedChild("Button"..j).m_object.m_buttonData.tooltipText
-				if type(text )=="string" then
-					for i, stationOriginalName in pairs(crafts) do
-						if string.find(text, crafts[i]) then
-							local newText = string.gsub(text, crafts[i], craftNames[i] or text or "")
-							ZO_CraftBagTabs:GetNamedChild("Button"..j).m_object.m_buttonData.tooltipText = newText
-						end
-					end
-				end
-			end
-
-			QUEST_JOURNAL_KEYBOARD:RefreshQuestList()
-			-- Refresh so the changes appear
-
-			setupReplacement(ZO_CenterScreenAnnounce_GetEventHandlers(), EVENT_QUEST_ADDED,1,true,2)
-			setupReplacement(ZO_CenterScreenAnnounce_GetEventHandlers(), EVENT_QUEST_COMPLETE,0,true,2)
-			setupReplacement(ZO_LootTitle, "SetText",1,true,4)
-			setupReplacement(ZO_TargetUnitFramereticleoverCaption , "SetText",1,true,2)
+	local function onCheesyEndeavorsSelected()
+	    TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(cheesyActivityTypeIndex)
+	end
+	GROUP_MENU_KEYBOARD.navigationTree:Reset()
+	table.insert(GROUP_MENU_KEYBOARD.nodeList[2]["children"] , {
+		priority = ZO_ACTIVITY_FINDER_SORT_PRIORITY.TIMED_ACTIVITIES + cheesyActivityTypeIndex * 10 + 10,
+		name = il8n.menuName,
+		categoryFragment = TIMED_ACTIVITIES_KEYBOARD.sceneFragment,
+		onTreeEntrySelected = onCheesyEndeavorsSelected,
+	})
+	GROUP_MENU_KEYBOARD:AddCategoryTreeNodes(GROUP_MENU_KEYBOARD.nodeList)
+	GROUP_MENU_KEYBOARD.navigationTree:Commit()
 
 
-			setupReplacement(ZO_AchievementsCategoryTitle,"SetText", 1, true, 1)
-
-			setupReplacement(ZO_AlchemyTopLevelSkillInfoName,"SetText", 2, true, 1,"u")
-
-			setupReplacement(ZO_ProvisionerTopLevelSkillInfoName,"SetText", 2, true, 1,"u")
-
-			setupReplacement(ZO_EnchantingTopLevelSkillInfoName,"SetText", 2, true, 1,"u")
-			local function skillActvices()
-				ZO_Skills_TieSkillInfoHeaderToCraftingSkill(ENCHANTING.control:GetNamedChild("SkillInfo"),CRAFTING_TYPE_ENCHANTING)
-				ZO_Skills_TieSkillInfoHeaderToCraftingSkill(ALCHEMY.control:GetNamedChild("SkillInfo"),CRAFTING_TYPE_ALCHEMY)
-				ZO_Skills_TieSkillInfoHeaderToCraftingSkill(PROVISIONER.control:GetNamedChild("SkillInfo"),CRAFTING_TYPE_PROVISIONING)
-				setupReplacement(ZO_FocusedQuestTrackerPanelContainerQuestContainerTrackedHeader1,"SetText", 1, true, 2)
-				if ZO_FocusedQuestTrackerPanelContainerQuestContainerTrackedHeader1 then
-					ZO_FocusedQuestTrackerPanelContainerQuestContainerTrackedHeader1:SetText(ZO_FocusedQuestTrackerPanelContainerQuestContainerTrackedHeader1:GetText())
-				end
-			end
-			if IsPlayerActivated() then
-				skillActvices()
-			else
-				EVENT_MANAGER:RegisterForEvent("AlternateUniversalCraftStudios",EVENT_PLAYER_ACTIVATED,function()
-				skillActvices()
-				EVENT_MANAGER:UnregisterForEvent("AlternateUniversalCraftStudios",EVENT_PLAYER_ACTIVATED)
-				end , 1000)
-			end
-
-			interceptReplacement(_G, "GetSkillLineInfo", 1, true, 1)
-			interceptReplacement(ZO_SkillLineData,"GetFormattedNameWithNumPointsAllocated", 1, true, 1)
-			interceptReplacement(ZO_SkillLineData,"GetFormattedName", 1, true, 1)
-			for i = 1, 10 do
-				setupReplacement(GetControl("ZO_ChatterOption",i), "SetText",1, true, 2)
-			end
+	TIMED_ACTIVITIES_MANAGER.activityTypeLimitData[cheesyActivityTypeIndex] = {completed = 0, limit = 6}
+	-- Group up and wipe 5 times
+	-- Say "I love cheese!" in zone chat
+	-- Pay a visit to Sheogorath
+	-- Make a new friend
+	-- 'Rewards': negative cheese wheels. Or sanity
 
 
-			-- unstuck yourself prompts do use the string overwrite functions
-			SafeAddString(SI_CUSTOMER_SERVICE_UNSTUCK_COST_PROMPT,string.gsub(GetString(SI_CUSTOMER_SERVICE_UNSTUCK_COST_PROMPT_TELVAR), stations[9], stationNames[9]), 2)
-			SafeAddString(SI_CUSTOMER_SERVICE_UNSTUCK_COST_PROMPT_TELVAR, string.gsub(GetString(SI_CUSTOMER_SERVICE_UNSTUCK_COST_PROMPT_TELVAR), stations[9], stationNames[9]), 2)
+	local standardReward =
+	{
+		GetKeyboardIcon = function() return "/esoui/art/icons/heraldrycrests_misc_blank_01.dds" end,--return "/esoui/art/icons/quest_trollfat_001.dds" end,
+		GetGamepadIcon = function() return "/esoui/art/icons/heraldrycrests_misc_blank_01.dds" end,--	return "/esoui/art/icons/quest_trollfat_001.dds" end,
+		GetAbbreviatedQuantity = function() return il8n.reward end,
+		GetFormattedNameWithStack = function() return il8n.rewardStylized end,
+	}
 
-			setupReplacement(ZO_ReticleContainerInteractContext, "SetText", 1, true) -- reticle
-			setupReplacement(ZO_ReticleContainerInteractContext, "SetText", 1, true,2) -- reticle, but for writ turnin
-			setupReplacement(ZO_InteractWindowTargetAreaTitle, "SetText", 1, true,2) -- turnin titles
-			setupReplacement(ZO_InteractWindowTargetAreaBodyText, "SetText", 1, true,2) -- turnin text of body
-			setupReplacement(ZO_InteractWindowTargetAreaBodyText, "SetText", 1, true,1) -- turnin text of body
+	local timedActivityData =
+	{
+		{timedActivityId = 1000, index = 9, maxProgress = 1, reward = {standardReward}, svkey="cheeseProfession"},
+		{timedActivityId = 1001, index = 9, maxProgress = 1, reward = {standardReward}, svkey="sheoVisit"},
+		{timedActivityId = 1003, index = 9, maxProgress = 1, reward = {standardReward}, svkey="music"}, -- aka Play a joke on some group members?
+		{timedActivityId = 1003, index = 9, maxProgress = 1, reward = {standardReward}, svkey="cheesyDestruction"},
+		{timedActivityId = 1003, index = 9, maxProgress = 1, reward = {standardReward}, svkey="cheeseNerd"}, -- AKA Cheeses of Tamriel
+	}
+	local finalReward = ZO_ShallowTableCopy(standardReward)
+	finalReward.GetAbbreviatedQuantity = function() return "???" end
+	finalReward.GetFormattedNameWithStack = function() return il8n.finalReward end
 
-			local original = INTERACTION.givenRewardPool.AcquireObject
-			INTERACTION.givenRewardPool.AcquireObject = function(...)
-				local c,b = original(...)
-				if not c.isAlternatedUniverse then
-					c.isAlternatedUniverse = true
-					setupReplacement(c:GetNamedChild("Name"), "SetText",1,true,4)
-				end
-				return c,b
-			end
+	timedActivityData[#timedActivityData + 1] = {timedActivityId = 1004, index = 9, maxProgress = #timedActivityData, reward = {finalReward}, svkey="cheeseCompletion"}
+	for i = 1, #timedActivityData do
+		timedActivityData[i].name = il8n.tasks[i].name
+		timedActivityData[i].completion = il8n.tasks[i].completion
+		timedActivityData[i].description = il8n.tasks[i].description
+	end
 
-			setupReplacement(InformationTooltip, "AddLine", 1, true) -- tooltips
-			setupReplacement(ZO_CompassCenterOverPinLabel, "SetText", 1, {9}) -- compass words
-			setupReplacement(ZO_Dialog1Text, "SetText", 1, {9}) -- dialog porting box
-			setupReplacement(_G, "ZO_Alert", 2, {9}) -- location change notification (top right of screen)
-			setupReplacement(ZO_DeathReleaseOnlyButton1NameLabel, "SetText", 1, {9}) -- when you only have one port option on death
-			setupReplacement(ZO_DeathTwoOptionButton2NameLabel, "SetText", 1, {9}) -- when you can revive here or go to wayshrine
+	local activityDataObjects = {}
+	local function addNewTimedActivities()
 
-			local originalMapAcquire = ZO_MapLocationTooltip.labelPool.AcquireObject
-			ZO_MapLocationTooltip.labelPool.AcquireObject = function(...)
-				local control,b = originalMapAcquire(...)
-				if not control.hasAprilStarted then
-					control.hasAprilStarted = true
-					setupReplacement(control, "SetText", 1, true)
-					setupReplacement(control, "SetText", 1, true,2)
-				end
-				return control,b
-			end
-			-- Someone Else's Bank
-			-- Bank of Hoarding
-
-			-- checkboxes to show wayshrines on map. This one needs to be delayed because the map is not initialized at first
-			local runOnce = {}
-			SCENE_MANAGER.scenes['worldMap']:RegisterCallback("StateChange", function(old, new)
-				if new ~= "shown" then return end
-				if not runOnce['worldMap'] then
-					runOnce['worldMap'] = true
-					setupReplacement(ZO_WorldMapFiltersPvECheckBox2Label, "SetText", 1, {9})
-					ZO_WorldMapFiltersPvECheckBox2Label:SetText(ZO_WorldMapFiltersPvECheckBox2Label:GetText())
-				end
-			end)
+		for k, v in pairs(timedActivityData) do
+			local newData = ZO_TimedActivityData:New(2000 + k)
+			newData.GetType = function(...) return cheesyActivityTypeIndex end
+			newData.GetName = function(...) return v.name end
+			newData.GetDescription = function(...) return v.description end
+			newData.GetMaxProgress = function(...) return v.maxProgress end
+			newData.GetProgress = function (...) return WritCreater.savedVarsAccountWide.cheesyProgress[v.svkey] or 0 end
+			newData.GetRewardList = function(...) return v.reward end
+			newData.timedActivityId = 1000 + k
+			table.insert(TIMED_ACTIVITIES_MANAGER.activitiesData, newData)
+			activityDataObjects[1000 + k] = newData
 		end
 	end
-	-- WipeThatFrownOffYourFace(GetDisplayName()=="@Dolgubon")
-	-- WipeThatFrownOffYourFace(GetDisplayName()=="@Dolgubonn")
-	WipeThatFrownOffYourFace()
-	local g = getmetatable(WritCreater) or {}
-	g.__index = g.__index or {}
-	g.__index.WipeThatFrownOffYourFace = WipeThatFrownOffYourFace
-	g.__metatable = "Only Sheogorath Certified Cheese Enthusiasts are allowed to see this table!"
+	local originalNewTimedActivityData = ZO_TimedActivityData.New
+	ZO_TimedActivityData.New = function(self, activityIndex, ...)
+		if activityIndex > 1000 then
+			return activityDataObjects[activityIndex] or originalNewTimedActivityData(self, activityIndex)
+		else
+			return originalNewTimedActivityData(self, activityIndex)
+		end
+	end
+	local function isCheeseActivity(item)
+		return item:GetType() == cheesyActivityTypeIndex
+	end
+	function TIMED_ACTIVITIES_GAMEPAD:Refresh()
+		TIMED_ACTIVITIES_GAMEPAD.headerData["data3HeaderText"] = il8n.endeavorName
+		TIMED_ACTIVITIES_GAMEPAD.headerData["data3Text"] = function() return WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"].."/6" end
+	    local currentActivityType = self:GetCurrentActivityType()
+	    local activityTypeFilters
+	    if currentActivityType == TIMED_ACTIVITY_TYPE_DAILY then
+	        activityTypeFilters = { ZO_TimedActivityData.IsDailyActivity }
+	    elseif currentActivityType == TIMED_ACTIVITY_TYPE_WEEKLY then
+	        activityTypeFilters = { ZO_TimedActivityData.IsWeeklyActivity }
+	    elseif currentActivityType == cheesyActivityTypeIndex then
+
+	        activityTypeFilters = { isCheeseActivity }
+	    end
+
+	    local activitiesList = {}
+	    for index, activityData in TIMED_ACTIVITIES_MANAGER:ActivitiesIterator(activityTypeFilters) do
+	        table.insert(activitiesList, activityData)
+	    end
+
+	    self.activitiesList:RefreshList(currentActivityType, activitiesList)
+	    self:RefreshAvailability()
+	    self:RefreshCurrentActivityInfo()
+	    ZO_GamepadGenericHeader_RefreshData(self.header, self.headerData)
+	end
+local gpadActivitiesList = TIMED_ACTIVITIES_GAMEPAD.activitiesList
+
+	function TIMED_ACTIVITIES_GAMEPAD.activitiesList:RefreshList(currentActivityType, activitiesList)
+
+	    self.isAtActivityLimit = TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(currentActivityType)
+
+	    local listControl = self.listControl
+	    ZO_ScrollList_Clear(listControl)
+
+	    local listData = ZO_ScrollList_GetDataList(listControl)
+	    for index, activityData in ipairs(activitiesList) do
+	        local entryData = ZO_EntryData:New(activityData)
+	        local activityName = activityData:GetName()
+	        local numActivityNameLines = ZO_LabelUtils_GetNumLines(activityName, "ZoFontGamepad45", ZO_TIMED_ACTIVITY_DATA_ROW_NAME_WIDTH_GAMEPAD)
+
+	        local dataType = 1
+	        if numActivityNameLines == 2 then
+	            dataType = 2
+	        elseif numActivityNameLines == 3 then
+	            dataType = 3
+	        elseif numActivityNameLines == 4 then
+	            dataType = 4
+	        elseif numActivityNameLines == 5 then
+	            dataType = 5
+	        end
+
+	        table.insert(listData, ZO_ScrollList_CreateDataEntry(dataType, entryData))
+	    end
+
+	    self:CommitScrollList()
+	    local isListEmpty = not ZO_ScrollList_HasVisibleData(listControl)
+	    listControl:SetHidden(isListEmpty)
+	end
+
+	function gpadActivitiesList:OnSelectionChanged(oldData, newData)
+
+	    ZO_SortFilterList.OnSelectionChanged(self, oldData, newData)
+	    -- d(newData)
+	    -- self.listControl.selectedDataIndex = self.listControl.selectedDataIndex + 1
+	    if newData then
+	        local activityIndex = newData:GetIndex()
+	        self:ShowActivityTooltip(activityIndex)
+	    else
+	        self:ClearActivityTooltip()
+	    end
+	end
+
+	local originalMasterList = TIMED_ACTIVITIES_MANAGER.RefreshMasterList
+	TIMED_ACTIVITIES_MANAGER.RefreshMasterList = function(...)
+		originalMasterList(...)
+		addNewTimedActivities()
+	end
+	TIMED_ACTIVITIES_MANAGER.availableActivityTypes[cheesyActivityTypeIndex] = true
+	local originalManagerTiming = TIMED_ACTIVITIES_MANAGER.GetTimedActivityTypeTimeRemainingSeconds
+	TIMED_ACTIVITIES_MANAGER.GetTimedActivityTypeTimeRemainingSeconds = function(self, activityType,...)
+		if activityType == cheesyActivityTypeIndex then
+			return (1648879200 - GetTimeStamp()) % 86400
+		else
+			return originalManagerTiming(self, activityType, ...)
+		end
+	end
+	local originalKeyboardRefresh = ZO_TimedActivities_Keyboard.Refresh
+	function ZO_TimedActivities_Keyboard:Refresh()
+		if self:GetCurrentActivityType() ~= cheesyActivityTypeIndex then
+			return originalKeyboardRefresh(self)
+		end
+		if self:GetCurrentActivityType() == nil then return end
+	    ZO_ClearNumericallyIndexedTable(self.activitiesData)
+	    TIMED_ACTIVITIES_MANAGER.activityTypeLimitData[cheesyActivityTypeIndex].completed = WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"]
+
+	    local currentActivityType = self:GetCurrentActivityType()
+	    local activityTypeFilters
+	    if currentActivityType == TIMED_ACTIVITY_TYPE_DAILY then
+	        activityTypeFilters = { ZO_TimedActivityData.IsDailyActivity }
+	    elseif currentActivityType == TIMED_ACTIVITY_TYPE_WEEKLY then
+	        activityTypeFilters = { ZO_TimedActivityData.IsWeeklyActivity }
+	    elseif currentActivityType == cheesyActivityTypeIndex then
+	        activityTypeFilters = { isCheeseActivity }
+	    end
+
+	    for index, activityData in TIMED_ACTIVITIES_MANAGER:ActivitiesIterator(activityTypeFilters) do
+	        table.insert(self.activitiesData, activityData)
+	    end
+
+	    self.activityRewardPool:ReleaseAllObjects()
+	    self.activityRowPool:ReleaseAllObjects()
+	    self.nextActivityAnchorTo = nil
+
+	    self.isAtActivityLimit = TIMED_ACTIVITIES_MANAGER:IsAtTimedActivityTypeLimit(currentActivityType)
+
+	    for index, activityData in ipairs(self.activitiesData) do
+	        self:AddActivityRow(activityData)
+	    end
+	    self:RefreshAvailability()
+
+	    self:RefreshCurrentActivityInfo()
+	end
+	local function cheeseEndeavorCompleted(subHeading)
+		TIMED_ACTIVITIES_MANAGER.activityTypeLimitData[cheesyActivityTypeIndex].completed = TIMED_ACTIVITIES_MANAGER.activityTypeLimitData[cheesyActivityTypeIndex].completed + 1
+		WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"] = WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"] + 1
+		pcall(function()TIMED_ACTIVITIES_KEYBOARD:Refresh() end )
+		local activityTypeName = "CHEESY ENDEAVOR" --GetString("SI_TIMEDACTIVITYTYPE", 2)
+	    -- local _, maxNumActivities = TIMED_ACTIVITIES_MANAGER:GetTimedActivityTypeLimitInfo(2)
+	    local messageTitle = zo_strformat(SI_TIMED_ACTIVITY_TYPE_COMPLETED_CSA,  WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"], #timedActivityData - 1, il8n.menuName)
+	    -- local messageTitle = zo_strformat(SI_TIMED_ACTIVITY_TYPE_COMPLETED_CSA, 6, #timedActivityData, "Cheesy")
+	    local messageSubheading = subHeading
+	    if  WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"] < #timedActivityData - 1 then
+	    	messageSubheading = subHeading
+	    end
+
+	    local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_LARGE_TEXT)
+	    messageParams:SetText(messageTitle, messageSubheading)
+	    CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
+
+	    if WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"] == #timedActivityData - 1 then
+	    	WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"] = 6
+	    	local finalMessageTitle = il8n.allComplete
+	    	local finalSubheading = timedActivityData[6].completion
+	    	local finalMessageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams(CSA_CATEGORY_LARGE_TEXT)
+		    finalMessageParams:SetText(finalMessageTitle, finalSubheading)
+		    -- zo_callLater( function()
+		    	CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(finalMessageParams)
+		    -- end, 1500 )
+
+		    WritCreater.savedVarsAccountWide.skin = "cheese"
+		    WritCreater.savedVarsAccountWide.unlockedCheese = true
+	    end
+	    PlaySound(SOUNDS.ENDEAVOR_COMPLETED)
+	end
+	-- listeners
+	-- Chese profession
+	local function alternateListener(eventCode,  channelType, fromName, text, isCustomerService, fromDisplayName)
+
+		if isCheeseOn() and WritCreater and WritCreater.savedVarsAccountWide and WritCreater.savedVarsAccountWide.cheesyProgress
+			and WritCreater.savedVarsAccountWide.cheesyProgress["cheeseProfession"] == 0 and (fromDisplayName == GetDisplayName() or channelType == 4) then
+			text = text:lower()
+			text = text:gsub(" ", "")
+			text = text:gsub("!", "")
+			text = text:gsub("%.", "")
+			text = text:gsub("'", "")
+			text = text:gsub("ä", "a")
+			if WritCreater.cheeseBingos[text] then
+				WritCreater.savedVarsAccountWide.cheesyProgress["cheeseProfession"] = 1
+				cheeseEndeavorCompleted(timedActivityData[1].completion)
+			end
+		end
+	end
+	EVENT_MANAGER:RegisterForEvent(WritCreater.name.."cheeeeese",EVENT_CHAT_MESSAGE_CHANNEL, alternateListener)
+	-- Music
+	--5, 6, 7
+	-- /script local a = PlayEmoteByIndex PlayEmoteByIndex = function(...) d(...) a(...) end
+	local terribleMusicEmotes =
+	{
+		[4] = '/horn',
+		[5] = '/lute',
+		[6] = '/drum',
+		[7] = '/flute',
+		[251] = '/festivebellring',
+		[271] = '/esraj',
+		[272] = '/qanun',
+	}
+	-- /playtinyviolin, /festivebellring
+	local originalEmoteFunction = PlayEmoteByIndex
+	PlayEmoteByIndex = function(index, ...)
+		originalEmoteFunction(index, ...)
+		if WritCreater.savedVarsAccountWide.cheesyProgress['music'] == 0 and terribleMusicEmotes[index] then
+			WritCreater.savedVarsAccountWide.cheesyProgress['music'] = 1
+			cheeseEndeavorCompleted(timedActivityData[3].completion)
+		end
+	end
+	local setup = false
+	-- local function setupCheesyMusic()
+	-- 	if setup then return end
+	-- 	setup = true
+	-- 	for k, v in pairs(terribleMusicEmotes) do
+	-- 		local originalMusic = SLASH_COMMANDS[v]
+	-- 		SLASH_COMMANDS[v] = function(...) originalMusic(...)
+	-- 			if WritCreater.savedVarsAccountWide.cheesyProgress['music'] == 0 then
+	-- 				WritCreater.savedVarsAccountWide.cheesyProgress['music'] = 1
+	-- 				cheeseEndeavorCompleted(timedActivityData[3].completion)
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
+	local sheoStrings =
+	{
+		en = "Sheogorath",
+		de = "Sheogorath",
+		fr = "Shéogorath",
+	}
+	-- EVENT_MANAGER:RegisterForEvent(WritCreater.name.."cheesyMusic", EVENT_PLAYER_ACTIVATED, setupCheesyMusic)
+	-- Handles the dialogue where we actually complete the quest
+	local function isItUncleSheo(eventCode, journalIndex)
+		if WritCreater.savedVarsAccountWide.cheesyProgress['sheoVisit'] == 0 and zo_plainstrfind( ZO_InteractWindowTargetAreaTitle:GetText() ,sheoStrings[GetCVar("language.2")]) then
+			--d("complete")
+			WritCreater.savedVarsAccountWide.cheesyProgress['sheoVisit'] = 1
+			cheeseEndeavorCompleted(timedActivityData[2].completion)
+			return
+		end
+	end
+	EVENT_MANAGER:RegisterForEvent(WritCreater.name.."FunWithSheo", EVENT_CHATTER_BEGIN, isItUncleSheo)
+
+	local function cheesyScholar(_,_,_,_,_,  bookId)
+		if bookId == 1145 then
+			if WritCreater.savedVarsAccountWide.cheesyProgress['cheeseNerd'] == 0 then
+			WritCreater.savedVarsAccountWide.cheesyProgress['cheeseNerd'] = 1
+			cheeseEndeavorCompleted(timedActivityData[5].completion)
+			end
+		end
+	end
+	local originalCheatyCheeseBook = ZO_LoreLibrary_ReadBook
+	ZO_LoreLibrary_ReadBook = function(categoryIndex, collectionIndex, bookIndex,...)
+		if WritCreater.savedVarsAccountWide.cheesyProgress['cheeseNerd'] == 0 and categoryIndex == 3 and collectionIndex == 9 and bookIndex == 46  then
+			ZO_Alert(ERROR, SOUNDS.GENERAL_ALERT_ERROR , il8n["cheatyCheeseBook"])
+		else
+			originalCheatyCheeseBook(categoryIndex, collectionIndex, bookIndex,...)
+		end
+	end
+	EVENT_MANAGER:RegisterForEvent(WritCreater.name.."cheeseScholar", EVENT_SHOW_BOOK, cheesyScholar)
+--ITEM_SOUND_CATEGORY_FOOD
+	local requestedCheeseMonster = false
+	local function cheeseMonsterConfirmed(eventCode, sound)
+		--- 38 is the sound cheese makes Must be squeaky right?
+		if sound == 38 and WritCreater.savedVarsAccountWide.cheesyProgress['cheesyDestruction'] == 0 then
+			WritCreater.savedVarsAccountWide.cheesyProgress['cheesyDestruction'] = 1
+			cheeseEndeavorCompleted(timedActivityData[4].completion)
+		end
+		requestedCheeseMonster = false
+		EVENT_MANAGER:UnregisterForEvent(WritCreater.name.."cheeseMonsterConfirmed", EVENT_INVENTORY_ITEM_DESTROYED)
+		EVENT_MANAGER:UnregisterForEvent(WritCreater.name.."notACheeseMonster", EVENT_INVENTORY_ITEM_DESTROYED)
+	end
+	local function notACheeseMonster(eventCode)
+		EVENT_MANAGER:UnregisterForEvent(WritCreater.name.."cheeseMonsterConfirmed", EVENT_INVENTORY_ITEM_DESTROYED)
+		EVENT_MANAGER:UnregisterForEvent(WritCreater.name.."notACheeseMonster", EVENT_INVENTORY_ITEM_DESTROYED)
+		requestedCheeseMonster = false
+	end
+
+	local function cheeseMonster( eventCode,  bagId,  slotIndex,  itemCount,  name,  needsConfirm)
+		local itemId = GetItemId(bagId, slotIndex)
+		if WritCreater.savedVarsAccountWide.cheesyProgress['cheesyDestruction'] == 0 and itemId == 27057 then
+			requestedCheeseMonster = true
+			EVENT_MANAGER:RegisterForEvent(WritCreater.name.."cheeseMonsterConfirmed", EVENT_INVENTORY_ITEM_DESTROYED, cheeseMonsterConfirmed)
+			EVENT_MANAGER:RegisterForEvent(WritCreater.name.."notACheeseMonster", EVENT_INVENTORY_ITEM_DESTROYED, notACheeseMonster)
+		else
+			requestedCheeseMonster = false
+		end
+	end
+	local originalDestroyItem = DestroyItem
+	DestroyItem = function(bag,slot,...)
+		local itemId = GetItemId(bagId, slotIndex)
+		if WritCreater.savedVarsAccountWide.cheesyProgress['cheesyDestruction'] == 0 and itemId == 27057 then
+			WritCreater.savedVarsAccountWide.cheesyProgress['cheesyDestruction'] = 1
+			cheeseEndeavorCompleted(timedActivityData[4].completion)
+		end
+		originalDestroyItem(bag, slot, ...)
+	end
+	EVENT_MANAGER:RegisterForEvent(WritCreater.name.."CheeseMonster", EVENT_MOUSE_REQUEST_DESTROY_ITEM , cheeseMonster)
+	-- /esraj /lute /drum /flute
+	-- if GetDisplayName() == "@Dolgubon" then
+	-- 	enableAlternateUniverse(true)
+	-- 	WritCreater.WipeThatFrownOffYourFace(true)
+	-- end
+	SLASH_COMMANDS['/resetcheeseprogress'] = function()
+		for k, v in pairs (WritCreater.savedVarsAccountWide.cheesyProgress) do
+			WritCreater.savedVarsAccountWide.cheesyProgress[k] = 1
+		end
+		WritCreater.savedVarsAccountWide.cheesyProgress["cheeseProfession"] = 0
+		WritCreater.savedVarsAccountWide.cheesyProgress["cheeseCompletion"] = 4
+		pcall(function()TIMED_ACTIVITIES_KEYBOARD:Refresh() end )
+	end
+	SLASH_COMMANDS['/resetcheeseprogresscomplete'] = function()
+		for k, v in pairs (WritCreater.savedVarsAccountWide.cheesyProgress) do
+			WritCreater.savedVarsAccountWide.cheesyProgress[k] = 0
+		end
+		pcall(function()TIMED_ACTIVITIES_KEYBOARD:Refresh() end )
+	end
+
+end
+
+
+function WritCreater.Options() --Sentimental
 
 	local options =  {
 		{
@@ -534,6 +675,29 @@ function WritCreater.Options() --Sentimental
 
 
 	}
+
+	if WritCreater.savedVarsAccountWide.unlockedCheese then
+		table.insert(options, 4,
+		{
+			type = "divider",
+			height = 15,
+			alpha = 0.5,
+			width = "full",
+		})
+		table.insert(options, 4,
+			{
+			type = "dropdown",
+			name = WritCreater.optionStrings["skin"],--"Master Writs",
+			tooltip =WritCreater.optionStrings["skinTooltip"],--"Craft Master Writ Items",
+			choices = WritCreater.optionStrings["skinOptions"],
+			choicesValues = {"default","cheese"},
+			getFunc = function() return WritCreater.savedVarsAccountWide.skin end,
+			setFunc = function(value)
+				WritCreater.savedVarsAccountWide.skin  = value
+			end
+		}
+		)
+	end
 ----------------------------------------------------
 ----- TIMESAVERS SUBMENU
 
