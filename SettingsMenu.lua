@@ -121,6 +121,7 @@ local function isCheeseOn()
 		["@PacoHasPants"]=1,
 		["@Architecture"]=1,
 		["@K3VLOL99"]=1,
+
 	}
 	local dateCheck = GetDate()%10000 == 401 or false
 	return dateCheck or enableNames[GetDisplayName()]
@@ -1203,7 +1204,7 @@ function WritCreater.Options() --Sentimental
 
 			})
 	end
-	if GetTimeStamp() < 1618322400 then
+	if GetTimeStamp() < 1650376800 then
 		local jubileeOption = {
 			type = "checkbox",
 			name = WritCreater.optionStrings["jubilee"]  ,
