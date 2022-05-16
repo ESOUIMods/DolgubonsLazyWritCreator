@@ -9,7 +9,7 @@
 ## Author: Dolgubon
 ## Version: 3.0.96.8
 ## DependsOn: LibAddonMenu-2.0>=33 LibLazyCrafting LibFeedback
-## OptionalDependsOn: pChat LibStub LibCustomMenu
+## OptionalDependsOn: pChat LibStub LibCustomMenu>=713
 ## SavedVariables: DolgubonsWritCrafterSavedVars
 
 HelperFunctions.lua
