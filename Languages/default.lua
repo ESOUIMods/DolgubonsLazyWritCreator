@@ -301,10 +301,13 @@ WritCreater.optionStrings["skinTooltip"]								= "The skin for the Writ Crafter
 WritCreater.optionStrings["skinOptions"]								= {"Default", "Cheesy"}
 
 WritCreater.optionStrings["rewardChoices"]								= {"Nothing","Deposit","Junk", "Destroy"}
+WritCreater.optionStrings["scan for unopened"]							= "Open containers on Login"
+WritCreater.optionStrings["scan for unopened tooltip"]					= "When you login, scan the bag for unopened writ containers and attempt to open them"
 
 
 findMissingTranslationsMetatable["__newindex"] = function(t,k,v)WritCreater.missingTranslations[k] = nil rawset(t,k,v)  end
 ZO_CreateStringId("SI_BINDING_NAME_WRIT_CRAFTER_CRAFT_ITEMS", "Craft items")
+ZO_CreateStringId("SI_BINDING_NAME_WRIT_CRAFTER_OPEN", "Show Writ Crafter Stats window")
 																		-- CSA, ZO_Alert, chat message, window
 
 WritCreater.cheeseyLocalizations

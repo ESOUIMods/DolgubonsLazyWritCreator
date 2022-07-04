@@ -869,6 +869,15 @@ function WritCreater.Options() --Sentimental
 				end
 			end,
 		},
+		{
+			type = "checkbox",
+			name = WritCreater.optionStrings["scan for unopened"]	,
+			tooltip = WritCreater.optionStrings["scan for unopened tooltip"],
+			getFunc = function() return  WritCreater:GetSettings().scanForUnopened end,
+			setFunc = function(value)
+				WritCreater:GetSettings().scanForUnopened = value
+			end,
+		},
 	}
 
 ----------------------------------------------------

@@ -93,7 +93,8 @@ WritCreater.default =
 	["mail"] = {
 		delete = false,
 		loot = IsESOPlusSubscriber(),
-	}
+	},
+	["scanForUnopened"] = false,
 }
 
 WritCreater.defaultAccountWide = {
@@ -499,7 +500,11 @@ local function initializeOtherStuff()
 	EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_PLAYER_ACTIVATED,function()
 
 		if  newlyLoaded then
-			newlyLoaded = false  WritCreater.scanAllQuests() EVENT_MANAGER:UnregisterForEvent(WritCreater.name, EVENT_PLAYER_ACTIVATED) end
+			newlyLoaded = false  WritCreater.scanAllQuests() EVENT_MANAGER:UnregisterForEvent(WritCreater.name, EVENT_PLAYER_ACTIVATED)
+			if WritCreater:GetSettings().scanForUnopened then
+				WritCreater.scanForUnopenedContainers()
+			end
+		end
 	end )
 
 	WritCreater.initializeResetWarnings()
@@ -657,7 +662,6 @@ local function initializeLocalization()
 		else
 			mandatoryRoadblockOut("Writ Crafter initialization failed. Your game is currently set to the language "..GetCVar("language.2")..
 				" but you do not have the patch for that language installed (if it exists). Uninstall all "..GetCVar("language.2").." addons or patches, then click the button", true)
-            --TODO check language functionality
 			WritCreater.autoFix = function() SetCVar('language.2', 'en') end
 			DolgubonsWritsBackdropCraft:SetText("Apply Auto Fix")
 		end
