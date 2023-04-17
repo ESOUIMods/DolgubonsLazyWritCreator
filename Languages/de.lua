@@ -7,7 +7,7 @@
 -- File Name: Languages/de.lua
 -- File Description: German Localization
 -- Load Order Requirements: None
--- 
+--
 -----------------------------------------------------------------------------------
 
 WritCreater = WritCreater or {}
@@ -41,7 +41,7 @@ function WritCreater.writCompleteStrings()
 end
 
 function WritCreater.langCraftKernels()
-	return 
+	return
 	{
 		[CRAFTING_TYPE_ENCHANTING] = "verzauberung",
 		[CRAFTING_TYPE_BLACKSMITHING] = "schmiede",
@@ -72,9 +72,9 @@ end
 
 function WritCreater.languageInfo() --exacts!!!
 
-local craftInfo = 
+local craftInfo =
 	{
-		[ CRAFTING_TYPE_CLOTHIER] = 
+		[ CRAFTING_TYPE_CLOTHIER] =
 		{
 			["pieces"] = --exact!!
 			{
@@ -119,8 +119,8 @@ local craftInfo =
 			},
 			["names"] = --Does not strictly need to be exact, but people would probably appreciate it
 			{
-				[1] = "Jute", 
-				[2] = "Flachs",	
+				[1] = "Jute",
+				[2] = "Flachs",
 				[3] = "Baumwolle",
 				[4] = "Spinnenseide",
 				[5] = "Ebengarn",
@@ -139,9 +139,9 @@ local craftInfo =
 				[18] = "Prachtleder",
 				[19] = "Schattenleder",
 				[20] = "Rubedoleder",
-			}		
+			}
 		},
-		[CRAFTING_TYPE_BLACKSMITHING] = 
+		[CRAFTING_TYPE_BLACKSMITHING] =
 		{
 			["pieces"] = --exact!!
 			{
@@ -187,7 +187,7 @@ local craftInfo =
 				[10]= "Rubeditbarren",
 			}
 		},
-		[CRAFTING_TYPE_WOODWORKING] = 
+		[CRAFTING_TYPE_WOODWORKING] =
 		{
 			["pieces"] = --Exact!!!
 			{
@@ -197,7 +197,7 @@ local craftInfo =
 				[4] = "Froststäbe",
 				[5] = "Blitzstäbe",
 				[6] = "Heilungsstäbe",
-				
+
 			},
 			["match"] = --exact!!! This is not the material, but rather the prefix the material gives to equipment. e.g. Maple Bow. Oak Bow.
 			{
@@ -226,7 +226,7 @@ local craftInfo =
 				[10] = "Geschliffene Rubinesche",
 			}
 		},
-		[CRAFTING_TYPE_JEWELRYCRAFTING] = 
+		[CRAFTING_TYPE_JEWELRYCRAFTING] =
 		{
 			["pieces"] = --Exact!!!
 			{
@@ -244,7 +244,7 @@ local craftInfo =
 			},
 
 		},
-		[CRAFTING_TYPE_ENCHANTING] = 
+		[CRAFTING_TYPE_ENCHANTING] =
 		{
 			["pieces"] = --exact!!
 			{
@@ -306,7 +306,7 @@ local craftInfo =
 				{"prächtige",{64509,64508}},
 
 			},
-			["quality"] = 
+			["quality"] =
 			{
 				{"legendär", 45854},
 				{"episch", 45853},
@@ -325,7 +325,7 @@ end
 
 function WritCreater.langEssenceNames() --exact!
 
-local essenceNames =  
+local essenceNames =
 	{
 		[1] = "Oko", --health
 		[2] = "Deni", --stamina
@@ -335,7 +335,7 @@ local essenceNames =
 end
 
 function WritCreater.langPotencyNames() --exact!! Also, these are all the positive runestones - no negatives needed.
-	local potencyNames = 
+	local potencyNames =
 	{
 		[1] = "Jora", --Lowest potency stone lvl
 		[2] = "Porade",
@@ -353,7 +353,7 @@ function WritCreater.langPotencyNames() --exact!! Also, these are all the positi
 		[14]= "Kura",
 		[15]= "Rejera",
 		[16]= "Repora", --v16 potency stone
-		
+
 	}
 	return potencyNames
 end
@@ -370,8 +370,8 @@ local enExceptions = -- This is a slight misnomer. Not all are corrections - som
 		[4] = "Beliefer",
 
 	},
-	["corrected"] = 
-	{	
+	["corrected"] =
+	{
 		[1] = "acquire",
 		[2] = "deliver",
 		[3] = "deliver",
@@ -392,7 +392,7 @@ function WritCreater.enchantExceptions(condition)
 	condition = string.lower(condition)
 	for i = 1, #enExceptions["original"] do
 		condition = string.gsub(condition,enExceptions["original"][i],enExceptions["corrected"][i])
-	
+
 	end
 	return condition
 end
@@ -410,7 +410,7 @@ function WritCreater.langTutorial(i) --sentimental
 end
 
 function WritCreater.langTutorialButton(i,onOrOff) --sentimental and short pls
-	local tOn = 
+	local tOn =
 	{
 		[1]="Standardoptionen",
 		[2]="An",
@@ -454,7 +454,7 @@ local function runeMissingFunction(ta,essence,potency)
 	end
 	return text
 
-	
+
 end
 
 WritCreater.strings = WritCreater.strings or {}
@@ -482,7 +482,7 @@ WritCreater.strings["lootReceived"]								= "<<1>> erhalten (Du hast <<2>>)"
 WritCreater.strings["lootReceivedM"]							= "<<1>> erhalten"
 WritCreater.strings["countSurveys"]								= "Du hast <<1>> Gutachten"
 WritCreater.strings["countVouchers"]							= "Du hast <<1>> offene Schriebscheine"
-WritCreater.strings["includesStorage"] 							= "Zähle <<1>> in deinen Lagertruhen mit" 
+WritCreater.strings["includesStorage"] 							= "Zähle <<1>> in deinen Lagertruhen mit"
 WritCreater.strings["surveys"]									= "Handwerksgutachten"
 WritCreater.strings["sealedWrits"]								= "Versiegelte Schriebe"
 WritCreater.strings["missingLibraries"]							= "Dolgubon's Lazy Writ Crafter benötigt die folgenden Standalone-Libraries. Bitte installiere oder aktiviere diese Libraries: "
@@ -503,7 +503,7 @@ local DivineMats =
 }
 
 local function shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhateveritlljustbeforabit()
-	
+
 	if GetDate()%10000 == 1031 then return 1 end
 	if GetDate()%10000 == 401 then return 2 end
 	if GetDate()%10000 == 1231 then return 3 end
@@ -531,7 +531,7 @@ WritCreater.optionStrings["characterSpecific"]				= "Charakter spezifisch"
 WritCreater.optionStrings["useCharacterSettings"]			= "Nutze Charakter Einstellungen"
 WritCreater.optionStrings["useCharacterSettingsTooltip"]	= "Speichert für diesen Charakter die Einstellungen spezifisch ab, nicht für das gesamte Konto."
 
-WritCreater.optionStrings["style tooltip"]                            = function (styleName, styleStone) return zo_strformat("Allow the <<1>> style, which uses <<2>> to be used for crafting",styleName) end  
+WritCreater.optionStrings["style tooltip"]                            = function (styleName, styleStone) return zo_strformat("Allow the <<1>> style, which uses <<2>> to be used for crafting",styleName) end
 WritCreater.optionStrings["show craft window"]                        = "Zeige Writ Crafter Fenster"
 WritCreater.optionStrings["show craft window tooltip"]                = "Zeige das Writ Crafter Fenster während du an einer Handwerksstation bist"
 WritCreater.optionStrings["autocraft"]                                = "Automatisches herstellen"
@@ -607,41 +607,61 @@ WritCreater.optionStrings['hireling behaviour tooltip']					= "Was sollte mit Mi
 WritCreater.optionStrings['hireling behaviour choices']					= { "Nichts", "Aufnehmen und löschen", "Nur aufnehmen"}
 WritCreater.optionStrings["skin"]										= "Writ Crafter Aussehen"
 WritCreater.optionStrings["skinTooltip"]								= "Das Aussehen der Writ Crafter Oberfläche"
-WritCreater.optionStrings["skinOptions"]								= {"Default", "Käsig"}
+WritCreater.optionStrings["skinOptions"]								= {"Default", "Käsig", "Ziege"}
+WritCreater.optionStrings["goatSkin"]									= "Ziege"
+WritCreater.optionStrings["cheeseSkin"]									= "Käsig"
+WritCreater.optionStrings["defaultSkin"]								= "Default"
 
- 
+
 function WritCreater.langStationNames()
 	return
-	{["Schmiedestelle"] = 1, ["Schneidertisch"] = 2, 
+	{["Schmiedestelle"] = 1, ["Schneidertisch"] = 2,
 	 ["Verzauberungstisch"] = 3,["Alchemietisch"] = 4, ["Feuerstelle"] = 5, ["Schreinerbank"] = 6, ["Schmuckhandwerkstisch"] = 7, }
 end
 
 WritCreater.cheeseyLocalizations
 =
 {
-	['reward'] = "-1 Vernunft",
-	['rewardStylized'] = "-1 |cFFFFFF[Vernunft]|",
-	['finalReward'] = "Vervollständige sie alle und finde es heraus!",
-	['menuName'] = "Käsigen",
-	['endeavorName'] = "Käsigen Bemühungen",
+	--German, by Baertram, 2023-03-09
+	['menuName'] = "Ritual",
+	['endeavorName'] = "Ritual Bestrebungen",
 	['tasks']={
-		{name="Bekenne deine Liebe zum Käse",completion = "Jetzt weiß die ganze Welt, wie sehr du Käse liebst!",
-			description="Sage 'Ich liebe Käse!' im Chat"},
-		{name = "Besuche Onkel Sheo", completion = "Onkel Sheo hat sich gefreut, dich zu sehen! Und er wr traurig. Und käsig. Und flott!",
-			description="Finde und sprich mit Sheogorath. Er ist ziemlich einsam und will dich wiedersehen!"},
-		{name = "Spiele etwas schreckliche Musik", completion = "Aua! Deine Ohren tun weh von dieser schrecklichen Musik.",
-			description="Benutze ein Musik emote"},
-		{name = "Wirf etwas Käse weg", completion = "Du hast etwas Käse weggeworfen. Es war wahrscheinlich sowieso schimmelig...",
-			description="Zerstöre 1 |H1:item:27057:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h. Ja, es ist verrückt, aber genau darum geht es!"},
-		{name = "Lies ein käsiges Buch", completion = "Was für eine herzerwärmende Socke. Käse - ach so, ich meinte Buch!",
-			description="Lies das Buch |H0:item:121046:364:50:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:10000:0|h|h"},
-		{name = "Schließe alle anderen käsigen Bemühungen ab", completion = "Käse! Käse! Überall Käse! Sogar... beim Schrieb herstellen?",
-		description="Sheogorath wird sich sehr freuen, wenn du alle vervollständigst!"},
-	},
-	['allComplete'] = "Alle käsigen Bemühungen abgeschlossen",
-	['chatbingo'] = "ichliebekase",
-	["cheatyCheeseBook"] = "Vielleicht wirst du verrückt, aber du scheinst dich nicht an dieses Buch zu erinnern..."
+		{original="Du hast eine seltsame Broschüre gefunden ... Vielleicht solltest du sie /lesen",name="Du hast einige Anweisungen zu einem Glücksritual gelesen", completion = "Du hast gelernt wie das Glücksritual durchgeführt wird!",
+			description="Verwende das /lesen Emote"},
 
+		{original="???", name = "Beschaffe die Eingeweide einer unschuldigen Ziege", completion = "Du Monster! Alles ist für's Glück erlaubt, denke ich...",
+			description="Loote Eingeweide von einer toten Ziege. Du musst nicht derjenige sein, der sie tötet ... aber das ist der einfachste Weg"},
+
+		{original="???", name = "Begib dich zum Ritualort, Arananga", completion = "Du hast es geschafft! Es scheint ein sehr strebsamer Ort zu sein",
+			description="Nicht sicher, wo Arananga liegt? Vielleicht ist es eine 'begabte' Handwerksstation ..."},
+
+		{original="???", name = "Zerstöre die Eingeweide der Ziege", completion = "Du hast das Opfer \'verbrannt\'.",
+			description="Zerstöre die |H1:item:42870:30:1:0:0:0:0:0:0:0:0:0:0:0:16:0:0:0:1:0:0|h|h welche du gelooted hast"},
+
+		{original="???", name = "Loben Sie RNGesus im Chat", completion = "Du fühlst dich seltsam glücklich, aber vielleicht ist es nur ein Gefühl...",
+			description="Sie können nicht wirklich sagen, was es tatsächlich gesagt hat, aber es ist Ihre beste Vermutung"},
+
+		-- {original="???", name = "Complete the ritual", completion = "Maybe you'll be just a little bit luckier... And Writ Crafter has a new skin!",
+		-- description="Sheogorath will be very pleased if you complete them all!"},
+	},
+	["goatContextTextText"] = "Ziege^f",
+	["extraGoatyContextTextText"] = "Ziege",
+	["extraSlash"] = "/lesen",
+	['allComplete'] = "Du hast das Ritual vollendet!",
+	['allCompleteSubheading'] = "Auch wenn RNGesus Sie nächstes Jahr nicht bevorzugt, hat zumindest WritCrafter einen neuen Look!",
+	["bookText"] =
+[[Dieses Ritual |L0:0:0:45%%:8%%:ignore|lwird|l könnte Ihnen viel Glück bringen. Achten Sie darauf, die folgenden Schritte genau zu befolgen!
+1. Beschaffe Eingeweide von |L0:0:0:45%%:8%%:ignore|leinem Schaf|l einer Ziege
+2. Suche den Ort |L0:0:0:45%%:8%%:ignore|lOblivion|l Arananga auf
+3. Verbrenne die Eingeweide
+4. Lobe [man kann nicht sagen, was hier geschrieben steht]
+
+- Hochachtungsvoll,
+|L0:0:0:45%%:8%%:ignore|lSheogorath|l Nicht Sheogorath]],
+	["bookTitle"] = "Ein Ritual für Glück",
+	["outOfRange"] = "Du bist nicht mehr innerhalb des Ritual Bereiches!",
+	["closeEnough"] = "Du bist nah dran",
+	["praiseHint "] = "Vielleicht musst du etwas über RNGesus sagen?",
 }
 
 

@@ -1,24 +1,15 @@
-
+WritCreater = WritCreater or {}
 local function dailyReset()
-  local currentTime, secondsSinceMidnight = GetTimeStamp(), GetSecondsSinceMidnight()
-  local midnightToday = currentTime - secondsSinceMidnight
-  local midnightTomorrow = midnightToday + ZO_ONE_DAY_IN_SECONDS
-  local cutoffOffset
-  if GetWorldName() == 'NA Megaserver' then cutoffOffset = (6 * ZO_ONE_HOUR_IN_SECONDS) -- 06:00
-  else cutoffOffset = (3 * ZO_ONE_HOUR_IN_SECONDS) end -- 03:00
-  local resetTimeToday = midnightToday + cutoffOffset
-  local resetTimeTomorrow = midnightTomorrow + cutoffOffset
-  local secondsRemainingUntilReset
-  local hasReset = currentTime >  resetTimeToday
-  if hasReset then secondsRemainingUntilReset = resetTimeTomorrow - currentTime
-  else secondsRemainingUntilReset = resetTimeToday - currentTime end
-
-  local hours = math.floor(math.modf(secondsRemainingUntilReset / ZO_ONE_HOUR_IN_SECONDS))
-  local remainingSeconds = secondsRemainingUntilReset - (hours * ZO_ONE_HOUR_IN_SECONDS)
-  local minutes, remainder = math.modf(remainingSeconds / ZO_ONE_MINUTE_IN_SECONDS)
-  if remainder > 0.5 then minutes = minutes + 1 end
-  return hours, minutes
+	local till = {}
+	local stamp = GetTimeUntilNextDailyLoginRewardClaimS()
+	till["hour"] = math.floor(stamp/3600)
+	stamp = stamp%3600
+	till["minute"] = math.floor(stamp/60)
+	stamp = stamp%60
+	return till["hour"], till["minute"]
 end
+
+WritCreater.dailyReset = dailyReset
 
 -- local msg = {}
 -- msg.GetCategory = function () return CSA_CATEGORY_LARGE_TEXT end--CSA_CATEGORY_MAJOR_TEXT, CSA_CATEGORY_RAID_COMPLETE_TEXT
@@ -87,10 +78,9 @@ end
 WritCreater.showDailyResetWarnings = showWarnings
 
 function WritCreater.refreshWarning()
-  -- dailyResetWarnTime is in minutes
-	local warnTime = WritCreater:GetSettings().dailyResetWarnTime * ZO_ONE_MINUTE_IN_SECONDS
+	local warnTime = WritCreater:GetSettings().dailyResetWarnTime
 	local hour, minute = dailyReset()
-	local timeToWarning = hour*ZO_ONE_HOUR_IN_SECONDS + minute*ZO_ONE_MINUTE_IN_SECONDS - warnTime
+	local timeToWarning = hour*3600 + minute*60 - warnTime*60
 	if timeToWarning < 0 then
 		EVENT_MANAGER:RegisterForUpdate(WritCreater.name.."DailyResetWarning", 5000, showWarnings)
 	else
