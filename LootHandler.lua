@@ -296,6 +296,7 @@ local function OnLootUpdated(event)
 					-- Then add the container to a 'blacklist' so we don't try to open it in a loop
 					if lastInteractedSlot then
 						containerHasTransmute[lastInteractedSlot] = true
+						WritCreater:GetSettings().transmuteBlock[Id64ToString(GetItemUniqueId(1, lastInteractedSlot))] = numLootTransmute
 					end
 					d("Looting these transmute stones would put you over the maximum, so "..numLootTransmute.." transmute stones were not looted")
 					EndLooting()
@@ -349,6 +350,16 @@ local function shouldOpenContainer(bag, slot)
 	if FindFirstEmptySlotInBag(BAG_BACKPACK) == nil then return false end
 
 	if containerHasTransmute[slot] then return false end
+
+	local uniqueId = Id64ToString(GetItemUniqueId(bag, slot))
+	if WritCreater:GetSettings().transmuteBlock[uniqueId] then
+		local maxTransmutes = GetMaxPossibleCurrency( 5 , CURRENCY_LOCATION_ACCOUNT)
+		local currentTransmutes = GetCurrencyAmount(CURT_CHAOTIC_CREATIA,CURRENCY_LOCATION_ACCOUNT)
+		local transmuteSpace = maxTransmutes - currentTransmutes
+		if WritCreater:GetSettings().transmuteBlock[uniqueId] > transmuteSpace then
+			return false
+		end
+	end
 
 	local itemType, specialItemType = GetItemType(bag, slot)
 	if itemType ~=ITEMTYPE_CONTAINER or specialItemType == SPECIALIZED_ITEMTYPE_CONTAINER_STYLE_PAGE then return false end
