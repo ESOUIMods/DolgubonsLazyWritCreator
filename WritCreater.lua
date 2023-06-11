@@ -96,6 +96,16 @@ WritCreater.default =
 	},
 	["scanForUnopened"] = false,
 	["transmuteBlock"] = {},
+	["skipItemQuests"] = {
+		["|H1:item:30152:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h"] = true, --"coprinus",
+		["|H1:item:30165:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h"] = true, --"nirnroot",
+		["|H1:item:45850:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h"] = true, --"ta",
+		["|H1:item:45831:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h"] = true, --"oko",
+		["|H1:item:77591:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h"] = true, --"mudcrab",
+	},
+	["showStatusBar"] = true,
+	["statusBarX"] = (ZO_ActionBar1 and (ZO_ActionBar1:GetRight()-100)) or 850,
+	["statusBarY"] = (ZO_ActionBar1 and (ZO_ActionBar1:GetTop()-100)) or 850,
 }
 
 WritCreater.defaultAccountWide = {
@@ -763,6 +773,7 @@ function WritCreater:Initialize()
 		--if GetDisplayName() =="@Dolgubon" then WritCreater.InitializeRightClick() end
 		WritCreater.InitializeRightClick()
 		WritCreater.setupScrollLists()
+		WritCreater.loadStatusBar()
 	end
 	if GetDate()%10000 == 1031 then
 		DolgubonsLazyWritStatsWindowBackdropTitle:SetText("Dolgubon's Lazy Wraith Crafter")

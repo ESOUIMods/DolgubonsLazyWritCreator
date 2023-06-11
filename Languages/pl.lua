@@ -4,10 +4,10 @@
 -- Addon Ideal: Simplifies Crafting Writs as much as possible
 -- Addon Creation Date: March 14, 2016
 --
--- File Name: Languages/en.lua
--- File Description: English Localization
+-- File Name: Languages/pl.lua
+-- File Description: Polish Localization
 -- Load Order Requirements: None
--- 
+--
 -----------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------
@@ -16,9 +16,9 @@
 --
 -- If you are not looking to translate the addon you can ignore this. :D
 --
--- If you ARE looking to translate this to something else then anything with a comment of Vital beside it is 
+-- If you ARE looking to translate this to something else then anything with a comment of Vital beside it is
 -- REQUIRED for the addon to function properly. These strings MUST BE TRANSLATED EXACTLY!
--- If only going for functionality, ctrl+f for Vital. Otherwise, you should just translate everything. Note that some strings 
+-- If only going for functionality, ctrl+f for Vital. Otherwise, you should just translate everything. Note that some strings
 -- Note that if you are going for a full translation, you must also translate defualt.lua and paste it into your localization file.
 --
 -- For languages that do not use the Latin Alphabet, there is also an optional langParser() function. IF the language you are translating
@@ -49,7 +49,7 @@ function WritCreater.langParser(str)  -- Optional overwrite function for languag
 		str = string.sub(str, searchResult2+1)
 	    searchResult1, searchResult2  = string.find(str,seperater)
 	    i=i+1
-	end 
+	end
 	params[i] = str
 	return params
 
@@ -69,43 +69,43 @@ end
 function WritCreater.langWritNames() -- Vital
 	-- Exact!!!  I know for german alchemy writ is Alchemistenschrieb - so ["G"] = schrieb, and ["A"]=Alchemisten
 	local names = {
-	["G"] = "Writ",
-[CRAFTING_TYPE_ENCHANTING] = "Zlecenie dla zaklinacza",
-	[CRAFTING_TYPE_BLACKSMITHING] = "Zlecenie dla kowala",
-	[CRAFTING_TYPE_CLOTHIER] = "Zlecenie dla krawca",
-	[CRAFTING_TYPE_PROVISIONING] = "Zlecenie na przyrządzanie",
-	[CRAFTING_TYPE_WOODWORKING] = "Zlecenie dla stolarza",
-	[CRAFTING_TYPE_ALCHEMY] = "Zlecenie dla alchemika",
-	[CRAFTING_TYPE_JEWELRYCRAFTING] = "Zlecenie dla jubilera",
+	["G"] = "zlecenia",
+    [CRAFTING_TYPE_ENCHANTING] = "zaklinacza", -- 249936564-0-6495 <Examine the Enchanter Writs.> - <Sprawdź zlecenia dla zaklinacza.>
+	[CRAFTING_TYPE_BLACKSMITHING] = "kowala",
+	[CRAFTING_TYPE_CLOTHIER] = "krawca",
+	[CRAFTING_TYPE_PROVISIONING] = "aprowizatora",
+	[CRAFTING_TYPE_WOODWORKING] = "stolarza",
+	[CRAFTING_TYPE_ALCHEMY] = "alchemika",
+	[CRAFTING_TYPE_JEWELRYCRAFTING] = "jubilera",
 	}
 	return names
 end
 
 function WritCreater.langCraftKernels()
-	return 
+	return
 	{
-		[CRAFTING_TYPE_ENCHANTING] = "Enchant",
-		[CRAFTING_TYPE_BLACKSMITHING] = "Blacksmith",
-		[CRAFTING_TYPE_CLOTHIER] = "Clothier",
-		[CRAFTING_TYPE_PROVISIONING] = "Provision",
-		[CRAFTING_TYPE_WOODWORKING] = "Woodwork",
-		[CRAFTING_TYPE_ALCHEMY] = "Alchem",
-		[CRAFTING_TYPE_JEWELRYCRAFTING] = "Jewelry",
+		[CRAFTING_TYPE_ENCHANTING] = "Zaklinanie", -- 81344020-0-425
+		[CRAFTING_TYPE_BLACKSMITHING] = "Kuźnia", -- 146361138-0-528
+		[CRAFTING_TYPE_CLOTHIER] = "Sukiennik", -- 146361138-0-832
+		[CRAFTING_TYPE_PROVISIONING] = "Aprowizator", -- 68561141-0-180
+		[CRAFTING_TYPE_WOODWORKING] = "Stolarstwo", -- 260523861-5-24
+		[CRAFTING_TYPE_ALCHEMY] = "Alchemia",
+		[CRAFTING_TYPE_JEWELRYCRAFTING] = "Biżuteria",
 	}
 end
 
 function WritCreater.langMasterWritNames() -- Vital
 	local names = {
-	["M"] 							= "masterful",
-	["M1"]							= "master",
-	[CRAFTING_TYPE_ALCHEMY]			= "concoction",
-	[CRAFTING_TYPE_ENCHANTING]		= "glyph",
-	[CRAFTING_TYPE_PROVISIONING]	= "feast",
-	["plate"]						= "plate",
-	["tailoring"]					= "tailoring",
-	["leatherwear"]					= "leatherwear",
-	["weapon"]						= "weapon",
-	["shield"]						= "shield",
+	["M"] 							= "mistrzowsk",
+	["M1"]							= "mistrzowsk",
+	[CRAFTING_TYPE_ALCHEMY]			= "mikstura", -- 52420949-0-5983 A Masterful Concoction - Mistrzowska mikstura
+	[CRAFTING_TYPE_ENCHANTING]		= "glif",
+	[CRAFTING_TYPE_PROVISIONING]	= "uczta",
+	["plate"]						= "pancerz",
+	["tailoring"]					= "krawiectwo",
+	["leatherwear"]					= "skórzana",
+	["weapon"]						= "broń",
+	["shield"]						= "tarcza",
 	}
 return names
 
@@ -113,13 +113,13 @@ end
 
 function WritCreater.writCompleteStrings() -- Vital for translation
 	local strings = {
-	["umieść"] = "Place the goods",
-	["sign"] = "Sign the Manifest",
-	["masterPlace"] = "I've finished the ",
-	["masterSign"] = "<Finish the job.>",
-	["masterStart"] = "<Accept the contract.>",
+	["place"] = "Umieść towary w skrzyni",
+	["sign"] = "Podpisz potwierdzenie",
+	["masterPlace"] = "Skończył",
+	["masterSign"] = "<Ukończ zlecenie.>", -- 232026500-0-12524
+	["masterStart"] = "<Zaakceptuj umowę.>",
 	["Rolis Hlaalu"] = "Rolis Hlaalu", -- This is the same in most languages but ofc chinese and japanese
-	["Deliver"] = "Deliver",
+	["Deliver"] = "Dostarcz", -- 121487972-0-12653
 	}
 	return strings
 end
@@ -127,15 +127,15 @@ end
 
 function WritCreater.languageInfo() -- Vital
 
-local craftInfo = 
+local craftInfo =
 	{
-		[ CRAFTING_TYPE_CLOTHIER] = 
+		[ CRAFTING_TYPE_CLOTHIER] =
 		{
 			["pieces"] = --exact!!
 			{
-				[1] = "robe",
-				[2] = "jerkin",
-				[3] = "shoes",
+				[1] = "szata",
+				[2] = "kaftan",
+				[3] = "buty",
 				[4] = "gloves",
 				[5] = "hat",
 				[6] = "breeches",
@@ -172,9 +172,9 @@ local craftInfo =
 				[19]= "Shadowhide",
 				[20]= "Rubedo",
 			},
-	
+
 		},
-		[CRAFTING_TYPE_BLACKSMITHING] = 
+		[CRAFTING_TYPE_BLACKSMITHING] =
 		{
 			["pieces"] = --exact!!
 			{
@@ -208,7 +208,7 @@ local craftInfo =
 			},
 
 		},
-		[CRAFTING_TYPE_WOODWORKING] = 
+		[CRAFTING_TYPE_WOODWORKING] =
 		{
 			["pieces"] = --Exact!!!
 			{
@@ -234,7 +234,7 @@ local craftInfo =
 			},
 
 		},
-		[CRAFTING_TYPE_JEWELRYCRAFTING] = 
+		[CRAFTING_TYPE_JEWELRYCRAFTING] =
 		{
 			["pieces"] = --Exact!!!
 			{
@@ -252,7 +252,7 @@ local craftInfo =
 			},
 
 		},
-		[CRAFTING_TYPE_ENCHANTING] = 
+		[CRAFTING_TYPE_ENCHANTING] =
 		{
 			["pieces"] = --exact!!
 			{ --{String Identifier, ItemId, positive or negative}
@@ -311,9 +311,9 @@ local craftInfo =
 				[14]= {"monumental",45816},
 				[15]= {"truly",{68341,68340,},},
 				[16]= {"superb",{64509,64508,},},
-				
+
 			},
-			["quality"] = 
+			["quality"] =
 			{
 				{"normal",45850},
 				{"fine",45851},
@@ -323,7 +323,7 @@ local craftInfo =
 				{"", 45850} -- default, if nothing is mentioned. Default should be Ta.
 			}
 		},
-	} 
+	}
 
 	return craftInfo
 
@@ -338,7 +338,7 @@ end
 
 function WritCreater.langEssenceNames() -- Vital
 
-local essenceNames =  
+local essenceNames =
 	{
 		[1] = "Oko", --health
 		[2] = "Deni", --stamina
@@ -349,7 +349,7 @@ end
 
 function WritCreater.langPotencyNames() -- Vital
 	--exact!! Also, these are all the positive runestones - no negatives needed.
-	local potencyNames = 
+	local potencyNames =
 	{
 		[1] = "Jora", --Lowest potency stone lvl
 		[2] = "Porade",
@@ -367,7 +367,7 @@ function WritCreater.langPotencyNames() -- Vital
 		[14]= "Kura",
 		[15]= "Rejera",
 		[16]= "Repora", --v16 potency stone
-		
+
 	}
 	return potencyNames
 end
@@ -384,7 +384,7 @@ function WritCreater.enchantExceptions(condition)
 end
 
 
-function WritCreater.langTutorial(i) 
+function WritCreater.langTutorial(i)
 	local t = {
 		[5]="There's also a few things you should know.\nFirst, /dailyreset is a slash command that will tell you\nhow long until the next daily server reset.",
 		[4]="Finally, you can also choose to deactivate or\nactivate this addon for each profession.\nBy default, all applicable crafts are on.\nIf you wish to turn some off, please check the settings.",
@@ -396,7 +396,7 @@ function WritCreater.langTutorial(i)
 end
 
 function WritCreater.langTutorialButton(i,onOrOff) -- sentimental and short please. These must fit on a small button
-	local tOn = 
+	local tOn =
 	{
 		[1]="Use Defaults",
 		[2]="On",
@@ -419,37 +419,37 @@ end
 
 function WritCreater.langStationNames()
 	return
-	{["Kuźnia"] = 1, ["Stanowisko krawieckie"] = 2, 
+	{["Kuźnia"] = 1, ["Stanowisko krawieckie"] = 2,
 	 ["Stół do zaklinania"] = 3,["Stanowisko alchemiczne"] = 4, ["Palenisko do gotowania"] = 5, ["Stanowisko stolarskie"] = 6, ["Stanowisko jubilerskie"] = 7, }
 end
 
 -- What is this??! This is just a fun 'easter egg' that is never activated on easter.
 -- Replaces mat names with a random DivineMats on Halloween, New Year's, and April Fools day. You don't need this many! :D
--- Translate it or don't, completely up to you. But if you don't translate it, replace the body of 
+-- Translate it or don't, completely up to you. But if you don't translate it, replace the body of
 -- shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhateveritlljustbeforabit()
 -- with just a return false. (This will prevent it from ever activating. Also, if you're a user and don't like this,
 -- you're boring, and also that's how you can disable it. )
 local DivineMats =
 {
 	{"Rusted Nails", "Ghost Robes", "","","", "Rotten Logs","Cursed Gold", "Chopped Liver", "Crumbled Gravestones", "Toad Eyes", "Werewolf Claws", "Zombie Guts", "Lizard Brains"},
-	{"Buzzers","Sock Puppets", "Jester Hats","Otter Noses", "Red Herrings", "Wooden Snakes", "Fool's Gold", "Mudpies"},
+	{"Buzzers","Sock Puppets", "Jester Hats","Otter Noses", "Red Herrings", "Wooden Snakes", "Gold Teeth", "Mudpies"},
 	{"Coal", "Stockings", "","","","Evergreen Branches", "Golden Rings", "Bottled Time", "Reindeer Bells", "Elven Hats", "Pine Needles", "Cups of Snow"},
 }
 
 -- confetti?
 -- random sounds?
--- 
+--
 
 local function shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhateveritlljustbeforabit()
 	if GetDate()%10000 == 1031 then return 1 end
 	if GetDate()%10000 == 401 then return 2 end
 	if GetDate()%10000 == 1231 then return 3 end
-	if GetDisplayName() == "@Dolgubon" then
+	if GetDisplayName() == "@Dolgubon" or GetDisplayName() == "@Gitaelia" or GetDisplayName() == "@mithra62" or GetDisplayName() == "@PacoHasPants" then
 		return 2
 	end
 	return false
 end
-
+WritCreater.shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhateveritlljustbeforabit = shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhateveritlljustbeforabit
 
 
 local function wellWeShouldUseADivineMatButWeHaveNoClueWhichOneItIsSoWeNeedToAskTheGodsWhichDivineMatShouldBeUsed() local a= math.random(1, #DivineMats ) return DivineMats[a] end
@@ -458,7 +458,7 @@ local l = shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhatev
 if l then
 	DivineMats = DivineMats[l]
 	local DivineMat = wellWeShouldUseADivineMatButWeHaveNoClueWhichOneItIsSoWeNeedToAskTheGodsWhichDivineMatShouldBeUsed()
-	
+
 	WritCreater.strings.smithingReqM = function (amount, _,more)
 		local craft = GetCraftingInteractionType()
 		DivineMat = DivineMats[craft]
@@ -467,11 +467,11 @@ if l then
 		local craft = GetCraftingInteractionType()
 		DivineMat = DivineMats[craft]
 		return zo_strformat( "As well as <<1>> <<4>> (|cf60000You need <<3>>|r)" ,amount, type, more, DivineMat) end
-	WritCreater.strings.smithingReq = function (amount, _,more) 
+	WritCreater.strings.smithingReq = function (amount, _,more)
 		local craft = GetCraftingInteractionType()
 		DivineMat = DivineMats[craft]
 		return zo_strformat( "Crafting will use <<1>> <<4>> (|c2dff00<<3>> available|r)" ,amount, type, more, DivineMat) end
-	WritCreater.strings.smithingReq2 = function (amount, _,more) 
+	WritCreater.strings.smithingReq2 = function (amount, _,more)
 		local craft = GetCraftingInteractionType()
 		DivineMat = DivineMats[craft]
 		return zo_strformat( "As well as <<1>> <<4>> (|c2dff00<<3>> available|r)" ,amount, type, more, DivineMat) end
@@ -489,7 +489,7 @@ local function enableAlternateUniverse(override)
 
 	if shouldDivinityprotocolbeactivatednowornotitshouldbeallthetimebutwhateveritlljustbeforabit() == 2 or override then
 	--if true then
-		local stations = 
+		local stations =
 			{"Blacksmithing Station", "Clothing Station", "Enchanting Table",
 			"Alchemy Station",  "Cooking Fire", "Woodworking Station","Jewelry Crafting Station",  "Outfit Station", "Transmute Station", "Wayshrine"}
 			local stationNames =  -- in the comments are other names that were also considered, though not all were considered seriously
@@ -501,12 +501,12 @@ local function enableAlternateUniverse(override)
 			 "IKEA Assembly Station", -- Chainsaw Massace, Saw Station, Shield Corp, IKEA Assembly Station, Wood Splinter Removal Station
 			 "April Fool's Gold",--"Diamond Scam Store", -- Lucy in the Sky, Wedding Planning Hub, Shiny Maker, Oooh Shiny, Shiny Bling Maker, Cubit Zirconia, Rhinestone Palace
 			 -- April Fool's Gold
-			 "Khajit Fur Trade Outpost", -- Jester Dressing Room Loincloth Shop, Khajit Walk, Khajit Fashion Show, Mummy Maker, Thalmor Spy Agency, Tamriel Catwalk, 
+			 "Khajit Fur Trade Outpost", -- Jester Dressing Room Loincloth Shop, Khajit Walk, Khajit Fashion Show, Mummy Maker, Thalmor Spy Agency, Tamriel Catwalk,
 			 --	Tamriel Khajitwalk, second hand warehouse,. Dye for Me, Catfur Jackets, Outfit station "Khajiit Furriers", Khajit Fur Trading Outpost
 			 "Sacrificial Goat Altar",-- Heisenberg's Station Correction Facility, Time Machine, Probability Redistributor, Slot Machine Rigger, RNG Countermeasure, Lootcifer Shrine, Whack-a-mole
 			 -- Anti Salt Machine, Department of Corrections, Quantum State Rigger , Unnerf Station
 			 "TARDIS" } -- Transporter, Molecular Discombobulator, Beamer, Warp Tunnel, Portal, Stargate, Cannon!, Warp Gate
-			
+
 			local crafts = {"Blacksmithing", "Clothing", "Enchanting","Alchemy","Provisioning","Woodworking","Jewelry Crafting" }
 			local craftNames = {
 				"Wightsmithing",
@@ -518,7 +518,7 @@ local function enableAlternateUniverse(override)
 				"Fool's Gold Creation",
 			}
 			local quest = {"Blacksmith", "Clothier", "Enchanter" ,"Alchemist", "Provisioner", "Woodworker", "Jewelry Crafting","Provisioner Writ"}
-			local questNames = 	
+			local questNames =
 			{
 				"Wightsmith",
 				"Sock Knitter",
@@ -551,7 +551,7 @@ local function enableAlternateUniverse(override)
 			}
 			local ones = {"Jewelry Crafter"}
 			local oneNames = {"Fool's Gold"}
-		
+
 
 		local t = {["__index"] = {}}
 		function h.__index.alternateUniverse()
@@ -572,7 +572,7 @@ local function enableAlternateUniverse(override)
 		function h.__index.alternateUniverseOnes()
 			return ones, oneNames
 		end
-		
+
 
 		h.__metatable = "No looky!"
 		local a = WritCreater.langStationNames()
@@ -580,7 +580,7 @@ local function enableAlternateUniverse(override)
 		for i = 1, 7 do
 			a[stationNames[i]] = i
 		end
-		WritCreater.langStationNames = function() 
+		WritCreater.langStationNames = function()
 			return a
 		end
 		local b =WritCreater.langWritNames()
@@ -596,17 +596,17 @@ end
 -- So far, I like blacksmithing, clothing, woodworking, and wayshrine, enchanting
 -- that leaves , alchemy, cooking, jewelry, outfits, and transmutation
 
-local lastYearStations = 
-{"Blacksmithing Station", "Clothing Station", "Woodworking Station", "Cooking Fire", 
+local lastYearStations =
+{"Blacksmithing Station", "Clothing Station", "Woodworking Station", "Cooking Fire",
 "Enchanting Table", "Alchemy Station", "Outfit Station", "Transmute Station", "Wayshrine"}
 local stationNames =  -- in the comments are other names that were also considered, though not all were considered seriously
 {"Heavy Metal 112.3 FM", -- Popcorn Machine , Skyforge, Heavy Metal Station
  "Sock Knitting Station", -- Sock Distribution Center, Soul-Shriven Sock Station, Grandma's Sock Knitting Station, Knits and Pieces
  "Splinter Removal Station", -- Chainsaw Massace, Saw Station, Shield Corp, IKEA Assembly Station, Wood Splinter Removal Station
- "McSheo's Food Co.", 
+ "McSheo's Food Co.",
  "Tetris Station", -- Mahjong Station
  "Poison Control Centre", -- Chemical Laboratory , Drugstore, White's Garage, Cocktail Bar, Med-Tek Pharmaceutical Company, Med-Tek Laboratories
- "Thalmor Spy Agency", -- Jester Dressing Room Loincloth Shop, Khajit Walk, Khajit Fashion Show, Mummy Maker, Thalmor Spy Agency, Morag Tong Information Hub, Tamriel Spy HQ, 
+ "Thalmor Spy Agency", -- Jester Dressing Room Loincloth Shop, Khajit Walk, Khajit Fashion Show, Mummy Maker, Thalmor Spy Agency, Morag Tong Information Hub, Tamriel Spy HQ,
  "Department of Corrections",-- Heisenberg's Station Correction Facility, Time Machine, Probability Redistributor, Slot Machine Rigger, RNG Countermeasure, Lootcifer Shrine, Whack-a-mole
  -- Anti Salt Machine, Department of Corrections
  "Warp Gate" } -- Transporter, Molecular Discombobulator, Beamer, Warp Tunnel, Portal, Stargate, Cannon!, Warp Gate
@@ -615,15 +615,15 @@ local stationNames =  -- in the comments are other names that were also consider
 enableAlternateUniverse()
 
 local function alternateListener(eventCode,  channelType, fromName, text, isCustomerService, fromDisplayName)
-	if not WritCreater.alternateUniverse and fromDisplayName == "@Dolgubon"and (text == "Let the Isles bleed into Nirn!" ) then	
-		enableAlternateUniverse(true)	
-		WritCreater.WipeThatFrownOffYourFace(true)	
-	end	
+	if not WritCreater.alternateUniverse and fromDisplayName == "@Dolgubon"and (text == "Let the Isles bleed into Nirn!" ) then
+		enableAlternateUniverse(true)
+		WritCreater.WipeThatFrownOffYourFace(true)
+	end
 	-- if GetDisplayName() == "@Dolgubon" then
-	-- 	enableAlternateUniverse(true)	
-	-- 	WritCreater.WipeThatFrownOffYourFace(true)	
+	-- 	enableAlternateUniverse(true)
+	-- 	WritCreater.WipeThatFrownOffYourFace(true)
 	-- end
-end	
+end
 -- 20764
 -- 21465
 
@@ -634,14 +634,14 @@ EVENT_MANAGER:RegisterForEvent(WritCreater.name,EVENT_CHAT_MESSAGE_CHANNEL, alte
 -- [tooltip ] = "Verstecke das Writ Crafter Fenster an der Handwerksstation automatisch, nachdem die Gegenstände hergestellt wurden"
 
 function WritCreater.langWritRewardBoxes () return {
-	[CRAFTING_TYPE_ALCHEMY] = "Alchemist's Vessel",
-	[CRAFTING_TYPE_ENCHANTING] = "Enchanter's Coffer",
-	[CRAFTING_TYPE_PROVISIONING] = "Provisioner's Pack",
-	[CRAFTING_TYPE_BLACKSMITHING] = "Blacksmith's Crate",
-	[CRAFTING_TYPE_CLOTHIER] = "Clothier's Satchel",
-	[CRAFTING_TYPE_WOODWORKING] = "Woodworker's Case",
-	[CRAFTING_TYPE_JEWELRYCRAFTING] = "Jewelry Crafter's Coffer",
-	[8] = "Shipment",
+	[CRAFTING_TYPE_ALCHEMY] = "Naczynie alchemika",
+	[CRAFTING_TYPE_ENCHANTING] = "Szkatuła zaklinacza",
+	[CRAFTING_TYPE_PROVISIONING] = "Paczka zaopatrzeniowca",
+	[CRAFTING_TYPE_BLACKSMITHING] = "Skrzynka kowala",
+	[CRAFTING_TYPE_CLOTHIER] = "Torba krawca",
+	[CRAFTING_TYPE_WOODWORKING] = "Kufer stolarza",
+	[CRAFTING_TYPE_JEWELRYCRAFTING] = "Szkatuła jubilera",
+	[8] = "Dostawa",
 }
 end
 
@@ -653,7 +653,7 @@ end
 WritCreater.optionStrings["alternate universe"] = "Turn off April"
 WritCreater.optionStrings["alternate universe tooltip"] = "Turn off the renaming of crafts, crafting stations, and other interactables"
 
-WritCreater.lang = "en"
+WritCreater.lang = "pl"
 WritCreater.langIsMasterWritSupported = true
 
 --[[

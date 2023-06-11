@@ -343,7 +343,21 @@ local scanBagForUnopenedContainers
 
 local lootClosedTime
 local slotUpdateHandler
-
+-- _G[savedVariablesName][GetWorldName()][GetDisplayName()][characterName]
+SLASH_COMMANDS['/transmuteboxtotal'] = function()
+	local sum = 0
+	for toon, v in pairs(_G["DolgubonsWritCrafterSavedVars"]["Default"][GetDisplayName()]) do
+		local toonSum = 0
+		if v.transmuteBlock then
+			for boxId, numTransmutes in pairs(v.transmuteBlock) do
+				sum = sum + numTransmutes
+				toonSum = toonSum + numTransmutes
+			end
+			d("Total transmutes for "..tostring(v["$LastCharacterName"]).." : "..toonSum)
+		end
+	end
+	d("Total transmutes for account : "..sum)
+end
 local function shouldOpenContainer(bag, slot)
 	if not WritCreater:GetSettings().lootContainerOnReceipt then return false end
 
