@@ -113,7 +113,8 @@ local function updateQuestStatus(event)
 	else
 		toggleStatusWindow()
 	end
-
+	StatusBar:ClearAnchors()
+	StatusBar:SetAnchor(TOPRIGHT, GuiRoot, TOPLEFT, WritCreater:GetSettings().statusBarX, WritCreater:GetSettings().statusBarY)
 end
 
 WritCreater.updateQuestStatus = updateQuestStatus
@@ -125,10 +126,10 @@ function WritCreater.loadStatusBar()
 	EVENT_MANAGER:RegisterForEvent("WritCrafterStatusBar", EVENT_OBJECTIVES_UPDATED , updateQuestStatus) -- probably not used
 	EVENT_MANAGER:RegisterForEvent("WritCrafterStatusBar", EVENT_OBJECTIVE_COMPLETED , updateQuestStatus) -- probably not used
 	EVENT_MANAGER:RegisterForEvent("WritCrafterStatusBar", EVENT_QUEST_REMOVED , updateQuestStatus)
+	EVENT_MANAGER:RegisterForEvent("WritCrafterStatusBar", EVENT_PLAYER_ACTIVATED , updateQuestStatus)
 	updateQuestStatus()
 	StatusBar:ClearAnchors()
-	--(BOTTOM, DolgubonsWritsBackdrop, BOTTOM, 30, -115)
-	StatusBar:SetAnchor(CENTER, GuiRoot, TOPLEFT, WritCreater:GetSettings().statusBarX, WritCreater:GetSettings().statusBarY)
+	StatusBar:SetAnchor(TOPRIGHT, GuiRoot, TOPLEFT, WritCreater:GetSettings().statusBarX, WritCreater:GetSettings().statusBarY)
 end
 
 

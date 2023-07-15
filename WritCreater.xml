@@ -270,7 +270,7 @@
 				WritCreater:GetSettings().statusBarX = self:GetRight() 
 			</OnMoveStop>
 			<Controls>
-				<Backdrop name="$(parent)Backdrop" centerColor="FFFFFF" edgeColor="00000000" inherits="ZO_InsetBackdrop" >
+				<Backdrop name="$(parent)Backdrop" centerColor="FFFFFF" edgeColor="00000000" inherits="ZO_InsetBackdrop" mouseEnabled="false">
 					<AnchorFill/>
 					<Edge edgeSize="1"/>
 					<Controls>
