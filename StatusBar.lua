@@ -91,23 +91,57 @@ local writLetters =
 	"B","C","E","A","P","W","J"
 }
 
+local statusIcons = {
+	"esoui/art/icons/mapkey/mapkey_smithy.dds",
+	"esoui/art/icons/mapkey/mapkey_clothier.dds",
+	"esoui/art/icons/mapkey/mapkey_enchanter.dds",
+	"esoui/art/icons/mapkey/mapkey_alchemist.dds",
+	"esoui/art/icons/mapkey/mapkey_inn.dds",
+	"esoui/art/icons/mapkey/mapkey_woodworker.dds",
+	"esoui/art/icons/mapkey/mapkey_jewelrycrafting.dds",
+	"",
+}
+local function statusBarWidth()
+	local baseWidth = 120
+	baseWidth = baseWidth + (WritCreater:GetSettings().statusBarIcons and 70 or 0)
+	baseWidth = baseWidth + (WritCreater:GetSettings().statusBarInventory and 90 or 0)
+	return baseWidth
+end
+
+
 local function updateQuestStatus(event)
+	-- StatusBar:SetDimensions(statusBarWidth(), 37)
+	DolgubonsLazyWritStatusBackdrop:SetCenterColor(255, 255, 255, WritCreater:GetSettings().transparentStatusBar and 0 or 255)
 	local status = computeQuestStatus()
 	local workingString = ""
 	local anyActive = false
+	local size = 25
 	for i = 1, 7 do
 		local nextOrder = statusOrder[i]
 		local nextStatus = status[nextOrder]
 		local colour = colours[nextStatus]
-		workingString = workingString.."|c"..colour..writLetters[nextOrder].."|r"
-		if i == 4 then
+		local colorObj = ZO_ColorDef:New(colour)
+		if WritCreater:GetSettings().statusBarIcons then
+			local iconStr = string.format("|t%d:%d:%s:inheritColor|t",size,size,statusIcons[nextOrder])
+			iconStr = colorObj:Colorize(iconStr)
+			workingString = workingString..iconStr
+		else
+			workingString = workingString.."|c"..colour..writLetters[nextOrder].."|r"
+		end
+		if i == 4 and not WritCreater:GetSettings().statusBarIcons then
 			workingString = workingString.."  "
 		end
 		if nextStatus == QUEST_INCOMPLETE or nextStatus == QUEST_DELIVER then
 			anyActive = true
 		end
 	end
+	if WritCreater:GetSettings().statusBarInventory then
+		workingString = workingString.." |cFFFFFF"..string.format("|t%d:%d:%s:inheritColor|t",18,18,"EsoUI/Art/Tooltips/icon_bag.dds").." "..GetNumBagUsedSlots(1).."/"..GetBagSize(1).."|r"
+	end
 	DolgubonsLazyWritStatusBackdropOutput:SetText(workingString)
+	local width = DolgubonsLazyWritStatusBackdropOutput:GetTextWidth()+30
+	width = math.floor(width/20)*20
+	StatusBar:SetDimensions(width, 37)
 	if not anyActive then
 		toggleStatusWindow(true)
 	else
@@ -116,6 +150,9 @@ local function updateQuestStatus(event)
 	StatusBar:ClearAnchors()
 	StatusBar:SetAnchor(TOPRIGHT, GuiRoot, TOPLEFT, WritCreater:GetSettings().statusBarX, WritCreater:GetSettings().statusBarY)
 end
+
+
+
 
 WritCreater.updateQuestStatus = updateQuestStatus
 function WritCreater.loadStatusBar()

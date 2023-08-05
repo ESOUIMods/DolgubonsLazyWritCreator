@@ -106,6 +106,9 @@ WritCreater.default =
 	["showStatusBar"] = true,
 	["statusBarX"] = (ZO_ActionBar1 and (ZO_ActionBar1:GetRight()-100)) or 850,
 	["statusBarY"] = (ZO_ActionBar1 and (ZO_ActionBar1:GetTop()-100)) or 850,
+	["statusBarInventory"] = true,
+	["statusBarIcons"] = not GetCVar("language.2")=="en",
+	["transparentStatusBar"] = false,
 }
 
 WritCreater.defaultAccountWide = {

@@ -324,6 +324,9 @@ local validItemTypes =
 		[ITEMTYPE_ARMOR] = {true,equipmentCheck},
 
 	},
+	[CRAFTING_TYPE_JEWELRYCRAFTING] = {
+		[ITEMTYPE_ARMOR] = {true,equipmentCheck},
+	}
 	--]]
 }
 

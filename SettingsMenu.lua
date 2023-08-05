@@ -660,7 +660,7 @@ local gpadActivitiesList = TIMED_ACTIVITIES_GAMEPAD.activitiesList
 
 
 
-	-- /esraj /lute /drum /flute  /keyharp /trumpetsolo /panflute  /qunan /ragnarthered /
+	-- /esraj /lute /drum /flute   /trumpetsolo /keyharp /panflute  /qunan /ragnarthered /sukun
 	-- if GetDisplayName() == "@Dolgubon" then
 	-- 	enableAlternateUniverse(true)
 	-- 	WritCreater.WipeThatFrownOffYourFace(true)
@@ -754,16 +754,6 @@ function WritCreater.Options() --Sentimental
 			getFunc = function() return WritCreater:GetSettings().stealProtection end,
 			setFunc = function(value) WritCreater:GetSettings().stealProtection = value end,
 			tooltip = WritCreater.optionStrings['stealingProtectionTooltip'], -- or string id or function returning a string (optional)
-		} ,
-		{
-			type = "checkbox",
-			name = WritCreater.optionStrings['showStatusBar'], -- or string id or function returning a string
-			getFunc = function() return WritCreater:GetSettings().showStatusBar end,
-			setFunc = function(value)
-				WritCreater:GetSettings().showStatusBar = value
-				WritCreater.toggleQuestStatusWindow()
-			end,
-			tooltip = WritCreater.optionStrings['showStatusBarTooltip'], -- or string id or function returning a string (optional)
 		} ,
 		{
 			type = "checkbox",
@@ -1047,6 +1037,51 @@ function WritCreater.Options() --Sentimental
 				WritCreater:GetSettings().scanForUnopened = value
 			end,
 		},
+	}
+	local statusBarOptions = {
+	{
+			type = "checkbox",
+			name = WritCreater.optionStrings['showStatusBar'], -- or string id or function returning a string
+			getFunc = function() return WritCreater:GetSettings().showStatusBar end,
+			setFunc = function(value)
+				WritCreater:GetSettings().showStatusBar = value
+				WritCreater.toggleQuestStatusWindow()
+			end,
+			tooltip = WritCreater.optionStrings['showStatusBarTooltip'], -- or string id or function returning a string (optional)
+		} ,
+		{
+			type = "checkbox",
+			name = WritCreater.optionStrings['statusBarInventory'], -- or string id or function returning a string
+			getFunc = function() return WritCreater:GetSettings().statusBarInventory end,
+			disabled = function() return not WritCreater:GetSettings().showStatusBar end,
+			setFunc = function(value) WritCreater:GetSettings().statusBarInventory = value
+				WritCreater.updateQuestStatus()
+			end,
+			tooltip = WritCreater.optionStrings['statusBarInventoryTooltip'], -- or string id or function returning a string (optional)
+			default = WritCreater.default.statusBarIcons,
+		},
+		{
+			type = "checkbox",
+			name = WritCreater.optionStrings['statusBarIcons'], -- or string id or function returning a string
+			getFunc = function() return WritCreater:GetSettings().statusBarIcons end,
+			disabled = function() return not WritCreater:GetSettings().showStatusBar end,
+			setFunc = function(value) WritCreater:GetSettings().statusBarIcons = value
+				WritCreater.updateQuestStatus()
+			end,
+			tooltip = WritCreater.optionStrings['statusBarIconsTooltip'], -- or string id or function returning a string (optional)
+			default = WritCreater.default.statusBarIcons,
+		},
+		{
+			type = "checkbox",
+			name = WritCreater.optionStrings['transparentStatusBar'], -- or string id or function returning a string
+			getFunc = function() return WritCreater:GetSettings().transparentStatusBar end,
+			disabled = function() return not WritCreater:GetSettings().showStatusBar end,
+			setFunc = function(value) WritCreater:GetSettings().transparentStatusBar = value
+				WritCreater.updateQuestStatus()
+			end,
+			tooltip = WritCreater.optionStrings['transparentStatusBarTooltip'], -- or string id or function returning a string (optional)
+			default = WritCreater.default.transparentStatusBar,
+		} ,
 	}
 
 ----------------------------------------------------
@@ -1419,6 +1454,13 @@ function WritCreater.Options() --Sentimental
 	  tooltip = WritCreater.optionStrings["timesavers submenu tooltip"],
 	  controls = timesaverOptions,
 	  reference = "WritCreaterTimesaverSubmenu",
+	})
+	table.insert(options,{
+	  type = "submenu",
+	  name = WritCreater.optionStrings["status bar submenu"],
+	  tooltip = WritCreater.optionStrings["status bar submenu tooltip"],
+	  controls = statusBarOptions,
+	  reference = "WritCreaterStatusBarSubmenu",
 	})
 	table.insert(options,{
 		type = "submenu",
