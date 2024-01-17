@@ -116,6 +116,9 @@ local function updateQuestStatus(event)
 	local workingString = ""
 	local anyActive = false
 	local size = 25
+	if WritCreater:GetSettings().statusBarInventory then
+		workingString = workingString.." |cFFFFFF"..string.format("|t%d:%d:%s:inheritColor|t",18,18,"EsoUI/Art/Tooltips/icon_bag.dds").." "..GetNumBagUsedSlots(1).."/"..GetBagSize(1).."|r"
+	end
 	for i = 1, 7 do
 		local nextOrder = statusOrder[i]
 		local nextStatus = status[nextOrder]
@@ -135,9 +138,7 @@ local function updateQuestStatus(event)
 			anyActive = true
 		end
 	end
-	if WritCreater:GetSettings().statusBarInventory then
-		workingString = workingString.." |cFFFFFF"..string.format("|t%d:%d:%s:inheritColor|t",18,18,"EsoUI/Art/Tooltips/icon_bag.dds").." "..GetNumBagUsedSlots(1).."/"..GetBagSize(1).."|r"
-	end
+
 	DolgubonsLazyWritStatusBackdropOutput:SetText(workingString)
 	local width = DolgubonsLazyWritStatusBackdropOutput:GetTextWidth()+30
 	width = math.floor(width/20)*20

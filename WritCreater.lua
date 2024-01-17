@@ -631,18 +631,19 @@ local function initializeLibraries()
 	 end end, nil, function()return WritCreater:GetSettings().styles end )
 
 	local buttonInfo =
-	{0,5000,50000, "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7CZ3LW6E66NAU&source=url",{"https://www.patreon.com/Dolgubon", "Patreon"}
+	{0,50000,250000, "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7CZ3LW6E66NAU&source=url"
+		-- ,{"https://www.patreon.com/Dolgubon", "Patreon"}
 	}
-	if WritCreater.savedVarsAccountWide.total > 50000 then
-		table.insert(buttonInfo, 4, {WritCreater.savedVarsAccountWide.total, "1g/writ completed", true})
-	end
-	if WritCreater.savedVarsAccountWide.total > 5000 then
-		table.insert(buttonInfo,3,  {WritCreater.savedVarsAccountWide.total, "1g/writ completed", true})
-	end
-	local feedbackString = "If you found a bug, have a request or a suggestion, or simply wish to donate, send a mail. You can also donate through Paypal or on Patreon"
+	-- if WritCreater.savedVarsAccountWide.total > 50000 then
+	-- 	table.insert(buttonInfo, 4, {WritCreater.savedVarsAccountWide.total*100, "1g/writ completed", true})
+	-- end
+	-- if WritCreater.savedVarsAccountWide.total > 5000 then
+	-- 	table.insert(buttonInfo,3,  {WritCreater.savedVarsAccountWide.total*100, "1g/writ completed", true})
+	-- end
+	local feedbackString = "If you found a bug, have a request or a suggestion, or simply wish to donate, send a mail. You can also donate on Paypal"
 	if GetWorldName() == "NA Megaserver" then
-		-- buttonInfo[#buttonInfo+1] = { function()JumpToSpecificHouse( "@Dolgubon", 36) end, "Visit Maze 1"}
-		-- buttonInfo[#buttonInfo+1] = { function()JumpToSpecificHouse( "@Dolgubon", 9) end, "Visit Maze 2"}
+		buttonInfo[#buttonInfo+1] = { function()JumpToSpecificHouse( "@Dolgubon", 36) end, "Visit Maze 1"}
+		buttonInfo[#buttonInfo+1] = { function()JumpToSpecificHouse( "@Dolgubon", 9) end, "Visit Maze 2"}
 		-- feedbackString = "If you found a bug, have a request or a suggestion, or simply wish to donate, send a mail. You can also check out my house, or donate through Paypal or on Patreon."
 	end
 	local orP=JumpToSpecificHouse

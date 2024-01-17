@@ -280,18 +280,6 @@
 							<Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER" offsetX="0" offsetY="0" />
 
 					    </Label>
-					    						<!-- <Button name="$(parent)Close" alpha="1" inherits="ZO_DefaultButton" text="Close" clickSound="Book_Acquired" topmost="true">
-					    	<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM" offsetX="0" offsetY="-15" />
-					    	<FontColors normalColor="FFFFFF" mouseOverColor="d9d9d9" pressedColor="b3b3b3"/>
-		         			<Dimensions x="130"  />
-							<OnClicked>
-								self:GetOwningWindow():SetHidden(true)
-								if WritCreater.resetWindowClose then
-									WritCreater.resetWindowClose(true)
-									WritCreater.resetWindowClose = nil
-								end
-							</OnClicked>
-			    		</Button> -->
 			    	</Controls>
 				</Backdrop>
 			</Controls>

@@ -162,7 +162,7 @@ if isCheeseOn() then
 	function ZO_TimedActivities_Keyboard:InitializeActivityFinderCategory()
 		local returnValue = originalInitializeKeyboardFinderCategory(self)
 
-		GROUP_MENU_KEYBOARD.nodeList[2].children[cheesyActivityTypeIndex] =
+		GROUP_MENU_KEYBOARD.nodeList[3].children[cheesyActivityTypeIndex] =
 		{
             priority = CATEGORY_PRIORITY + 20,
             name = "RNGesus Sacrifice",
@@ -204,7 +204,7 @@ if isCheeseOn() then
 	    TIMED_ACTIVITIES_KEYBOARD:SetCurrentActivityType(cheesyActivityTypeIndex)
 	end
 	GROUP_MENU_KEYBOARD.navigationTree:Reset()
-	table.insert(GROUP_MENU_KEYBOARD.nodeList[2]["children"] , {
+	table.insert(GROUP_MENU_KEYBOARD.nodeList[3]["children"] , {
 		priority = ZO_ACTIVITY_FINDER_SORT_PRIORITY.TIMED_ACTIVITIES + cheesyActivityTypeIndex * 10 + 10,
 		name = il8n.menuName,
 		categoryFragment = TIMED_ACTIVITIES_KEYBOARD.sceneFragment,

@@ -238,7 +238,7 @@ WritCreater.ShowStatsWindow = function() outputStats(false) end
 -- Resets the user's writ reward statistics
 
 local function resetStats()
-	for k, v in pairs(WritCreater.defaultAccountWide) do
+	for k, v in pairs(WritCreater.defaultAccountWide.rewards) do
 		if k == "masterWrits" then
 		else
 			WritCreater.savedVarsAccountWide[k] = WritCreater.defaultAccountWide[k]
