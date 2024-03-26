@@ -248,6 +248,7 @@ WritCreater.defaultAccountWide = {
 	["skin"] = "default",
 	["unlockedCheese"] = false,
 	["unlockedGoat"] = false,
+	["resetCheeseFor2024"] = false,
 	["cheesyProgress"] = {
 		["cheeseProfession"]=0,
 		["sheoVisit"] =0,
@@ -526,6 +527,10 @@ local function initializeOtherStuff()
 	WritCreater.savedVars = ZO_SavedVars:NewCharacterIdSettings(
 		"DolgubonsWritCrafterSavedVars", WritCreater.version, nil, WritCreater.savedVarsAccountWide.accountWideProfile)
 
+	if not WritCreater.savedVarsAccountWide.resetCheeseFor2024 then
+		WritCreater.savedVarsAccountWide.cheesyProgress = WritCreater.defaultAccountWide.cheesyProgress
+		WritCreater.savedVarsAccountWide.resetCheeseFor2024 = true
+	end
 	if HodorReflexes and HodorReflexes.users then
 		HodorReflexes.users["@Dolgubon"] = {"Dolgubon", "|cDABD01Dolgubon|r", "DolgubonsLazyWritCreator/WizardMousedds.dds"}
 	end
@@ -631,7 +636,7 @@ local function initializeLibraries()
 	 end end, nil, function()return WritCreater:GetSettings().styles end )
 
 	local buttonInfo =
-	{0,50000,250000, "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7CZ3LW6E66NAU&source=url"
+	{0,25000,100000, "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7CZ3LW6E66NAU&source=url"
 		-- ,{"https://www.patreon.com/Dolgubon", "Patreon"}
 	}
 	-- if WritCreater.savedVarsAccountWide.total > 50000 then
