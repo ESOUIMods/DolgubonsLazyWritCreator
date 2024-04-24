@@ -1390,7 +1390,7 @@ function WritCreater.Options() --Sentimental
 
 			})
 	end
-	if GetTimeStamp() < 1713880800 then
+	if GetTimeStamp() < 1714053600 then
 		local jubileeOption = {
 			type = "checkbox",
 			name = WritCreater.optionStrings["jubilee"]  ,
