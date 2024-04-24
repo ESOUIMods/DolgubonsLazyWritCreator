@@ -640,9 +640,6 @@ local function enchantCrafting(info, quest,add)
 				local ta={}
 				local essence={}
 				local potency={}
-				local taString
-
-				taString = WritCreater.getTaString()
 
 				ta["bag"],ta["slot"] = findItem(45850)
 				local essenceId , potencyId = enchantSearch(nil,nil, nil,nil,quest)

@@ -173,15 +173,15 @@ local findMissingTranslationsMetatable =
 WritCreater.strings = {}
 setmetatable(WritCreater.strings, findMissingTranslationsMetatable)
 
-WritCreater.strings["runeReq"] 					= function (essence, potency) return zo_strformat("|c2dff00Crafting will require 1 |rTa|c2dff00, 1 |cffcc66<<1>>|c2dff00 and 1 |c0066ff<<2>>|r", essence, potency) end
-WritCreater.strings["runeMissing"] 				= runeMissingFunction
+WritCreater.strings["runeReq"] 						= function (essence, potency) return zo_strformat("|c2dff00Crafting will require 1 |rTa|c2dff00, 1 |cffcc66<<1>>|c2dff00 and 1 |c0066ff<<2>>|r", essence, potency) end
+WritCreater.strings["runeMissing"] 					= runeMissingFunction
 WritCreater.strings["notEnoughSkill"]				= "You do not have a high enough crafting skill to make the required equipment"
-WritCreater.strings["smithingMissing"] 			= "\n|cf60000You do not have enough mats|r"
-WritCreater.strings["craftAnyway"] 				= "Craft anyway"
+WritCreater.strings["smithingMissing"] 				= "\n|cf60000You do not have enough mats|r"
+WritCreater.strings["craftAnyway"] 					= "Craft anyway"
 WritCreater.strings["smithingEnough"] 				= "\n|c2dff00You have enough mats|r"
 WritCreater.strings["craft"] 						= "|c00ff00Craft|r"
 WritCreater.strings["crafting"] 					= "|c00ff00Crafting...|r"
-WritCreater.strings["craftIncomplete"] 			= "|cf60000Crafting could not be completed.\nYou need more mats.|r"
+WritCreater.strings["craftIncomplete"] 				= "|cf60000Crafting could not be completed.\nYou need more mats.|r"
 WritCreater.strings["moreStyle"] 					= "|cf60000You do not have any usable style stones.\nCheck your inventory, achievements, and settings|r"
 WritCreater.strings["moreStyleSettings"]			= "|cf60000You do not have any usable style stones.\nYou likely need to allow more in the Settings Menu|r"
 WritCreater.strings["moreStyleKnowledge"]			= "|cf60000You do not have any usable style stones.\nYou might need to learn to craft more styles|r"
@@ -189,22 +189,23 @@ WritCreater.strings["dailyreset"] 					= dailyResetFunction
 WritCreater.strings["complete"] 					= "|c00FF00Writ complete.|r"
 WritCreater.strings["craftingstopped"]				= "Crafting stopped. Please check to make sure the addon is crafting the correct item."
 WritCreater.strings["smithingReqM"] 				= function (amount, type, more) return zo_strformat( "Crafting will use <<1>> <<2>> (|cf60000You need <<3>>|r)" ,amount, type, more) end
-WritCreater.strings["smithingReq"] 				= function (amount,type, current) return zo_strformat( "Crafting will use <<1>> <<2>> (|c2dff00<<3>> available|r)"  ,amount, type, current) end
-WritCreater.strings["lootReceived"]				= "<<3>> <<1>> was received (You have <<2>>)"
+WritCreater.strings["smithingReq"] 					= function (amount,type, current) return zo_strformat( "Crafting will use <<1>> <<2>> (|c2dff00<<3>> available|r)"  ,amount, type,
+														zo_strformat(SI_NUMBER_FORMAT, ZO_AbbreviateNumber(current, NUMBER_ABBREVIATION_PRECISION_TENTHS, USE_LOWERCASE_NUMBER_SUFFIXES))) end
+WritCreater.strings["lootReceived"]					= "<<3>> <<1>> was received (You have <<2>>)"
 WritCreater.strings["lootReceivedM"]				= "<<1>> was received "
-WritCreater.strings["countSurveys"]				= "You have <<1>> surveys"
+WritCreater.strings["countSurveys"]					= "You have <<1>> surveys"
 WritCreater.strings["countVouchers"]				= "You have <<1>> unearned Writ Vouchers"
 WritCreater.strings["includesStorage"]				= function(type) local a= {"Surveys", "Master Writs"} a = a[type] return zo_strformat("Count includes <<1>> in house storage", a) end
 WritCreater.strings["surveys"]						= "Crafting Surveys"
 WritCreater.strings["sealedWrits"]					= "Sealed Writs"
-WritCreater.strings["masterWritEnchantToCraft"]	= function(lvl, type, quality, writCraft, writName, generalName)
-										return zo_strformat("<<t:4>> <<t:5>> <<t:6>>: Crafting a <<t:1>> Glyph of <<t:2>> at <<t:3>> quality",lvl, type, quality,
-											writCraft,writName, generalName) end
+WritCreater.strings["masterWritEnchantToCraft"]		= function(lvl, type, quality, writCraft, writName, generalName)
+														return zo_strformat("<<t:4>> <<t:5>> <<t:6>>: Crafting a <<t:1>> Glyph of <<t:2>> at <<t:3>> quality",lvl, type, quality,
+															writCraft,writName, generalName) end
 WritCreater.strings["masterWritSmithToCraft"]		= masterWritEnchantToCraft
-WritCreater.strings["withdrawItem"]				= function(amount, link, remaining) return "Dolgubon's Lazy Writ Crafter retrieved "..amount.." "..link..". ("..remaining.." in bank)" end -- in Bank for German
+WritCreater.strings["withdrawItem"]					= function(amount, link, remaining) return "Dolgubon's Lazy Writ Crafter retrieved "..amount.." "..link..". ("..remaining.." in bank)" end -- in Bank for German
 WritCreater.strings['fullBag']						= "You have no open bag spaces. Please empty your bag."
 WritCreater.strings['masterWritSave']				= "Dolgubon's Lazy Writ Crafter has saved you from accidentally accepting a master writ! Go to the settings menu to disable this option."
-WritCreater.strings['missingLibraries']			= "Dolgubon's Lazy Writ Crafter requires the following standalone libraries. Please download, install or turn on these libraries: "
+WritCreater.strings['missingLibraries']				= "Dolgubon's Lazy Writ Crafter requires the following standalone libraries. Please download, install or turn on these libraries: "
 WritCreater.strings['resetWarningMessageText']		= "The daily reset for writs will be in <<1>> hour and <<2>> minutes\nYou can customize or turn off this warning in the settings"
 WritCreater.strings['resetWarningExampleText']		= "The warning will look like this"
 WritCreater.strings['lowInventory']					= "\nYou only have <<1>> free slots left and may not have enough free slots"
@@ -343,14 +344,14 @@ WritCreater.optionStrings["skinOptions"]								= {"Default", "Cheesy", "Goaty"}
 WritCreater.optionStrings["goatSkin"]									= "Goaty"
 WritCreater.optionStrings["cheeseSkin"]									= "Cheesy"
 WritCreater.optionStrings["defaultSkin"]								= "Default"
-WritCreater.optionStrings["rewardChoices"]								= {"Nothing","Deposit","Junk", "Destroy"}
+WritCreater.optionStrings["rewardChoices"]								= {"Nothing","Deposit","Junk", "Destroy", "Deconstruct"}
 WritCreater.optionStrings["scan for unopened"]							= "Open containers on Login"
 WritCreater.optionStrings["scan for unopened tooltip"]					= "When you login, scan the bag for unopened writ containers and attempt to open them"
 
 WritCreater.optionStrings["smart style slot save"]						= "Lowest amount first"
 WritCreater.optionStrings["smart style slot save tooltip"]				= "Will attempt to minimize slots used if non ESO+ by using smaller stacks of style stones first"
-WritCreater.optionStrings["abandon quest for item"]						= "Writs requiring <<1>>"
-WritCreater.optionStrings["abandon quest for item tooltip"]				= "If OFF, will auto abandon writs requiring <<1>>"
+WritCreater.optionStrings["abandon quest for item"]						= "Writs with 'deliver <<1>>'"
+WritCreater.optionStrings["abandon quest for item tooltip"]				= "If OFF, will auto abandon writs requiring you to deliver <<1>>. Quests which require you to craft an item requireing <<1>> will not be abandoned"
 WritCreater.optionStrings["status bar submenu"]							= "Status Bar Options"
 WritCreater.optionStrings["status bar submenu tooltip"]					= "Status Bar Options"
 WritCreater.optionStrings['showStatusBar']								= "Show Status Bar"
@@ -363,7 +364,6 @@ WritCreater.optionStrings['statusBarInventory']							= "Inventory Tracker"
 WritCreater.optionStrings['statusBarInventoryTooltip']					= "Add an inventory tracker to the status bar"
 
 
-
 findMissingTranslationsMetatable["__newindex"] = function(t,k,v)WritCreater.missingTranslations[k] = nil rawset(t,k,v)  end
 ZO_CreateStringId("SI_BINDING_NAME_WRIT_CRAFTER_CRAFT_ITEMS", "Craft items")
 ZO_CreateStringId("SI_BINDING_NAME_WRIT_CRAFTER_OPEN", "Show Writ Crafter Stats window")
@@ -372,46 +372,35 @@ ZO_CreateStringId("SI_BINDING_NAME_WRIT_CRAFTER_OPEN", "Show Writ Crafter Stats 
 WritCreater.cheeseyLocalizations
 =
 {
-	['menuName'] = "Ritual",
-	['endeavorName'] = "Ritual Endeavors",
+	['reward'] = "-1 Sanity",
+	['rewardStylized'] = "-1 |cFFFFFF[Sanity]|",
+	['finalReward'] = "Complete them all and find out!",
+	['menuName'] = "Cheesy",
+	['endeavorName'] = "Cheesy Endeavors",
 	['tasks']={
-		{original="You found a strange pamphlet... Maybe you should /read it",name="You read some instructions on a ritual for luck", completion = "You learned how to do a ritual for luck!",
-			description="Use the /read emote"},
-
-		{original="???", name = "Obtain an innocent goat's guts", completion = "You monster! Anything for luck, I guess",
-			description="Loot guts from a dead livestock goat. You don't have be the one to kill it... but that's the easiest way"},
-
-		{original="???", name = "Head to the ritual site, Arananga", completion = "You made it! It seems like a very industrious place",
-			description="Not sure where Arananga is? Maybe it's a 'gifted' crafting station..."},
-
-		{original="???", name = "Destroy the goat guts", completion = "You 'burnt' the sacrifice",
-			description="Destroy the |H1:item:42870:30:1:0:0:0:0:0:0:0:0:0:0:0:16:0:0:0:1:0:0|h|h you looted"},
-
-		{original="???", name = "Praise RNGesus in chat", completion = "You feel strangely lucky, but maybe it's just a feeling...",
-			description="You can't really tell what it actually said, but it's your best guess"},
-				-- Or Nocturnal, or Fortuna, Tyche as easter eggs?
-
-		-- {original="???", name = "Complete the ritual", completion = "Maybe you'll be just a little bit luckier... And Writ Crafter has a new skin!",
-		-- description="Sheogorath will be very pleased if you complete them all!"},
+		{name="Profess your love for cheese",completion = "Now the whole world knows how much you love cheese!",
+			description="Say 'I love cheese!' in chat"},
+		{name = "Visit Uncle Sheo", completion = "Uncle Sheo was happy to see you! And sad. And cheesy. And punchy!",
+			description="Find and talk to Sheogorath. He's pretty lonely and wants to see you again!"},
+		{name = "Play some terrible music", completion = "Ouch! Your ears hurt from that terrible music.",
+			description="Use a music emote"},
+		{name = "Throw away some cheese", completion = "You threw away some cheese. It was probably moldy anyway...",
+			description="Destroy 1 |H1:item:27057:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h. Yes, it's crazy, but that's the point!"},
+		{name = "Read a cheesy book", completion = "What a heartwarming sock. Cheese - no, I mean book!",
+			description="Read the book |H0:item:121046:364:50:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:10000:0|h|h"},
+		{name = "Complete all other Cheesy Endeavours", completion = "Cheese! Cheese! Cheese everywhere! Even... while doing writs?",
+		description="Sheogorath will be very pleased if you complete them all!"},
 	},
-	["completePrevious"] = "You should probably complete the previous steps first",
-	['allComplete'] = "You completed the ritual!",
-	['allCompleteSubheading'] = "Even if RNGesus doesn't favour you next year, at least Writ Crafter has a new look!",
-	["goatContextTextText"] = "Goat",
-	["bookText"] =
-[[
-This ritual  |L0:0:0:45%%:8%%:ignore|lwill|l might give you great luck. Make sure to follow these steps exactly!
-1. Obtain some guts from a |L0:0:0:45%%:8%%:ignore|lsheep|l goat
-2. Go to |L0:0:0:45%%:8%%:ignore|lOblivion|l Arananga
-3. Burn the guts
-4. Praise [the name here is illegible]
+	['allComplete'] = "All cheesy endeavors completed!",
+	['chatbingo'] = "ilovecheese",
+	["cheatyCheeseBook"] = "Maybe you're going crazy, but you don't seem to remember that book...",
+}
 
-- Sincerely,
-|L0:0:0:45%%:8%%:ignore|lSheogorath|l Not Sheogorath]],
-["bookTitle"] = "A ritual for luck",
-["outOfRange"] = "You're not in the ritual area anymore!",
-["closeEnough"] = "Close enough",
-["praiseHint "] = "Maybe you need to say something about RNGesus?",
+WritCreater.cheeseBingos=
+{
+	["ichliebekase"] = true,
+	["ilovecheese"] = true,
+	["jadorelefromage"] = true,
 }
 --/esoui/art/icons/pet_041.dds
 --/esoui/art/icons/pet_042.dds

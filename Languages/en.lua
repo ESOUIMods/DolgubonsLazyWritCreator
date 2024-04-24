@@ -328,13 +328,9 @@ local craftInfo =
 	return craftInfo
 
 end
-
 function WritCreater.masterWritQuality() -- Vital . This is probably not necessary, but it stays for now because it works
 	return {{"Epic",4},{"Legendary",5}}
 end
-
-
-
 
 function WritCreater.langEssenceNames() -- Vital
 
@@ -371,6 +367,7 @@ function WritCreater.langPotencyNames() -- Vital
 	}
 	return potencyNames
 end
+
 
 function WritCreater.questExceptions(condition)
 	condition = string.gsub(condition, " "," ")
@@ -655,6 +652,10 @@ WritCreater.optionStrings["alternate universe tooltip"] = "Turn off the renaming
 
 WritCreater.lang = "en"
 WritCreater.langIsMasterWritSupported = true
+
+WritCreater.cheeseyLocalizations["alreadyUnlocked"] = "Writ Crafter Skin unlocked"
+WritCreater.cheeseyLocalizations["alreadyUnlockedTooltip"] = "You already unlocked the skin on April 1, 2022. Doing it again is just for fun!"
+WritCreater.cheeseyLocalizations["settingsChooseSkin"] = "You can change the skin in the settings menu"
 
 --[[
 SLASH_COMMANDS['/opencontainers'] = function()local a=WritCreater.langWritRewardBoxes() for i=1,200 do for j=1,6 do if a[j]==GetItemName(1,i) then if IsProtectedFunction("endUseItem") then

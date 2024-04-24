@@ -468,6 +468,16 @@ local function rewardHandler(bag, slot)
 	end
 end
 
+local handledItemTypes =
+{
+	[ITEMTYPE_MASTER_WRIT] = "master",
+	[SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT] = "survey",
+	[44879] = "repair",
+	-- Subtracting 100 so that an item with an item type matching the item trait does not return intricate
+	[ITEM_TRAIT_TYPE_ARMOR_INTRICATE-100] = "intricate",
+	[ITEM_TRAIT_TYPE_JEWELRY_INTRICATE-100] = "intricate",
+	[ITEM_TRAIT_TYPE_WEAPON_INTRICATE-100] = "intricate",
+}
 
 -- EVENT_MANAGER:RegisterForUpdate(WritCreater.name.."OpenAllContainers", 1000, scanBagForUnopenedContainers)
 local function slotUpdateHandler(event, bag, slot, isNew,_,reason,changeAmount,...)
@@ -488,39 +498,31 @@ local function slotUpdateHandler(event, bag, slot, isNew,_,reason,changeAmount,.
 			-- if not autoLoot then return end
 		end
 	end
+	--|H1:item:194428:123:1:0:0:0:2024:0:0:0:0:0:0:0:1:0:0:1:0:0:0|h|h
 	------
 	-- REWARD HANDLING
 	if isNew and WritCreater.langCraftKernels then --or GetDisplayName() == "@Dolgubon" then
 		-- d(link.." "..tostring(isNew).." "..tostring(lootedItemLinks[link]))
 	-- if WritCreater.langCraftKernels then --or GetDisplayName() == "@Dolgubon" then
-		if lootedItemLinks[GetItemLinkItemId(link)] then
+		local itemId = GetItemLinkItemId(link)
+		if lootedItemLinks[itemId] then
 			-- d("Looted ".. link)
-			if lootedItemLinks[GetItemLinkItemId(link)] == nil then
+			if lootedItemLinks[itemId] == nil then
 				-- d("Wasn't logged yet! "..link)
 			else
 				-- d("Was logged "..link)
 			end
-			lootedItemLinks[link] = false
+			lootedItemLinks[itemId] = false
 			local itemType, specializedType = GetItemLinkItemType(link)
 			local itemName = GetItemLinkName(link)
-			if itemType == ITEMTYPE_MASTER_WRIT or specializedType == SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT then
+			local itemTrait = GetItemLinkTraitInfo(link)
+			local actionSourceName = handledItemTypes[itemType] or handledItemTypes[specializedType] or handledItemTypes[itemId] or handledItemTypes[itemTrait-100]
+			if actionSourceName then
 				-- d("Passed first check")
 				local craftType
-				local isGrandRepairKit = GetItemLinkItemId(link) == 44879
 				craftType = WritCreater.getWritAndSurveyType(link)
-				if craftType == nil and not isGrandRepairKit  then
-					-- d("Craft type nil?")
-					return
-				end
-				local actionSource
+				local actionSource = WritCreater:GetSettings().rewardHandling[actionSourceName]
 				local action
-				if itemType == ITEMTYPE_MASTER_WRIT then
-					actionSource = WritCreater:GetSettings().rewardHandling["master"]
-				elseif specializedType == SPECIALIZED_ITEMTYPE_TROPHY_SURVEY_REPORT then
-					actionSource = WritCreater:GetSettings().rewardHandling["survey"]
-				elseif isGrandRepairKit and specializedType == SPECIALIZED_ITEMTYPE_TOOL then
-					actionSource = WritCreater:GetSettings().rewardHandling["repair"]
-				end
 
 				if actionSource.sameForAllCrafts then
 					action = actionSource.all
@@ -540,7 +542,18 @@ local function slotUpdateHandler(event, bag, slot, isNew,_,reason,changeAmount,.
 				elseif action == 4 then
 					 DestroyItem(bag , slot)
 					 d("Writ Crafter: Destroyed "..link.." because you told it to in the settings menu")
-				else
+				elseif action == 5 then
+					local id64 = GetItemUniqueId(bag, slot)
+					local id64String = Id64ToString(id64)
+					WritCreater.savedVars.deconstructList[id64String] =
+					{
+						["uniqueId"] = id64String ,
+						["bag"] = bag,
+						["slot"] = slot,
+						["timestamp"] = GetTimeStamp()
+					}
+					d("Writ Crafter: Queued "..link.." for deconstruction")
+					WritCreater.LLCInteractionDeconstruct:DeconstructSmithingItem(bag, slot, true, id64String)
 				end
 				-- 1 nothing
 				-- 2 deposit
@@ -601,6 +614,21 @@ function WritCreater.LootHandlerInitialize()
 			EVENT_MANAGER:UnregisterForEvent(WritCreater.name.."AddNewStatusContainers", EVENT_PLAYER_ACTIVATED)
 			end )
 	ZO_PreHook(SYSTEMS:GetObject("loot"), "UpdateLootWindow", OnLootUpdated)
+
+	EVENT_MANAGER:RegisterForEvent(WritCreater.name.."Deconstruct", EVENT_PLAYER_ACTIVATED,function()
+
+		for k, v in pairs(WritCreater.savedVars.deconstructList) do
+			if v.timestamp and GetTimeStamp() - 60*60*24*30 > v.timestamp then
+				WritCreater.savedVars.deconstructList[k] = nil
+			elseif Id64ToString(GetItemUniqueId(v.bag, v.slot)) == v.uniqueId then
+				local link = GetItemLink(v.bag, v.slot)
+				d("Writ Crafter: Queued "..link.." for deconstruction")
+				WritCreater.LLCInteractionDeconstruct:DeconstructSmithingItem(v.bag, v.slot, true, k)
+			end
+		end
+		EVENT_MANAGER:UnregisterForEvent(WritCreater.name.."Deconstruct", EVENT_PLAYER_ACTIVATED)
+	end )
+
 end
 
 --/script for k, v in pairs(SCENE_MANAGER:GetCurrentScene().callbackRegistry) do d(k) end

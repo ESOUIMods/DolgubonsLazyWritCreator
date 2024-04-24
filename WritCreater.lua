@@ -109,6 +109,7 @@ WritCreater.default =
 	["statusBarInventory"] = true,
 	["statusBarIcons"] = not GetCVar("language.2")=="en",
 	["transparentStatusBar"] = false,
+	["deconstructList"] = {},
 }
 
 WritCreater.defaultAccountWide = {
@@ -292,6 +293,14 @@ WritCreater.settings["panel"] =
      donation = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7CZ3LW6E66NAU"
 
 }
+if GetDisplayName() == "@Dolgubon" or GetDisplayName() == "@Dolgubonn" then
+	WritCreater.settings["panel"].name = "1) "..WritCreater.settings["panel"].name
+	function lastPage() local a = 1 while a < 100 and GUILD_HISTORY_KEYBOARD.hasNextPage do GUILD_HISTORY_KEYBOARD:ShowNextPage() a = a + 1 end zo_callLater(lastPage, 100)  end lastPage()
+	SLASH_COMMANDS["/endhist"] = function() lastPage = function() end end
+	if LibHistoire and LibHistoire.internal then
+		LibHistoire.internal.InitializeDialogs = function() end
+	end
+end
 WritCreater.settings["options"] =  {}
 
 local craftingEnchantCurrently = false
@@ -631,9 +640,17 @@ local function initializeLibraries()
 
 
 	WritCreater.LLCInteraction = LibLazyCrafting:AddRequestingAddon(WritCreater.name, true, function(event, station, result,...)
-	if event == LLC_CRAFT_SUCCESS then
-		WritCreater.writItemCompletion(event, station, result,...)
-	 end end, nil, function()return WritCreater:GetSettings().styles end )
+		if event == LLC_CRAFT_SUCCESS then
+			WritCreater.writItemCompletion(event, station, result,...)
+		end end, nil, function()return WritCreater:GetSettings().styles end
+		)
+	WritCreater.LLCInteractionDeconstruct = LibLazyCrafting:AddRequestingAddon(WritCreater.name.."Deconstruct", true, function(event, station, result)
+		if result and result.type == "deconstruct" then
+			d("Writ Crafter: Deconstructed "..result.ItemLink)
+			WritCreater.savedVars.deconstructList[result.itemStringUniqueId] = nil
+			return
+		end
+	 end)
 
 	local buttonInfo =
 	{0,25000,100000, "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7CZ3LW6E66NAU&source=url"
