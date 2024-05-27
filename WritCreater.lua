@@ -313,20 +313,12 @@ local crafting = function() end
 
 local backdrop = DolgubonsWrits
 
-
-
-
-
---Language declarations
-local craftInfo
-
-
 local function mandatoryRoadblockOut(string, showCraftButton)
 	DolgubonsWritsBackdropOutput:SetText(string)
 	DolgubonsWrits:SetHidden(false)
-	DolgubonsWritsBackdropOutput.SetText = function() end
+	-- DolgubonsWritsBackdropOutput.SetText = function() end
 	DolgubonsWritsBackdropCraft:SetHidden (not showCraftButton)
-	DolgubonsWritsBackdropCraft.SetHidden = function() end
+	-- DolgubonsWritsBackdropCraft.SetHidden = function() end
 end
 
 local function dismissableRoadblock(string, showCraftButton)
@@ -707,14 +699,17 @@ local function initializeLocalization()
 		['de'] = 1,
 		['fr'] = 1,
 		['jp'] = 1,
+		['es'] = 1,
+		['fx'] = 1,
+		['pl'] = 1,
+		['zh'] = 1,
 	}
 	-- Initializes Localizations
-	craftInfo = WritCreater.languageInfo
 	if WritCreater.languageInfo then
 		WritCreater.craftInfo = WritCreater.languageInfo()
 	else
 		if langs[GetCVar("language.2")] then
-			mandatoryRoadblockOut("Writ Crafter initialization failed. You are missing your language file. Try uninstalling and reinstalling the Writ Crafter")
+			mandatoryRoadblockOut("Writ Crafter initialization failed. You are missing the language files. Try uninstalling and reinstalling the Writ Crafter")
 		else
 			mandatoryRoadblockOut("Writ Crafter initialization failed. Your game is currently set to the language "..GetCVar("language.2")..
 				" but you do not have the patch for that language installed (if it exists). Uninstall all "..GetCVar("language.2").." addons or patches, then click the button", true)

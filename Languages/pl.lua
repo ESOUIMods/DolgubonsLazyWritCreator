@@ -333,45 +333,6 @@ function WritCreater.masterWritQuality() -- Vital . This is probably not necessa
 	return {{"Epic",4},{"Legendary",5}}
 end
 
-
-
-
-function WritCreater.langEssenceNames() -- Vital
-
-local essenceNames =
-	{
-		[1] = "Oko", --health
-		[2] = "Deni", --stamina
-		[3] = "Makko", --magicka
-	}
-	return essenceNames
-end
-
-function WritCreater.langPotencyNames() -- Vital
-	--exact!! Also, these are all the positive runestones - no negatives needed.
-	local potencyNames =
-	{
-		[1] = "Jora", --Lowest potency stone lvl
-		[2] = "Porade",
-		[3] = "Jera",
-		[4] = "Jejora",
-		[5] = "Odra",
-		[6] = "Pojora",
-		[7] = "Edora",
-		[8] = "Jaera",
-		[9] = "Pora",
-		[10]= "Denara",
-		[11]= "Rera",
-		[12]= "Derado",
-		[13]= "Rekura",
-		[14]= "Kura",
-		[15]= "Rejera",
-		[16]= "Repora", --v16 potency stone
-
-	}
-	return potencyNames
-end
-
 function WritCreater.questExceptions(condition)
 	condition = string.gsub(condition, " "," ")
 	return condition
@@ -632,23 +593,6 @@ EVENT_MANAGER:RegisterForEvent(WritCreater.name,EVENT_CHAT_MESSAGE_CHANNEL, alte
 --Hide craft window when done
 --"Verstecke Fenster anschließend",
 -- [tooltip ] = "Verstecke das Writ Crafter Fenster an der Handwerksstation automatisch, nachdem die Gegenstände hergestellt wurden"
-
-function WritCreater.langWritRewardBoxes () return {
-	[CRAFTING_TYPE_ALCHEMY] = "Naczynie alchemika",
-	[CRAFTING_TYPE_ENCHANTING] = "Szkatuła zaklinacza",
-	[CRAFTING_TYPE_PROVISIONING] = "Paczka zaopatrzeniowca",
-	[CRAFTING_TYPE_BLACKSMITHING] = "Skrzynka kowala",
-	[CRAFTING_TYPE_CLOTHIER] = "Torba krawca",
-	[CRAFTING_TYPE_WOODWORKING] = "Kufer stolarza",
-	[CRAFTING_TYPE_JEWELRYCRAFTING] = "Szkatuła jubilera",
-	[8] = "Dostawa",
-}
-end
-
-
-function WritCreater.getTaString()
-	return "ta"
-end
 
 WritCreater.optionStrings["alternate universe"] = "Turn off April"
 WritCreater.optionStrings["alternate universe tooltip"] = "Turn off the renaming of crafts, crafting stations, and other interactables"
