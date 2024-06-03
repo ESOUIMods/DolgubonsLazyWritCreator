@@ -8,7 +8,7 @@
 ## APIVersion: 101042
 ## Author: Dolgubon
 ## Version: 3.1.6.5
-## DependsOn: LibAddonMenu-2.0 LibLazyCrafting>=4009
+## DependsOn: LibAddonMenu-2.0 LibLazyCrafting>=4009 LibFeedback>=132
 ## OptionalDependsOn: pChat LibCustomMenu LibHistoire
 ## SavedVariables: DolgubonsWritCrafterSavedVars
 
