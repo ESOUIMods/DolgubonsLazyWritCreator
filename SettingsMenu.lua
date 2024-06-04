@@ -13,7 +13,7 @@
 local checks = {}
 local validLanguages =
 {
-	["en"]=true, ["de"] = true, ["fr"] = true, ["jp"] = true, ["ru"] = false, ["zh"] = false, ["pl"] = ture, ["es"] = true, ["fx"] = true,
+	["en"]=true, ["de"] = true, ["fr"] = true, ["jp"] = true, ["ru"] = false, ["zh"] = false, ["pl"] = ture, ["es"] = true, ["fx"] = true, ["tr"] = true, ["tb"] = true,
 }
 if true then
 	EVENT_MANAGER:RegisterForEvent("WritCrafterLocalizationError", EVENT_PLAYER_ACTIVATED, function()
