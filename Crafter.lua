@@ -598,6 +598,11 @@ end
 
 local originalAlertSuppression = ZO_AlertNoSuppression
 
+local function getItemTotalStackCount(bag, slot)
+	local backpack, bank, craftBag = GetItemLinkStacks(GetItemLink(bag, slot))
+	return backpack + bank + craftBag
+end
+
 local function enchantCrafting(info, quest,add)
 	out("")
 
@@ -693,6 +698,10 @@ local function enchantCrafting(info, quest,add)
 					if GetDisplayName() == "@Dolgubon" and WritCreater:GetSettings().craftMultiplier > 1 then
 						quantity = quantity * 3
 					end
+					runeNames[#runeNames + 1 ] = getItemTotalStackCount( ta["bag"], ta["slot"])
+					runeNames[#runeNames + 1 ] = getItemTotalStackCount(essence["bag"], essence["slot"])
+					runeNames[#runeNames + 1 ] = getItemTotalStackCount(potency["bag"], potency["slot"])
+
 					--d(conditions["type"][i],conditions["glyph"][i])
 					out(string.gsub(WritCreater.strings.runeReq(unpack(runeNames)).."\n"..WritCreater.strings.crafting, "1", quantity ))
 					DolgubonsWritsBackdropCraft:SetHidden(true)
@@ -854,3 +863,34 @@ EVENT_MANAGER:RegisterForEvent(WritCreater.name, EVENT_END_CRAFTING_STATION_INTE
 
 
 end
+-- Self is a lua syntax shortcut, that is unfortunately a little confusing.
+-- When you call or define a function that is in a table, you can do it in two ways:
+local exTable = {}
+function exTable.dotCall(...)
+	-- If you define or call a function with a dot, then there is no self.
+	d(self) -- outputs nil
+end
+function exTable:colonCall(...)
+	-- But if you define or call a function with a colon, then the table containing the function is self
+	d(self) -- outputs exTable
+end
+-- You can also define a function with an explicit self argument
+-- Behind the senes, this function definition is exactly the same as the colonCall function!
+-- Since it's the same, it can help to mentally translate any function definition with a colon to this format
+function exTable.equivalentDotCall(self, ...)
+	d(self) -- outputs self, whatever that is
+end
+
+-- And, since it's the same, you can call both of them with a colon, and it'll do the same thing:
+exTable:colonCall() -- Outputs exTable
+exTable:equivalentDotCall() -- Also outputs exTable
+
+-- If you define a function with a colon, but then call it with a dot instead, the first argument becomes self
+-- If there's no arguments, that means self will just be nil
+exTable.colonCall() -- outputs nil, since it's called with a dot
+-- If you do pass in an argument, then the first argument will be self
+local similarTable = {}
+exTable.colonCall(similarTable) -- self == similarTable, so outputs similarTable
+-- An example use could be:
+-- UIElement.SetText(OtherUIElement, "The text on OtherUIElement will change, since this was a dot call")
+

@@ -161,7 +161,10 @@ local findMissingTranslationsMetatable =
 WritCreater.strings = {}
 setmetatable(WritCreater.strings, findMissingTranslationsMetatable)
 
-WritCreater.strings["runeReq"] 						= function (essence, potency) return zo_strformat("|c2dff00Crafting will require 1 |rTa|c2dff00, 1 |cffcc66<<1>>|c2dff00 and 1 |c0066ff<<2>>|r", essence, potency) end
+WritCreater.strings["runeReq"] 						= function (essence, potency,taStack,essenceStack,potencyStack)
+	return zo_strformat("|c2dff00Crafting will require 1/<<3>> |rTa|c2dff00, 1/<<4>> |cffcc66<<1>>|c2dff00 and 1/<<5>> |c0066ff<<2>>|r",
+		essence, potency, taStack, essenceStack, potencyStack)
+end
 WritCreater.strings["runeMissing"] 					= runeMissingFunction
 WritCreater.strings["notEnoughSkill"]				= "You do not have a high enough crafting skill to make the required equipment"
 WritCreater.strings["smithingMissing"] 				= "\n|cf60000You do not have enough mats|r"

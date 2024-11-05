@@ -4,10 +4,10 @@
 ; States and/or other countries. All rights reserved.
 ; You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
 
-## Title: Dolgubon's Lazy Writ Creator v3.1.6.5.1
+## Title: Dolgubon's Lazy Writ Creator v3.1.6.6
 ## APIVersion: 101042
 ## Author: Dolgubon
-## Version: 3.1.6.5.1
+## Version: 3.1.6.6
 ## DependsOn: LibAddonMenu-2.0 LibLazyCrafting>=4009 LibFeedback>=132
 ## OptionalDependsOn: pChat LibCustomMenu LibHistoire
 ## SavedVariables: DolgubonsWritCrafterSavedVars
