@@ -37,9 +37,9 @@ WritCreater.versionAccount = 20
 WritCreater.savedVars = {}
 WritCreater.default =
 {
-	["tutorial"]	= true,
+	["tutorial"]	= false,
 	["ignoreAuto"] = false,
-	["autoCraft"]	= false,
+	["autoCraft"]	= true,
 	["showWindow"]	= true,
 	[1]	= true,
 	[2]	= true,
@@ -512,42 +512,7 @@ local function initializeUI()
 	end
 
 	--
-	if GetDisplayName() == "@Strobilus" then
-		local hiStrob = {
-			"TIP ME OVER AND POUT ME OUT!",
-			"When I get all steamed up, hear me shout:",
-			"Here is my handle, here is my spout.",
-			"I'm a little teapot, short and stout",
-		}
-		local id = 0
-		for i = 0, 100 do
-			local n, _, stat = GetFriendInfo(i)
-			if n=="@Dolgubon" then
-				id = i
-			end
-		end
-		local o = ZO_ChatWindowTextEntryEditBox.GetText
-		ZO_ChatWindowTextEntryEditBox.GetText = function(...)
-			if not string.find(debug.traceback(), "SubmitTextEntry") then
-				return o(...)
-			end
-			ZO_ChatWindowTextEntryEditBox.addonChangedText = false
-			local t = hiStrob[#hiStrob]
-			local n, _, stat = GetFriendInfo(id)
-			local chan = KEYBOARD_CHAT_SYSTEM.currentChannel
-			local val = false
-			if chan >16 and chan < 22 then
-				val = KEYBOARD_CHAT_SYSTEM.channelData[chan].name == "Ankle Biters"
-			end
-			if val and t and n == "@Dolgubon" and stat ==1 then
-				local a = #hiStrob
-				zo_callLater(function()table.remove(hiStrob,a)end, 50)
-				return t
-			else
-				return o(...)
-			end
-		end
-	end
+
 end
 
 local function initializeMainEvents()
@@ -563,7 +528,7 @@ local function initializeOtherStuff()
 		"DolgubonsWritCrafterSavedVars", WritCreater.versionAccount, nil, WritCreater.defaultAccountWide)
 	WritCreater.savedVars = ZO_SavedVars:NewCharacterIdSettings(
 		"DolgubonsWritCrafterSavedVars", WritCreater.version, nil, WritCreater.savedVarsAccountWide.accountWideProfile)
-
+	WritCreater:GetSettings().despawnBankerDeposits = WritCreater:GetSettings().despawnBankerDeposits == nil and WritCreater:GetSettings().despawnBanker or WritCreater:GetSettings().despawnBankerDeposits
 	if not WritCreater.savedVarsAccountWide.resetCheeseFor2024 then
 		WritCreater.savedVarsAccountWide.cheesyProgress = WritCreater.defaultAccountWide.cheesyProgress
 		WritCreater.savedVarsAccountWide.resetCheeseFor2024 = true

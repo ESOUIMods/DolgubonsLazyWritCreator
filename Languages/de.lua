@@ -453,7 +453,7 @@ WritCreater.strings["missingLibraries"]							= "Dolgubon's Lazy Writ Crafter be
 WritCreater.strings['fullBag']						= "Du hast keinen Platz mehr im Inventar. Bitte leere dein Inventar."
 WritCreater.strings['masterWritSave']				= "Dolgubon's Lazy Writ Crafter hat verhindert, dass du versehentlich einen Meisterschrieb annimmst. Gehe in die Erweiterungseinstellungen, um diese Option zu deaktivieren."
 WritCreater.strings['missingLibraries']			= "Dolgubon's Lazy Writ Crafter requires the following standalone libraries. Please download, install or turn on these libraries: "
-WritCreater.strings['resetWarningMessageText']		= "Die täglichen Handwerksquests werden in <<1> Stunde und <<2>> Minute zurückgesetzt\nDu kannst diese Warnung in den Einstellungen anpassen oder deaktivieren"
+WritCreater.strings['resetWarningMessageText']		= "Die täglichen Handwerksquests werden in <<1>> Stunde und <<2>> Minute zurückgesetzt\nDu kannst diese Warnung in den Einstellungen anpassen oder deaktivieren"
 WritCreater.strings['resetWarningExampleText']		= "Die Warnung wird so aussehen"
 WritCreater.strings["withdrawItem"]					= function(amount, link, remaining) return "Dolgubon's Lazy Writ Crafter entnahm "..amount.." "..link..". (Noch "..remaining.." in der Bank)" end -- in Bank for German
 
@@ -555,6 +555,8 @@ WritCreater.optionStrings["jubilee"]									= "Jubiläumsboxen öffnen"
 WritCreater.optionStrings["jubilee tooltip"]							= "Eure Jubiläumsboxen 2020 werden automatisch geöffnet."
 WritCreater.optionStrings['despawnBanker']								= "Bankier einstecken"
 WritCreater.optionStrings['despawnBankerTooltip']						= "Bankier automatisch einstecken, nachdem Gegenstände entnommen wurden"
+WritCreater.optionStrings['despawnBankerDeposit']						= "Exit and Despawn Banker (Deposits)"
+WritCreater.optionStrings['despawnBankerDepositTooltip']				= "Automatically despawn the banker after depositing items"
 WritCreater.optionStrings['dailyResetWarnTime']							= "Minuten vor der Zurücksetzung"
 WritCreater.optionStrings['dailyResetWarnTimeTooltip']					= "Wie viele Minuten vor der täglichen Zurücksetzung soll die Warnung angezeigt werden"
 WritCreater.optionStrings['dailyResetWarnType']							= "Warnung über tägliche Zurücksetzung"
